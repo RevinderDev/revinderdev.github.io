@@ -1,6 +1,6 @@
 # Be sure to change these!
-base_url = "https://pawroman.github.io/zola-theme-terminimal"
-title = "Zola Terminimal theme"
+base_url = "https://revinderdev.github.io/"
+title = "RevinderDev Blog"
 
 # Sass compilation is required
 compile_sass = true
@@ -36,56 +36,24 @@ logo_text = "Revinder"
 # Author name: when specified, modifies the default
 # copyright text. Apart from author, it will
 # contain current year and a link to the theme.
-#author = "My Name"
+author = "Revinder"
 
 # Copyright text in HTML format. If specified,
 # entirely replaces default copyright and author.
-#copyright_html = "My custom&nbsp;<b>copyright</b>"
+# copyright_html = "&nbsp;<b>copyright</b>"
 
-# menu is enabled by adding menu_items (optional)
 menu_items = [
-    # each of these is optional, name and url are required
-    # $BASE_URL is going to be substituted by base_url from configuration
     {name = "Blog", url = "$BASE_URL"},
 
-    # tags should only be enabled if you have "tags" taxonomy
-    # see documentation below for more details
     {name = "Tags", url = "$BASE_URL/tags"},
     {name = "Archive", url = "$BASE_URL/archive"},
     {name = "About me", url = "$BASE_URL/about"},
 
-    # set newtab to true to make the link open in new tab
-    {name = "GitHub", url = "https://github.com/pawroman/zola-theme-terminimal", newtab = true},
+    {name = "GitHub", url = "https://github.com/RevinderDev", newtab = true},
+    {name = "Twitter", url = "https://twitter.com/Revinder_", newtab = true},
 ]
 
-# Whether to show links to earlier and later (aka. higher/lower) posts
-# on each post page (defaults to true).
 enable_post_view_navigation = true
-
-# The text shown at the bottom of a post,
-# before earlier/later post links.
-# Defaults to "Thanks for reading! Read other posts?"
 post_view_navigation_prompt = "Thanks for reading! Read other posts?"
-
-# Use full Hack character set, not just a subset.
-# Switch this to true if you need full unicode support.
-# Defaults to false.
 use_full_hack_font = true
-
-# Optional: Global favicon URL and mimetype.
-#           Mimetype defaults to "image/x-icon".
-#           The URL should point at a file located
-#           in your site's "static" directory.
-favicon = "/phone_rotary_icon_250589.png"
-favicon_mimetype = "image/png"
-
-# Optional: Set how <title> elements are rendered.
-# Values:
-# - "main_only" -- only the main title (`config.title`) is rendered.
-# - "page_only" -- only the page title (if defined) is rendered,
-#                  falling back to `config.title` if not defined or empty.
-# - "combined" -- combine like so: "page_title | main_title",
-#                 or if page_title is not defined or empty, fall back to `main_title`
-#
-# Note that the main (index) page only has the main title.
 page_titles = "main_only"
