@@ -1,5 +1,5 @@
 +++
-title = "Pyton's `__init_subclass_` demystified"
+title = "Python `__init_subclass_` demystified"
 date = 2023-03-11
 
 [taxonomies]
@@ -92,10 +92,10 @@ class FileHandler(abc.ABC):
 ```
 
 Breaking it down:
-* we create [Abstract Base Class](https://docs.python.org/3/library/abc.html) called `FileHandler`.
-* we defined class field called `_registry` that is going to be of a type `dict` with key of type `FileType` and value as `FileHandler` class **type, not object**. 
-* we added helper *public* class method that will allow us to fetch `FileHandler` type, based on given a `FileType` enum choice, from the registry - this will be entry point of a client.
-* and for the sake of example, some abstract function `generate_file` which will generate our file™.
+* `FileHandler` is our [Abstract Base Class](https://docs.python.org/3/library/abc.html).
+* `_registry` is it's class field that is going to be of a type `dict` with key of type `FileType` and value as `FileHandler` class - **type, not object**. This will be part of our `registry-pattern`. 
+* `get_by_file_type` is *public* class method that will allow us to fetch `FileHandler` type, based on given a `FileType` enum choice, from the registry - this will be entry point of a client and this is rest of our registry implementation. We use input as a key in the dictionary and if it is not there - we raise a `ValueError`. You could return `None` if the key is incorrect, but it is better to be [explicit rather than implicit](https://peps.python.org/pep-0020/).
+* `generate_file` is only for the sake of example. Abstract function which will generate our file™ - patent pending. Concrete implementation will be inside subclasses.
 
 Now we can implement our `__init_subclass__` method, which will only put our class type inside our registry. Notice how we didn't call `super().__init_subclass__()`. That's because base implementation does nothing, other than raising an error should it be called with any arguments, as stated in the documentation [2]. We already took care of that by doing:
 ```python
