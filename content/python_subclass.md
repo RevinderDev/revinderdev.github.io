@@ -139,7 +139,7 @@ Traceback (most recent call last):
 TypeError: FileHandler.__init_subclass__() missing 1 required keyword-only argument: 'file_type'
 ```
 
-Nice! It fileed an error during importing module, not when trying to instantiate the class! 
+Nice! It threw an error during importing module, not when trying to instantiate the class! 
 
 Anyways, back to the example. Remember that we defined everything inside a python module and we now want our client to use our file to well.. file! Let's expose that for him.
 
