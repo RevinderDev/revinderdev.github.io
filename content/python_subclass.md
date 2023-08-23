@@ -1,5 +1,5 @@
 +++
-title = "Python `__init_subclass_` demystified"
+title = "Python `__init_subclass__` demystified"
 date = 2023-03-11
 
 [taxonomies]
