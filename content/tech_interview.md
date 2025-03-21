@@ -12,12 +12,14 @@ Before you read further, if there is one thing that you should get out of this a
 
 <!-- more -->
 
+--- 
 # Why our process sucks
 
 Currently our process looks like this:
 
 ![Current Process](/tech_interview/bad_process.png)
 
+--- 
 ## 1. HR interview
 
 *Disclaimer: I was never present in one of those interviews, though I did hear about how they went and do actively read feedback from those, as it helps me understand the candidate before he even shows up for technical interview.*
@@ -31,6 +33,7 @@ This includes but is not limited to:
 
 This is actually the one thing that I do like about our process. I feel like it does solid job for what it is supposed to do - help technical interviewers not be overwhelmed by abundance of candidates by filtering out the most obvious ones.
 
+--- 
 ## 2. Technical interview
 
 Here is where it gets much worse unfortunately. Currently our main interviews consist of pure Frontend developers, pure Backend developers, Data Engineering/Machine learning and Fullstack developers.
@@ -40,6 +43,7 @@ I guess that would depend on your definition of an expert, but to me that person
 You have to check all of that in those 2 hours - don't forget to fit in 1hr for technical task of some sort, during which you want your candidate to focus, thus not disturb him by talking too much. 
 I've had plenty of candidates who were fantastic when talking about their experience, knowledge and understanding, only to get to practical part and ask me "How do I make hashmap in python? Sorry I forgot".
 
+--- 
 ### **But it gets much worse.**
 
 Suppose someone is applying for a Fullstack position. Time for the interview remains constant, which means that you now have even more topics to cover during two hours (and preferably two tasks since you need to check both JS and BE language of choice).
@@ -64,6 +68,7 @@ that we are gonna do it up to a week, but... everytime there is a candidate, the
 I get where it comes from - it is an urgency to fill client needs and lack of manpower to do so, but you can't have it both ways, where you kneecap the process
 but still expect unicorn candidates to come out of it in timely fashion. Some part of it is bound to suffer because of those choices.
 
+--- 
 ### Tasks for candidate
 
 As mentioned, up until a certain point, we've really had no time dedicated to fixing our tasks.
@@ -92,6 +97,7 @@ I have since added a few more challenging tasks, but my team has pushed back on 
 Worth noting is that I have personally chosen them several times and _all_ feedback I've got from candidates was positive _(I know, the dynamic of the situation probably does not warrant them saying the exercise blows and that the whole idea is dumb, but it really felt genuine okay, leave me alone!)._
 
 
+--- 
 ## 3. Manager/TL feedback review
 
 This is the part where managers read the feedback provided by technical interview and HR interview. They also take into the account financial expectations 
@@ -101,7 +107,7 @@ on the candidate and decide whether or not to give them an offer.
 I am okay with that part as well, though I would rather see them conduct quick call with the candidate, something like 15 minutes just to see if they like the candidate on a personal level. 
 This call should be done by a manager who would end up being the manager of a candidate (should he accept given offer).
 
-
+--- 
 # What can we do about it
 
 Most importantly dedicate more time for the process. Leave personal bias out of the equation. Add more scope to the interviews that vary depending on the 
@@ -115,6 +121,7 @@ The main idea here revolves around adding _modules_. That is, interviews that fo
 for a candidate is dynamic - it changes depending on the need of candidate. 
 
 
+--- 
 ## Modules
 
 These modules don't need to be overly strict in what they check - for example, given Junior Backend Position, it's reasonable to conduct combination of Database module and System design module together (totalling shorter time), as simply the expectation is much lower from them. 
@@ -132,6 +139,8 @@ Semantics, flow of the interview, questions to ask, expected answers for a given
 to ace that module flawlessly.
 
 
+--- 
+
 ### Example
 
 Let's look at concrete example of what modules would be required for Senior Backend Developer position:
@@ -148,6 +157,7 @@ Given that this module is shorter than its original version (1hr30 instead of 2h
 There is also added benefit of removing personal bias as different people would be responsible of conducting different modules and if someone was called rude by
 3 different people, they are probably just actually rude. 🤷 
 
+--- 
 ## Take home task
 
 Good in practice and generally I've been a fan of those, but the issue is that apparently most of the candidates don't like to do them and skip the entire application whenever they hear about it during introductory call. 
@@ -155,6 +165,7 @@ I like them, especially when candidate does not have a git account with up to da
 Maybe it is something that the candidate could bring to system design module and we can spend entire time chatting about his solution? 
 I don't know yet. All I know is that I wouldn't say no to try and fit them somewhere, but it does not hurt that much not having them here.
 
+--- 
 ## Other Issues
 
 Unfortunately this solution also has a few issues, I would argue that they are to be expected and should be embraced rather than fight upon.
@@ -167,6 +178,7 @@ does not want to join the position all that much in the first place. Moreover, i
 was suspciously too easy or incomplete, that would make me think that other developers in the company went through the same process and thus
 **might not actually be senior themselves**. I wouldn't want to work at that company either.
 
+--- 
 # Conclusion
 
 Hopefully this will be enough of arguments against the existing system to warrant a change. I would be surprised if the idea I came up with 
