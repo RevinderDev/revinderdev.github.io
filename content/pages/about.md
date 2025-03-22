@@ -7,7 +7,7 @@ path = "about"
 ### About blog
 
 It is kind of personal, I'm going to be writing only about topics that are interesting to me and probably outside of any fixed schedule so don't expect it.
-If there is a new post, I will mention it on my twitter so preferably check there for updates. This blog is powered by [Zola](https://www.getzola.org/) hosted on [github](https://pages.github.com/).
+This blog is powered by [Zola](https://www.getzola.org/) hosted on [github](https://pages.github.com/).
 
 ### Who am I?
 
@@ -26,4 +26,3 @@ My name is Michael. On the internet most people know me by 'Revinder' hence the 
 * **Music** - pretty much the same deal as movies and tv series ;).
 
 
-Feel free to reach me on twitter [@Revinder_](https://twitter.com/Revinder_)
