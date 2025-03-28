@@ -70,12 +70,12 @@ And last but not least - time (again). All interviews are conducted strictly as 
 interview task creation/maintenance, actual interview, note writing and more. We are mandated not to ever take client's allocated time to conduct interviews. That does make sense, but that also means that there are no technical interviewers who conduct interviews as part of their schedule, but rather they are chosen one 'whenever they can fit overtime'. 
 
 > ***Horror story I:** Because we don't have enough time to conduct the interviews, a lot of the candidates are either undervalued (someone gets Mid rating even though he was most likely a Senior)*
-> *or worse, they get overvalued (someone gets Senior, where in reality, they were Mid). We've had recruitment team member in trouble, because a candidate they themselves recommended did not live up to the clients expectations so heavily, that managers got involved and the whole situation turned into an embarassment.*
+> *or worse, they get overvalued (someone gets Senior, where in reality, they were Mid). We've had recruitment team member in trouble, because a candidate they themselves recommended did not live up to the clients expectations so heavily, that managers got involved and the whole situation turned into an embarrassment.*
 > *The situation was handled so poorly in fact, that the recruitment team member ultimately quit conducting interviews altogether out of a fear of doing the same mistake citing lack of time to do so.*
 > ***It is very easy to misjudge someone based on one (brief) meeting and this was no exception.***
 
 On top of that, there is a constant pressure to do everything ASAP - e.g. feedback writing (both for candidate and TL) takes time, we usually tell candidates
-that we are gonna do it up to a week, but... everytime there is a candidate, there is a request to write this note faster if its possible.
+that we are gonna do it up to a week, but... every time there is a candidate, there is a request to write this note faster if its possible.
 I get where it comes from - there is an urgency to fill client needs and lack of manpower to do so, but you can't have it both ways, where you kneecap the process
 but still expect unicorn candidates to come out of it in a timely fashion. Some part of it is bound to suffer because of those choices.
 
@@ -142,11 +142,11 @@ In either case let's go through what each module could be before moving onto con
 
 1. **Frontend and Backend modules** - They will be similar enough that I am going to group them here. We start off by chatting through candidates experience in the given language ecosystem and then move onto the practical part that should last at minimum 1hr.
 2. **System design module** - This is something that is not present in the process so this entire component is something new. Ideally part of this module should be focused on practical part, with little chatting to back it up. Depending on the position the candidate is choosing this could be focused more on a DevOps side (different cloud services, how they interact with each other and how they scale) or on a backend side (how would different APIs talk to each other, what would be responses be, communication between microservices, architectural patterns and so on). In both cases CI/CD, containers, orchestration, local environments is something that too can be covered here.
-3. **Database module** - Again, something new. Everything related to database regardless of database of choice. You would usually choose the one that the candidate claims to be proficient in as a task and then validate if that is actually the case. Split with chatting on different RDBMS, tradeoffs but also include practical part. Writing some kind of query to active database instance. Start small (simple select), progress through (joins), to window functions, views, query optimisation and so on.
-4. **DE/ML module** - this is something that was already part of the process, so this part would remain the same as it was proven succesful already. The only difference is that for a DE position, you wouldn't just need to pass DE module - more on that later.
+3. **Database module** - Again, something new. Everything related to database regardless of database of choice. You would usually choose the one that the candidate claims to be proficient in as a task and then validate if that is actually the case. Split with chatting on different RDBMS, trade-offs but also include practical part. Writing some kind of query to active database instance. Start small (simple select), progress through (joins), to window functions, views, query optimisation and so on.
+4. **DE/ML module** - this is something that was already part of the process, so this part would remain the same as it was proven successful already. The only difference is that for a DE position, you wouldn't just need to pass DE module - more on that later.
 5. **DevOps module** - this overlaps heavily with system design and it is on purpose. For a Tech Lead position, this would be mostly chat about different cloud vendors. Solutions to common problems of theirs, available services and tools, what to use when. Perhaps someone has a certificate from one of the popular choices, so this module would be the place to validate that, but crucially, as opposed to system design - this would not have practical part. 
 
-Semantics, flow of the interview, questions to ask, expected answers for a given candidate level and tasks to give would be a seperate thing for each module and each team/member of said module would be responsible for implementing those. It goes without saying that to be a member of said module, you should have been able
+Semantics, flow of the interview, questions to ask, expected answers for a given candidate level and tasks to give would be a separate thing for each module and each team/member of said module would be responsible for implementing those. It goes without saying that to be a member of said module, you should have been able
 to ace that module flawlessly.
 
 
@@ -160,7 +160,7 @@ Let's look at concrete example of what modules would be required for Senior Back
 
 At minimum senior developer should be able to come up with a system design, operate a database and implement features on a backend (in a language of his choice).
 Thus all 3 modules are present. It is entirely possible that candidate could be less experienced (or no experience) with a database, but perform absolutely 
-flawelessly in system design. That is great. We all excel in different things and thats the root of the idea. To find out what the candidate excels at.
+flawlessly in system design. That is great. We all excel in different things and that's the root of the idea. To find out what the candidate excels at.
 
 Ordering matters - obviously. Since it is a senior **backend** position, we start of with backend and only move to consecutive modules IF the candidate 
 successfully passed "the core" of his process. Vast majority of the candidates flop interviews and so, most would fail here.
@@ -187,7 +187,7 @@ Be it by unhappy client having a 'senior' developer come in and not actually bei
 
 The other issues such as process being longer and more involved are valid. However, if candidate isn't willing to be properly checked, then he probably
 does not want to join the position all that much in the first place. Moreover, if I was the candidate and the recruitment process to a company 
-was suspciously too easy or incomplete, that would make me think that other developers in the company went through the same process and thus
+was suspiciously too easy or incomplete, that would make me think that other developers in the company went through the same process and thus
 **might not actually be senior themselves**. I wouldn't want to work at that company either.
 
 --- 
