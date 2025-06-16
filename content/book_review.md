@@ -1,5 +1,5 @@
 +++
-title = "Book Review #0: Mara Bos - Rust Atomics and Locks"
+title = "Book summary and review #0: Mara Bos - Rust Atomics and Locks"
 date = 2025-03-20
 
 [taxonomies]
@@ -18,10 +18,9 @@ Mara is an excellent engineer, current Rust library team dev and a fantastic wri
 - [Twitter](https://x.com/m_ou_se)
 - [Link to a book](https://marabos.nl/atomics/)
 
-<!-- more -->
-
 Since I am not a book reviewer, I don't exactly know how to conduct one, so I am going to approach it how I see it make most sense - going chapter by chapter.
 
+<!-- more -->
 --- 
 ## Chapter 1 - Basics of Rust Concurrency
 
@@ -71,11 +70,11 @@ Then there is stuff that I didn't know exist - `compare_exchange` (and `_weak`).
 
 In my mind, this chapter is the core of the entire book. If you don't understand this chapter, you will struggle to find deeper understanding in all subsequent chapters because they are all built upon ideas from this one.
 This isn't precisely about _memory_ itself but about instructions that are stored within that memory. These instructions can be executed out of order for variety of optimisation reasons.
-Two important sources of these reorderings that we care about are: processors and compilers. A processor might determine that two consecutive instructions in your program will not affect each other, therefore it is allowed to execute them out of order. Similarly, a compiler will do the same when it has a reason to believe it might execute faster. The idea is that neither of the two things will change the behaviour of your program - else you there is a bug and it's a very deep one.
+Two important sources of these reordering that we care about are: processors and compilers. A processor might determine that two consecutive instructions in your program will not affect each other, therefore it is allowed to execute them out of order. Similarly, a compiler will do the same when it has a reason to believe it might execute faster. The idea is that neither of the two things will change the behaviour of your program - else you there is a bug and it's a very deep one.
 
 Again, with a Rust spin, we learn that there are these memory orderings available to use:
 - `Relaxed` - relaxed ordering.
-- `Release`, `Acquire` and `AcqRel` - release and acquirue (duh!)
+- `Release`, `Acquire` and `AcqRel` - release and acquire (duh!)
 - `SeqCast` - sequentially consistent.
 
 In order to fully grasp them however, we are presented with a concept known as `happens-before` relationship. It describes how something is guaranteed to have happened before another thing, and order of everything else is undefined. For example, everything within the same thread happens in order; that is, if thread is executing `f()` then `g()`, then `f()` `happens-before` `g()`. It sounds obvious but it needs to be said, because that concept does not exist in between threads. The only way it can is through synchronization mechanisms or when spawning other threads.
@@ -86,14 +85,28 @@ Each ordering then can be understood in terms of that `happens-before` relations
 
 > A happens-before relationship is formed when an acquire-load operation observes the result of a release-store operation.
 
-`SeqCast` is the strongest memory ordering. It includes all guarentees of acquire ordering (for loads) and release ordering (for stores), and also guarentees a globally consistent order of operations. That is, every single operation with `SeqCst` ordering within a program is part of a single total order all threads agreen on. An aquire-load can not only form a happens-before relationship with a release-store, but alos with a sequentially consistent store, and similarly the other way around.
+`SeqCast` is the strongest memory ordering. It includes all guarantees of acquire ordering (for loads) and release ordering (for stores), and also guarantees a globally consistent order of operations. That is, every single operation with `SeqCst` ordering within a program is part of a single total order all threads green on. An acquire-load can not only form a happens-before relationship with a release-store, but also with a sequentially consistent store, and similarly the other way around.
 
-Last thing mentioned in this chapter is something called `Fences`. Fence can have its own ordering applies, but in essence it allows you to seperate the memory ordering from the atomic operation. It prevents the CPU and compiler from reordering certain memory operations across the fence boudry.
+Last thing mentioned in this chapter is something called `Fences`. Fence can have its own ordering applies, but in essence it allows you to separate the memory ordering from the atomic operation. It prevents the CPU and compiler from reordering certain memory operations across the fence boundary.
 
 I initially thought I could reason about this chapter rather nicely, until author gathered common myths, that while super interesting, did put a dent in my understanding as I directly came up with one of the myths. I will leave explanations why they are myths to the author:)
 
-> Myth I: I need strong memory ordering to make sure changes are "immediately" visible.
-> Myth II: Sequentially consistent memory ordering is a great default and is always correct.
-> Myth III: Disabling optimization means I don’t need to care about memory ordering.
+> - Myth I: I need strong memory ordering to make sure changes are "immediately" visible.
+> - Myth II: Sequentially consistent memory ordering is a great default and is always correct.
+> - Myth III: Disabling optimization means I don’t need to care about memory ordering.
 
+---
+## Chapter 4, 5 and 6 -  Building our own X
 
+In these chapters, author gives us a chance to do something practical, which will hopefully deepen our understanding of previously mentioned concepts. We build our base using chapter 1, 2 and 3, to now use actually leverage it and code up something useful. It's a nice mix of practicality and theory, though I was mostly interested in concepts that go beyond Rust and these chapters felt Rust heavy.
+
+We build our own:
+- `SpinLock` - is a lock that is designed such that a thread waiting for it to be unlocked, is repeatedly trying to unlock it, instead of going to sleep, as is in the case of regular Mutex. This can make sense in a scenario where a lock is only held for a brief moment, thus waking a thread and putting it to sleep would waste more resources than 'busy' waiting like so.
+- `Channels` - are used to send data between threads and they can come in many variants. One sender/one receiver or many receivers/one sender and so on. Some are blocking, some are optimised for throughput and so on. The important bit is towards the end, that is - **Every design and implementation decision involves a trade-off and can best be made with a specific use case in mind.** 
+- `Arc` - is an Atomic Reference Counting that allows us in Rust to have shared ownership through reference counting. Cloning Arc will share the original allocation, without creating new one. It's only when all references are dropped, when the actual allocation will be dropped as well. 
+
+All in all in each of the implementations, we are always given reasons as to why we do a certain thing and what's the outcome of it. More over, the author points out all the subtle mistakes that the implementation has and ways it can be improved. Each chapter starts of with simple naive implementation, and throughout it we are constantly improving it bit by bit. 
+Particularly, like a true rustacean that we are, we are trying to create a safe interface such that the user _cannot_ possibly use in a wrong way. Achieving that can be tricky, as under the hood, we have to deal with unsafe code.
+All the examples and short codes are distributed by the author on her own github page [3].
+
+[3] https://github.com/m-ou-se/rust-atomics-and-locks?tab=readme-ov-file 
