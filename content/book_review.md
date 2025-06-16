@@ -64,3 +64,36 @@ Then there is stuff that I didn't know exist - `compare_exchange` (and `_weak`).
 
 
 [2] https://en.wikipedia.org/wiki/ABA_problem
+
+---
+
+## Chapter 3 - Memory Ordering
+
+In my mind, this chapter is the core of the entire book. If you don't understand this chapter, you will struggle to find deeper understanding in all subsequent chapters because they are all built upon ideas from this one.
+This isn't precisely about _memory_ itself but about instructions that are stored within that memory. These instructions can be executed out of order for variety of optimisation reasons.
+Two important sources of these reorderings that we care about are: processors and compilers. A processor might determine that two consecutive instructions in your program will not affect each other, therefore it is allowed to execute them out of order. Similarly, a compiler will do the same when it has a reason to believe it might execute faster. The idea is that neither of the two things will change the behaviour of your program - else you there is a bug and it's a very deep one.
+
+Again, with a Rust spin, we learn that there are these memory orderings available to use:
+- `Relaxed` - relaxed ordering.
+- `Release`, `Acquire` and `AcqRel` - release and acquirue (duh!)
+- `SeqCast` - sequentially consistent.
+
+In order to fully grasp them however, we are presented with a concept known as `happens-before` relationship. It describes how something is guaranteed to have happened before another thing, and order of everything else is undefined. For example, everything within the same thread happens in order; that is, if thread is executing `f()` then `g()`, then `f()` `happens-before` `g()`. It sounds obvious but it needs to be said, because that concept does not exist in between threads. The only way it can is through synchronization mechanisms or when spawning other threads.
+
+Each ordering then can be understood in terms of that `happens-before` relationship.
+`Relaxed` is therefore an order that does not provide any `happens-before`, they do guarantee a _total modification order_ of each individual atomic variable. That is, **all modifications of the same atomic variable happen in an order that is the same from the perspective of every single thread.**
+`Release` and `Acquire` are used in pair to form a `happens-before` relationship between threads. `Release` applies to store operations, while `Acquire` applies to load operations. Compound operation such as `fetch-and-modify` will then therefore have `Release` be applied only to it's modify part and then `Acquire` for it's load part.
+
+> A happens-before relationship is formed when an acquire-load operation observes the result of a release-store operation.
+
+`SeqCast` is the strongest memory ordering. It includes all guarentees of acquire ordering (for loads) and release ordering (for stores), and also guarentees a globally consistent order of operations. That is, every single operation with `SeqCst` ordering within a program is part of a single total order all threads agreen on. An aquire-load can not only form a happens-before relationship with a release-store, but alos with a sequentially consistent store, and similarly the other way around.
+
+Last thing mentioned in this chapter is something called `Fences`. Fence can have its own ordering applies, but in essence it allows you to seperate the memory ordering from the atomic operation. It prevents the CPU and compiler from reordering certain memory operations across the fence boudry.
+
+I initially thought I could reason about this chapter rather nicely, until author gathered common myths, that while super interesting, did put a dent in my understanding as I directly came up with one of the myths. I will leave explanations why they are myths to the author:)
+
+> Myth I: I need strong memory ordering to make sure changes are "immediately" visible.
+> Myth II: Sequentially consistent memory ordering is a great default and is always correct.
+> Myth III: Disabling optimization means I don’t need to care about memory ordering.
+
+
