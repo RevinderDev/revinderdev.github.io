@@ -1,6 +1,6 @@
 +++
 title = "Book summary and review #0: Mara Bos - Rust Atomics and Locks"
-date = 2025-03-20
+date = 2025-06-20
 
 [taxonomies]
 tags = ["Rust", "Book", "Programming"]
@@ -110,3 +110,297 @@ Particularly, like a true rustacean that we are, we are trying to create a safe 
 All the examples and short codes are distributed by the author on her own github page [3].
 
 [3] https://github.com/m-ou-se/rust-atomics-and-locks?tab=readme-ov-file 
+
+---
+## Chapter 7 - Understanding the processor
+
+Chapter 7 is the chapter that I was looking forward the most. In fact, this is the reason why I've picked this book up in the first place. At my university we did in fact have classes that dealt with assembler itself, but we never really dived deep into it. I was hoping to fill in the gaps that were created, by me 
+rushing through topics to hopefully make everything on time.
+
+It starts off with explaining in a very high level approach two main different processor architectures: x86-64 and ARM64. From this books perspective, the most important difference is that they handle atomics differently. We then have some brief assembler lessons and the way to see generated assembly from rust compiler.
+So far so good. The entire chapter compares compile codes for x86-64 and ARM64 from the same code. Let's take a look at first and already surprising bit:
+
+
+<table>
+  <tr>
+    <th>Rust source</th>
+    <th>Compiled x86-64</th>
+    <th>Compiled ARM64</th>
+  </tr>
+  <tr>
+    <td>
+<pre><code class="language-rust" style='font-size: 10px'>pub fn a(x: &mut i32) {
+    *x = 0;
+}
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-x86asm" style='font-size: 10px'>a:
+    mov dword ptr [rdi], 0
+    ret
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-armasm" style='font-size: 10px'>a:
+    str wzr, [x0]
+    ret
+</code></pre>
+    </td>
+  </tr>
+  <tr>
+    <td>
+<pre><code class="language-rust" style='font-size: 10px'>pub fn a(x: &AtomicI32) {
+    x.store(0, Relaxed);
+}
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-x86asm" style='font-size: 10px'>a:
+    mov dword ptr [rdi], 0
+    ret
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-armasm" style='font-size: 10px'>a:
+    str wzr, [x0]
+    ret
+</code></pre>
+    </td>
+  </tr>
+</table>
+
+As you can see, if using atomic or not is irrelevant in this function - it compiles to the same thing! That is because both `mov` and `str` are already atomic!
+
+Mild interest levels, I know, but let's go one step further into `read-and-modify` types of function:
+
+<table>
+  <tr>
+    <th>Rust source</th>
+    <th>Compiled x86-64</th>
+    <th>Compiled ARM64</th>
+  </tr>
+  <tr>
+    <td>
+<pre><code class="language-rust" style='font-size: 10px'>pub fn a(x: &mut i32) {
+    *x += 10;
+}</code></pre>
+    </td>
+    <td>
+<pre><code class="language-x86asm" style='font-size: 10px'>a:
+    add dword ptr [rdi], 10
+    ret
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-armasm" style='font-size: 10px'>a:
+    ldr w8, [x0]
+    add w8, w8, #10
+    str w8, [x0]
+    ret
+</code></pre>
+    </td>
+  </tr>
+  <tr>
+    <td>
+<pre><code class="language-rust" style='font-size: 10px'>pub fn a(x: &AtomicI32) {
+    x.fetch_add(10, Relaxed);
+}</code></pre>
+    </td>
+    <td>
+<pre><code class="language-x86asm" style='font-size: 10px'>a:
+    lock add dword ptr [rdi], 10
+    ret
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-armasm" style='font-size: 10px'>a:
+.L1:
+    ldxr w8, [x0]    
+    add w9, w8, #10  
+    stxr w10, w9, [x0] 
+    cbnz w10, .L1    
+    ret
+</code></pre>
+    </td>
+  </tr>
+</table>
+
+Finally! We see some difference. For x86-64 it's the `lock` prefix that was introduced by Intel to support multi core systems. It causes processors LOCK# signal to be asserted during execution of the accompanying instruction (which turns the instruction into atomic instruction). It ensures that processor has exclusive use of any shared memory while that signal is asserted. [4]
+
+But what's going on with ARM64? Our previous 3 instructions changed into 4 and there is additional label added somehow. What for? Let's go over each step.
+
+```asm
+a:
+.L1:
+    ldxr w8, [x0]      ; Load the value at address x0 into w8 (LL).
+    add w9, w8, #10    ; Add 10 to w8 and store the result in w9.
+    stxr w10, w9, [x0] ; Attempt to store w9 back to x0 (SC). Result in w10. 0 = success, 1 = fail.
+    cbnz w10, .L1      ; If w10 != 0, retry.
+    ret
+```
+
+Keen reader will observe that we've swapped `ldr` (load register) and `str` (store register) for `ldrx` and `strx`. What's the difference? Those are atomic versions of the same functions. `ldrx` is load exclusive register while `strx` is store exclusive register. Both instructions guarantee that memory access is atomic. [5] [6]
+`strx` can fail, and if that happens, we need to retry. Interestingly though, `ldrx` doesn't seem to be possible to fail.
+
+
+[4] [Lock prefix](https://www.felixcloutier.com/x86/lock)
+
+[5] [LDXR documentation]( https://developer.arm.com/documentation/100069/0606/Data-Transfer-Instructions/LDXR )
+
+[6] [STXR Documentation]( https://developer.arm.com/documentation/100069/0606/Data-Transfer-Instructions/STXR )
+
+---
+
+Book goes on into the topic of different instructions (such as those that do not have equivalent instructions to compile down to), cache and cache lines, memory reordering done by the processors and cost of certain atomic operations on each architecture. All of these are extremely detailed and I want to encourage you that if you do not wish to read this entire book, this chapter and chapter 1 were fantastic and are worth your time regardless if you program in Rust or not.
+I do not envy people that have to debug multithreaded issues that come from memory ordering bugs on different architectures!
+
+---
+## Chapter 8 - Operating System Primitives
+
+We've been talking instructions on a CPU level. We've been talking instructions in your code. Now it's time to talk about what we haven't yet - stuff your operating system does to them! More specifically, how scheduler of a kernel, _schedules_ your instructions to run on given processor core.
+Your entire communication with system kernel is through _syscall_. Depending on your system, you can/should them in a different way. On Linux, you use `libc` as it provides you with standard interface for it. MacOS also has it's own `libc` implementation, however, as opposed to Linux, it's syscalls are not stable and thus you should not be using them as they are likely to be broken.
+
+Apart from `libc`, unix systems have another thing in common - POSIX standard. It is a set on functions that you should implement in order to be POSIX compliant
+and thus having libraries that leverage POSIX work from the get go. Windows does not follow POSIX (nor libc for that matter) and instead gives us its own `kernel32.dll` that we are supposed to use instead. Again, no syscalls should be made here.
+
+**PThreads** are extensions to POSIX standard that give us access to common data types and functions for concurrency. Stuff like mutexes, locks, threads, condition variables are all possible to use from pthreads. Lot's of examples given by author of functions and how they can be leveraged.
+
+> There is a problem though. PThreads were designed for C, not Rust, thus, they are not exactly compatible with Rust memory model. Threads from PThreads are not moveable which in Rust is problematic. 
+
+There was another cool thing mentioned by the author, which I had never heard of before - `futex`! [7]
+On Linux all synchronization primitives are implemented using the `futex` system call. It is what's called "fast user-space mutex". Here is it's `libc` signature:
+
+```c
+long syscall(
+        SYS_futex, 
+        uint32_t *uaddr, 
+        int futex_op, 
+        uint32_t val,
+        const struct timespec *timeout,   /* or: uint32_t val2 */
+        uint32_t *uaddr2, 
+        uint32_t val3
+);
+```
+
+It provides a method to wait until certain condition is true. Kernel will put a thread specified by us to sleep, and then another thread can wake that other thread up by using the same atomic variable to notify it.
+
+There are operating system primitives explained from Windows and MacOS too, but... [Linux FTW](https://xkcd.com/272/)!
+
+[7] [Futex manpage](https://man7.org/linux/man-pages/man2/futex.2.html)
+
+---
+## My own ZigLock
+
+There are still 2 more chapters - building our own lock and ideas and inspiration. I thought it would be fun instead of summarising these, is to use `zig` to recreate one of the easiest lock implementations from chapter 9. I don't know anything about `zig`. I don't know much about concurrency. I am not as qualified as the author is. It is gonna be the easiest thing to do and it's gonna be awful. You've been warned! Let's go then!
+
+Firstly, let's create a simple race condition.
+
+```zig
+const std = @import("std");
+
+var global_counter: i32 = 0;
+
+fn incrementer() !void {
+    var i: usize = 0;
+    while (i < 100_000) : (i += 1) {
+        global_counter += 1;
+    }
+}
+
+pub fn main() !void {
+    const thread1 = try std.Thread.spawn(.{}, incrementer, .{});
+    const thread2 = try std.Thread.spawn(.{}, incrementer, .{});
+    thread1.join();
+    thread2.join();
+    std.debug.print("\tFinal counter value: {d}\n", .{global_counter});
+}
+````
+
+Running this a couple of times we can see that, we did in fact succeeded in creating a bad code.
+
+```sh
+$ zig build run
+    Final counter value: 150368
+$ zig build run
+    Final counter value: 133840
+$ zig build run
+    Final counter value: 157181
+```
+
+We can obviously fix our function by using atomic like so:
+
+```zig
+fn incrementer() !void {
+    var i: usize = 0;
+    while (i < 100_000) : (i += 1) {
+        _ = @atomicRmw(i32, &global_counter, .Add, 1, .release);
+    }
+}
+```
+
+But where is the fun in that! We wanted our own lock to be used for it! I am gonna go for SpinLock. Which is a lock that continuously 'spins' trying to unlock to get in. Sort of a busy waiting. Let's define `lock` and `unlock` methods on our struct:
+
+```zig
+const std = @import("std");
+
+const SpinLock = struct {
+    flag: std.atomic.Value(bool) = std.atomic.Value(bool).init(false),
+
+    pub fn lock(self: *SpinLock) !void {
+        while (self.flag.swap(true, .acquire)) {
+            try std.Thread.yield(); // Give up CPU if lock busy
+        }
+    }
+
+    pub fn unlock(self: *SpinLock) void {
+        self.flag.store(false, .release);
+    }
+};
+```
+
+And that's it! We can now use it to lock around our variable and have no race conditions.
+
+```zig
+var my_lock = SpinLock{};
+
+var shared_counter: i32 = 0;
+
+fn thread_fn() !void {
+    var i: usize = 0;
+    while (i < 100_000) : (i += 1) {
+        try my_lock.lock(); // What a great variable name.
+        shared_counter += 1;
+        my_lock.unlock();
+    }
+}
+
+pub fn main() !void {
+    const t1 = try std.Thread.spawn(.{}, thread_fn, .{});
+    const t2 = try std.Thread.spawn(.{}, thread_fn, .{});
+    t1.join();
+    t2.join();
+    std.debug.print("Counter: {}\n", .{shared_counter});
+}
+```
+
+Results:
+
+```sh
+$ zig build run
+Counter: 200000
+$ zig build run
+Counter: 200000
+$ zig build run
+Counter: 200000
+```
+
+Ahh! Lovely! There are probably issues with that - it is a naive implementation by someone who doesn't even program in `zig` at all. I will once again refer you to a book for deeper explanations as to what could go wrong with it.
+
+## Summary
+
+Overall, this book has been a joy to read. It's packed with knowledge that I've never heard of. It's dense. It has practical examples. It has theory. It explains concepts that are not language specific. It's _almost_ what I hoped would be in it. 
+The only mild thing that I would prefer to be less of is.. Rust itself. I know, this sounds silly being shocked of abundance of Rust in a book titled `Rust - Atomics and Locks` but both chapter 1 and chapter 8 are precisely my favourites because they go beyond just Rust. Even though the concepts were language agnostic,
+it felt to me like a lot of hoops you had to jump through, were there so that you can make safe code in Rust. Translating these concepts to `zig` took me 10 minutes and I didn't have to deal with complexity, something which Rust with it's `UnsafeCell` and interfaces clearly has more of than `zig`. Is the Rust code safer then? Probably. Is it harder to follow and more verbose than `zig` in this case? Yes. Ultimately this is a price you have to pay for being sure your code is indeed secure with Rust. If it compiles, I am safe... (right?). 
+
+
+> If you hadn't added any `unsafe` blocks, then you are safe from data races and segfaults, but you are still vulnerable to panics.
