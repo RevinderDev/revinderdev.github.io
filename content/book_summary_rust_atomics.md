@@ -19,6 +19,7 @@ Mara is an excellent engineer, current Rust library team dev and a fantastic wri
 - [Link to a book](https://marabos.nl/atomics/)
 
 Since I am not a book reviewer, I don't exactly know how to conduct one, so I am going to approach it how I see it make most sense - going chapter by chapter.
+This article is for those who are not yet sure if this book is worth a read (spoiler - it is) and is mainly targeted for someone interested in a little bit lower level of concurrency, with a sprinkle of Rust, than what's usually used. We rarely, if ever, write these structures ourselves.
 
 <!-- more -->
 --- 
@@ -26,6 +27,9 @@ Since I am not a book reviewer, I don't exactly know how to conduct one, so I am
 
 This chapter introduces us to the concepts of concurrency, what it actually is in theory and how it looks like in practise - that is - how it looks like in Rusts code.
 The core that you get to know are: Threads and their scopes, data ownerships between them and reference counting, data races, interior mutability, `Send` and `Sync` traits that allow for sharing data between the Threads safely, Locks and finally Thread parking and Condition Variables.
+
+**Thread** are a unit of execution within your process. In user space, threads only exist within process, they cannot exist on their own. Kernel has it's own privileges and has some running threads but that's beyond the scope for now so we will skip that idea. Multiple threads can be run within your process concurrently and they can execute sequence of instructions. They can share some resources with the process, such as memory, though they can have their own local memory too. Apart from multiprocessing, they are the key to unlocking full concurrent power of your processor, but they need to be synchronized. Otherwise you can have lots of troubles.
+These book will show you ways you can achieve this synchronization, such as **Locks**, which are a way to prevent something to be modified or read by multiple threads at once.
 
 **Leaking** is particularly interesting construct to me, as I've always associated it with a bad code, however, author suggests that you can leverage that 
 to _share_ data between the threads. In other words, you deliberately leak the memory thread owns, promising it will never be cleaned up (in Rust they say "dropped") and thus make it live forever and allowing it to be borrowed by any thread as long as the program runs. You do that by using `Box::leak`
@@ -394,7 +398,8 @@ $ zig build run
 Counter: 200000
 ```
 
-Ahh! Lovely! There are probably issues with that - it is a naive implementation by someone who doesn't even program in `zig` at all. I will once again refer you to a book for deeper explanations as to what could go wrong with it.
+Ahh! Lovely! There are probably issues with that - it is a naive implementation by someone who doesn't even program in `zig` at all. I will once again refer you to a book for deeper explanations as to what could go wrong with it. You can also see how close the implementation is to that of a Rust.
+I didn't really have to wrestle to get it working. That's because all these primitives, memory orderings and functions are mostly present in all systems languages.
 
 ## Summary
 
