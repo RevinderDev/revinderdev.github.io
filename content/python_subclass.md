@@ -10,6 +10,8 @@ tags = ["Python", "Programming"]
 
 In this article I will try to demystify less commonly known function `__init_subclass__` introduced in [PEP 487](https://peps.python.org/pep-0487/), explain how it works and show you real life example of how you can leverage it in Python 3.11 for your own benefit.
 
+**Prerequisites**:
+- Basic python understanding
 <!-- more -->
 
 ## Inner workings
