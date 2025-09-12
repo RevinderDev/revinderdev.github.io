@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>RevinderDev Blog</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://revinderdev.github.io/style.css">
+    <link rel="stylesheet" href="https://revinderdev.github.io/color/orange.css">
+
+    <link rel="stylesheet" href="https://revinderdev.github.io/font-hack.css">
+
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    </head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://revinderdev.github.io/" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Revinder
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinderdev.github.io/">Blog</a></li>
+            
+                <li><a href="https://revinderdev.github.io//tags">Tags</a></li>
+            
+                <li><a href="https://revinderdev.github.io//archive">Archive</a></li>
+            
+                <li><a href="https://revinderdev.github.io//about">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinderdev.github.io/forgetful-dict/">The &quot;Forgetful&quot; pattern: A method for Deep Copying with unique instances</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2025-09-08
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinderdev.github.io/tags/python/">#Python</a>&nbsp;
+                <a class="post-tag" href="https://revinderdev.github.io/tags/programming/">#Programming</a></span>
+    
+
+        
+        <div class="post-content">
+            <h2 id="introduction">Introduction</h2>
+<p>In this article I will showcase you a recent trick I've learned when glancing through boto3 source code. There was a particular class which name was even stranger than its usage: <code>ForgetfulDict</code>.
+We'll break down its surprisingly simple implementation, understand the specific problem it solves within Python's copy module, and see how this pattern can be useful in other contexts.</p>
+<p><strong>Prerequisites</strong>:</p>
+<ul>
+<li>Basic <strong>Python</strong> understanding</li>
+</ul>
+<span id="continue-reading"></span>
+<hr />
+<h2 id="forgetfuldict">ForgetfulDict</h2>
+<p>This is the full implementation of the class. And I mean it when I say it's <strong>full implementation</strong> - there is nothing more.</p>
+<blockquote>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#8fbfdc;">class </span><span style="color:#ffb964;">_ForgetfulDict</span><span>(</span><span style="color:#ffb964;">dict</span><span>):
+</span><span>   </span><span style="color:#888888;">&quot;&quot;&quot;A dictionary that discards any items set on it. For use as `memo` in
+</span><span style="color:#888888;">   `copy.deepcopy()` when every instance of a repeated object in the deepcopied
+</span><span style="color:#888888;">   data structure should result in a separate copy.
+</span><span style="color:#888888;">   &quot;&quot;&quot;
+</span><span>   </span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">__setitem__</span><span>(</span><span style="color:#ffb964;">self</span><span>, </span><span style="color:#ffb964;">key</span><span>, </span><span style="color:#ffb964;">value</span><span>):
+</span><span>       </span><span style="color:#8fbfdc;">pass
+</span></code></pre>
+</blockquote>
+<p align=center><a href="https://github.com/boto/boto3/blob/332640a9a2e01431d2a8e0952d61712f525f4ec6/boto3/dynamodb/transform.py#L25">boto3/dynamodb/transform.py#L25</a>
+<p>Slightly below that, you can actually see how they use it:</p>
+<blockquote>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">copy_dynamodb_params</span><span>(</span><span style="color:#ffb964;">params</span><span>, **</span><span style="color:#ffb964;">kwargs</span><span>):
+</span><span>   </span><span style="color:#8fbfdc;">return </span><span>copy.</span><span style="color:#ffb964;">deepcopy</span><span>(params, </span><span style="color:#ffb964;">memo</span><span>=</span><span style="color:#ffb964;">_ForgetfulDict</span><span>())
+</span><span>
+</span><span style="color:#8fbfdc;">class </span><span style="color:#ffb964;">DynamoDBHighLevelResource</span><span>:
+</span><span>   </span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">__init__</span><span>(</span><span style="color:#ffb964;">self</span><span>, *</span><span style="color:#ffb964;">args</span><span>, **</span><span style="color:#ffb964;">kwargs</span><span>):
+</span><span>       </span><span style="color:#ffb964;">super</span><span>().</span><span style="color:#ffb964;">__init__</span><span>(*args, **kwargs)
+</span><span>      </span><span style="color:#888888;"># Apply handler that creates a copy of the user provided dynamodb
+</span><span>      </span><span style="color:#888888;"># item such that it can be modified.
+</span><span>      </span><span style="color:#ffb964;">self</span><span>.meta.client.meta.events.</span><span style="color:#ffb964;">register</span><span>(
+</span><span>          </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">provide-client-params.dynamodb</span><span style="color:#556633;">&#39;</span><span>,
+</span><span>          copy_dynamodb_params,
+</span><span>          </span><span style="color:#ffb964;">unique_id</span><span>=</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">dynamodb-create-params-copy</span><span style="color:#556633;">&#39;</span><span>,
+</span><span>      )
+</span></code></pre>
+</blockquote>
+<h2 id="lib-copy-py">Lib/copy.py</h2>
+<p>So what actually is a <code>copy.py</code> module?
+<code>copy</code> is a python std library module that contains functions to perform shallow and deep copy operations. Unlike some other languages, in Python, when you do assignment statement (that is x = 1), you don't 
+copy objects - you create binding between a target and an object. Sometimes however, this is not what you want (such as collections with mutable items) and you do want to create a copy.
+This module provides you with tools necessary to achieve that mainly: <code>copy(obj)</code> and <code>deepcopy(obj[, memo])</code>.
+The difference between the two is one performs <em>shallow</em> copy (that is a copy that is a new compound object with inserted <em>references</em> into it that were found on the original - hence <strong>shallow</strong>) and the other
+performs a <em>deep</em> copy (a new compound object with recursively inserted <em>copies</em> of the objects found in the original - hence <strong>deep</strong>).</p>
+<p>When you need a completely independent copy of a nested structure, deepcopy is what you should use. It has a built-in mechanism to handle a particular challenge: recursive objects. If an object contains a reference to itself (or there is a cycle), a naive copy implementation would enter an infinite loop, eventually causing a RecursionError.</p>
+<p>To prevent this, deepcopy cleverly uses an optional memo dictionary. This dictionary tracks objects that have already been copied during the current pass. When it encounters an object it has seen before, it simply reuses the existing copy from the memo instead of trying to copy it again. This not only solves the recursion problem but also ensures that shared object references within the original structure remain shared in the copied structure.
+Now we know what's the purpose of <code>memo</code> argument and we got a little bit closer to discovering what's the use of <code>ForgetfulDict</code>.</p>
+<h3 id="usage-example">Usage example</h3>
+<p>Let's try to use the copy module to do some... well copying.</p>
+<p>First, create some dummy class and collection with nested objects.</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#8fbfdc;">class </span><span style="color:#ffb964;">T</span><span>:
+</span><span>    </span><span style="color:#8fbfdc;">pass
+</span><span>
+</span><span>a = </span><span style="color:#ffb964;">T</span><span>()
+</span><span>b = </span><span style="color:#ffb964;">T</span><span>()
+</span><span>original_list = [a, a, b]
+</span></code></pre>
+<p>Now let's check their ids:</p>
+<pre data-lang="sh" style="background-color:#151515;color:#e8e8d3;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#ffb964;">$</span><span> python test.py
+</span><span style="color:#ffb964;">id</span><span>(original_list)=</span><span style="color:#99ad6a;">128962585137664
+</span><span style="color:#ffb964;">id</span><span>(original_list[0])=</span><span style="color:#99ad6a;">128962572331216
+</span><span style="color:#ffb964;">id</span><span>(original_list[1])=</span><span style="color:#99ad6a;">128962572331216
+</span><span style="color:#ffb964;">id</span><span>(original_list[2])=</span><span style="color:#99ad6a;">128962572908496
+</span></code></pre>
+<p>Clearly you can see that both <code>a</code>s are the same object.</p>
+<p>Let's create a dummy dictionary memo so we can see what happens when we invoke properly <code>deepcopy</code>:</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span>memo_normal = {}
+</span><span>copied_list_normal = copy.</span><span style="color:#ffb964;">deepcopy</span><span>(original_list, memo_normal)
+</span></code></pre>
+<p>And now what we've created:</p>
+<pre data-lang="sh" style="background-color:#151515;color:#e8e8d3;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#ffb964;">$</span><span> python test.py
+</span><span style="color:#ffb964;">id</span><span>(copied_list_normal)=</span><span style="color:#99ad6a;">128962585135936
+</span><span style="color:#ffb964;">id</span><span>(copied_list_normal[0])=</span><span style="color:#99ad6a;">128962572909264
+</span><span style="color:#ffb964;">id</span><span>(copied_list_normal[1])=</span><span style="color:#99ad6a;">128962572909264
+</span><span style="color:#ffb964;">id</span><span>(copied_list_normal[2])=</span><span style="color:#99ad6a;">128962573095360
+</span><span style="color:#ffb964;">memo_normal</span><span>=
+</span><span style="color:#ffb964;">{128962572331216: </span><span>&lt;__main__.T object at 0x754a7058fad</span><span style="color:#cf6a4c;">0</span><span>&gt;,
+</span><span> </span><span style="color:#ffb964;">128962572908496: </span><span>&lt;__main__.T object at 0x754a705bd1c</span><span style="color:#cf6a4c;">0</span><span>&gt;,
+</span><span> </span><span style="color:#ffb964;">128962572942976:</span><span> [&lt;__main__.T object at 0x754a705028d</span><span style="color:#cf6a4c;">0</span><span>&gt;,
+</span><span>                   &lt;__main__.T </span><span style="color:#ffb964;">object</span><span> at 0x754a7058f7d</span><span style="color:#cf6a4c;">0</span><span>&gt;,
+</span><span>                   </span><span style="color:#ffb964;">[</span><span>&lt;__main__.T object at 0x754a705028d</span><span style="color:#cf6a4c;">0</span><span>&gt;,
+</span><span>                    &lt;__main__.T </span><span style="color:#ffb964;">object</span><span> at 0x754a705028d</span><span style="color:#cf6a4c;">0</span><span>&gt;,
+</span><span>                    &lt;__main__.T </span><span style="color:#ffb964;">object</span><span> at 0x754a7058f7d</span><span style="color:#cf6a4c;">0</span><span>&gt;]],
+</span><span> </span><span style="color:#ffb964;">128962585137664:</span><span> [&lt;__main__.T object at 0x754a7058fad</span><span style="color:#cf6a4c;">0</span><span>&gt;,
+</span><span>                   &lt;__main__.T </span><span style="color:#ffb964;">object</span><span> at 0x754a7058fad</span><span style="color:#cf6a4c;">0</span><span>&gt;,
+</span><span>                   &lt;__main__.T </span><span style="color:#ffb964;">object</span><span> at 0x754a705bd1c</span><span style="color:#cf6a4c;">0</span><span>&gt;]}
+</span></code></pre>
+<p>As you can see the <code>memo</code> dictionary got some keys filled in for us from the <code>deepcopy</code> function.</p>
+<ul>
+<li>The very first thing <code>deepcopy</code> sees is the <code>original_list</code> hence why it creates new empty list 
+and stores it <code>memo[id(original_list)] = copied_list_normal</code>. </li>
+<li>Then it sees both <code>a</code> and <code>b</code>, places them in memo again <code>memo[id(a)] = copy_a</code> and <code>memo[id(b)] = copy_b</code> and puts them into the <code>copied_list_normal</code>.</li>
+</ul>
+<p>You might notice other keys in the memo besides our objects (the <code>128962572942976</code> key); these are used internally by <code>deepcopy</code> to manage the recursion process.
+For our purposes, the crucial entries are the ones mapping the original objects (a, b, and the list itself) to their new copies.</p>
+<p>As you can see, at minimum, you will always have <strong>keys for every unique object</strong> that <code>deepcopy</code> encounters.</p>
+<p>Now, the purpose of <code>ForgetfulDict</code> becomes clear. By overriding <code>__setitem__</code> with a pass statement, it creates a dictionary-like object that accepts set operations but silently discards the items. It's a black hole for data.</p>
+<p>When passed to <code>copy.deepcopy</code> as the memo, it effectively disables the memoization mechanism. Every time <code>deepcopy</code> tries to save a copied object <code>(memo[id(original_obj)] = new_obj)</code>, <code>ForgetfulDict</code> does nothing. Consequently, <code>deepcopy</code> never finds any previously copied objects and is forced to create a fresh copy of every single item it encounters, even if it's a duplicate. Let's see it in action:</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span>memo_forgetful = </span><span style="color:#ffb964;">_ForgetfulDict</span><span>()
+</span><span>copied_list_forgetful = copy.</span><span style="color:#ffb964;">deepcopy</span><span>(original_list, memo_forgetful)
+</span></code></pre>
+<p>And...</p>
+<pre data-lang="sh" style="background-color:#151515;color:#e8e8d3;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#ffb964;">$</span><span> python test.py
+</span><span style="color:#ffb964;">id</span><span>(copied_list_forgetful)=</span><span style="color:#99ad6a;">128962573070912
+</span><span style="color:#ffb964;">id</span><span>(copied_list_forgetful[0])=</span><span style="color:#99ad6a;">128962573100304
+</span><span style="color:#ffb964;">id</span><span>(copied_list_forgetful[1])=</span><span style="color:#99ad6a;">128962573100496
+</span><span style="color:#ffb964;">id</span><span>(copied_list_forgetful[2])=</span><span style="color:#99ad6a;">128962573100880
+</span><span style="color:#ffb964;">memo_forgetful</span><span>=</span><span style="color:#99ad6a;">{}
+</span></code></pre>
+<p>Did you spot the difference? ;) </p>
+<p>Not only memo is empty (because we've given it a dictionary that never actually saves keys!) but our copied list, now has <strong>3 references to 3 objects</strong> instead of <strong>3 references to 2 objects</strong>!</p>
+<p>To hammer the point even further. Let's compare them and print them out.</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span>
+</span><span style="color:#ffb964;">print</span><span>(</span><span style="color:#8fbfdc;">f</span><span style="color:#556633;">&quot;</span><span>{copied_list_forgetful[</span><span style="color:#cf6a4c;">0</span><span>] is copied_list_forgetful[</span><span style="color:#cf6a4c;">1</span><span>]}</span><span style="color:#556633;">&quot;</span><span>)
+</span><span style="color:#ffb964;">print</span><span>(</span><span style="color:#8fbfdc;">f</span><span style="color:#556633;">&quot;</span><span>{copied_list_normal[</span><span style="color:#cf6a4c;">0</span><span>] is copied_list_normal[</span><span style="color:#cf6a4c;">1</span><span>]}</span><span style="color:#556633;">&quot;</span><span>)
+</span><span>
+</span><span>...
+</span><span>
+</span><span>$ python test.py
+</span><span>False
+</span><span>True
+</span></code></pre>
+<p>Our <code>deepcopy</code> operation created a new copy of every item, even separating the duplicates. Neat!</p>
+<h3 id="warning">Warning ⚠️</h3>
+<p>As mentioned before, <code>memo</code> argument is used to prevent <code>RecursionError</code>. Using <code>ForgetfulDict</code> removes that roadblock, <strong>so any recursive structure you have will cause an error</strong>.</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span>
+</span><span style="color:#8fbfdc;">import </span><span>sys
+</span><span>
+</span><span>sys.</span><span style="color:#ffb964;">setrecursionlimit</span><span>(</span><span style="color:#cf6a4c;">100</span><span>) </span><span style="color:#888888;"># Just so you see the error faster.
+</span><span>
+</span><span>recursive_list = [</span><span style="color:#cf6a4c;">1</span><span>, </span><span style="color:#cf6a4c;">2</span><span>]
+</span><span>recursive_list.</span><span style="color:#ffb964;">append</span><span>(recursive_list)
+</span><span>
+</span><span>copied_list = copy.</span><span style="color:#ffb964;">deepcopy</span><span>(recursive_list, memo_forgetful)
+</span><span style="color:#ffb964;">print</span><span>(</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">We do not reach that point.</span><span style="color:#556633;">&quot;</span><span>)
+</span></code></pre>
+<pre data-lang="sh" style="background-color:#151515;color:#e8e8d3;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#ffb964;">$</span><span> python test.py
+</span><span>  </span><span style="color:#ffb964;">File </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">/usr/lib/python3.12/copy.py</span><span style="color:#556633;">&quot;</span><span>, line 136, in deepcopy
+</span><span>    </span><span style="color:#ffb964;">y</span><span> = copier(x, memo)
+</span><span>        </span><span style="color:#ffb964;">^^^^^^^^^^^^^^^
+</span><span>  </span><span style="color:#ffb964;">File </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">/usr/lib/python3.12/copy.py</span><span style="color:#556633;">&quot;</span><span>, line 196, in _deepcopy_list
+</span><span>    </span><span style="color:#ffb964;">append</span><span>(deepcopy(a, memo))
+</span><span>           </span><span style="color:#ffb964;">^^^^^^^^^^^^^^^^^
+</span><span>  </span><span style="color:#ffb964;">File </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">/usr/lib/python3.12/copy.py</span><span style="color:#556633;">&quot;</span><span>, line 136, in deepcopy
+</span><span>    </span><span style="color:#ffb964;">y</span><span> = copier(x, memo)
+</span><span>        </span><span style="color:#ffb964;">^^^^^^^^^^^^^^^
+</span><span style="color:#ffb964;">RecursionError:</span><span> maximum recursion depth exceeded
+</span></code></pre>
+<p>Whereas normal <code>deepcopy</code> deals with it appropriately.</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span>copied_list = copy.</span><span style="color:#ffb964;">deepcopy</span><span>(recursive_list)
+</span><span style="color:#ffb964;">print</span><span>(</span><span style="color:#8fbfdc;">f</span><span style="color:#556633;">&quot;</span><span>{ copied_list </span><span style="color:#8fbfdc;">=</span><span>}</span><span style="color:#556633;">&quot;</span><span>)
+</span><span>$ python test.py
+</span><span> copied_list =[</span><span style="color:#cf6a4c;">1</span><span>, </span><span style="color:#cf6a4c;">2</span><span>, [...]]
+</span></code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>The <code>ForgetfulDict</code> is a brilliant, minimal solution to a very specific problem: how to force <code>deepcopy</code> to create a truly distinct copy of every single element in a data structure, breaking any shared references that might exist. It does so at the cost of safety.</p>
+<p>While the default behavior of <code>deepcopy</code> is usually what you want—preserving the internal structure of your objects—the boto3 authors needed to ensure that user-provided parameters could be modified without any side effects, even if the user passed in a list with duplicate object references.</p>
+<p>This elegant pattern teaches us two things:</p>
+<ol>
+<li>Understand your tools: Knowing about the memo argument in <code>copy.deepcopy</code> opens up new possibilities for customizing its behavior.</li>
+<li>Embrace simple interfaces: By creating a class that adheres to the dictionary interface (<code>__setitem__</code>), you can fundamentally change the behavior of a standard library function without rewriting it.</li>
+</ol>
+<p>So, the next time you need to ensure every object in a copy is unique, remember the power of being a little forgetful.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinderdev.github.io/book-summary-rust-atomics/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Book summary and review #0: Mara Bos - Rust Atomics and Locks</span>
+                        </a>
+                    </span>
+                
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Revinder</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

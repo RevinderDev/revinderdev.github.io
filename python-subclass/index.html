@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>RevinderDev Blog</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://revinderdev.github.io/style.css">
+    <link rel="stylesheet" href="https://revinderdev.github.io/color/orange.css">
+
+    <link rel="stylesheet" href="https://revinderdev.github.io/font-hack.css">
+
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    </head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://revinderdev.github.io/" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Revinder
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinderdev.github.io/">Blog</a></li>
+            
+                <li><a href="https://revinderdev.github.io//tags">Tags</a></li>
+            
+                <li><a href="https://revinderdev.github.io//archive">Archive</a></li>
+            
+                <li><a href="https://revinderdev.github.io//about">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinderdev.github.io/python-subclass/">Python `__init_subclass__` demystified</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2023-03-11
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinderdev.github.io/tags/python/">#Python</a>&nbsp;
+                <a class="post-tag" href="https://revinderdev.github.io/tags/programming/">#Programming</a></span>
+    
+
+        
+        <div class="post-content">
+            <h2 id="introduction">Introduction</h2>
+<p>In this article I will try to demystify less commonly known function <code>__init_subclass__</code> introduced in <a href="https://peps.python.org/pep-0487/">PEP 487</a>, explain how it works and show you real life example of how you can leverage it in Python 3.11 for your own benefit.</p>
+<p><strong>Prerequisites</strong>:</p>
+<ul>
+<li>Basic python understanding</li>
+</ul>
+<span id="continue-reading"></span><h2 id="inner-workings">Inner workings</h2>
+<p><code>__init_subclass__</code> is whats known as a <a href="https://www.oreilly.com/library/view/learning-python-design/9781785888038/ch08s03.html#:~:text=A%20hook%20is%20a%20method,it%20can%20easily%20ignore%20this.">hook method</a> [1]. It was introduced as an easier alternative to using metaclasses should you want to customize how your classes are defined using <a href="https://en.wikipedia.org/wiki/Metaprogramming#:~:text=Metaprogramming%20is%20a%20programming%20technique,even%20modify%20itself%20while%20running.">meta programming</a>. That is - ability to manipulate code by itself. In python, one of the ways you can achieve such behaviour is by using <a href="https://docs.python.org/3/reference/datamodel.html#metaclasses">Metaclasses</a>. This can allow us to customize class creation process, however we need to: introduce new base meta class (that inherits from <code>type</code>), the class needs to implement either <code>__new__</code> or <code>__init__</code> depending on how we want it to behave, inherited classes need to explicitly set it as a metaclass and so on. That is a lot of boilerplate! This is where <code>__init_subclass__</code> comes to the rescue and simplifies it all for us.</p>
+<p>As mentioned in the documentation [2], <code>__init_subclass__</code> is called, whenever a containing class is subclassed by class (it will get more clear with an example I promise). So to phrase it differently - whenever you define new <em>type</em> or <em>subclass</em> of a class that had this method defined. By defining that method, we can add behaviour that will be added to each new subclass in our project.</p>
+<blockquote>
+<p>To go slightly too much in depth, in CPython the method is called whenever new a <em>type</em> is defined with <code>type_new(...)</code> function. <code>type_new(...)</code> then calls <code>type_new_impl(...)</code>. That function creates new <code>PyObject</code> (more specifically <code>PyTypeObject</code> which is CPython equivalent of Python <a href="https://docs.python.org/3/library/functions.html#type"><code>type</code></a> object), that will be a new <em>type</em>, based on given <code>PyTypeObject</code> metatype structure. Gets confusing I know. It will also do all the heavy lifting of defining a new type such as calling <code>set_attrs</code>, putting slots, calling <code>set_names</code> and.. you guessed it - <code>init_subclass</code> too! How cool open source is?</p>
+<pre data-lang="C" style="background-color:#151515;color:#e8e8d3;" class="language-C "><code class="language-C" data-lang="C"><span>...
+</span><span style="color:#888888;">/* line 3438 */
+</span><span style="color:#8fbfdc;">static</span><span> PyObject *
+</span><span style="color:#fad07a;">type_new</span><span>(PyTypeObject *</span><span style="color:#ffb964;">metatype</span><span>, PyObject &gt; *</span><span style="color:#ffb964;">args</span><span>, PyObject *</span><span style="color:#ffb964;">kwds</span><span>)
+</span><span>{
+</span><span>   </span><span style="color:#888888;">/* Partially ommited */
+</span><span>   type = </span><span style="color:#ffb964;">type_new_impl</span><span>(&amp;ctx);     
+</span><span>}
+</span><span>
+</span><span style="color:#888888;">/* line 3334 */
+</span><span style="color:#8fbfdc;">static</span><span> PyObject*
+</span><span style="color:#fad07a;">type_new_impl</span><span>(type_new_ctx *</span><span style="color:#ffb964;">ctx</span><span>)
+</span><span>{
+</span><span>   </span><span style="color:#888888;">/* Partially ommitted */
+</span><span>   PyTypeObject *type = </span><span style="color:#ffb964;">type_new_init</span><span>(ctx);
+</span><span>   </span><span style="color:#8fbfdc;">if </span><span>(</span><span style="color:#ffb964;">type_new_set_names</span><span>(type) &lt; </span><span style="color:#cf6a4c;">0</span><span>) {
+</span><span>       </span><span style="color:#8fbfdc;">goto</span><span> error;
+</span><span>   }
+</span><span>   </span><span style="color:#8fbfdc;">if </span><span>(</span><span style="color:#ffb964;">type_new_init_subclass</span><span>(type, ctx-&gt;kwds) &lt; </span><span style="color:#cf6a4c;">0</span><span>) {
+</span><span>      </span><span style="color:#8fbfdc;">goto</span><span> error; </span><span style="color:#888888;">// https://xkcd.com/292
+</span><span>   }
+</span><span>   </span><span style="color:#8fbfdc;">return </span><span>(PyObject *)type;
+</span><span>}
+</span></code></pre>
+<p align=center><a href="https://github.com/python/cpython/blob/main/Objects/typeobject.c#L3334">Objects/typeobject.c</a>
+</blockquote>
+<h2 id="usage">Usage</h2>
+<p>What can you use it for? Anything! Maybe additional logging, automatic property creation or resource locking/synchronization. The possibilites are endless, but in this article I will show you an example a friend of mine showed me that involves <a href="https://charlesreid1.github.io/python-patterns-the-registry.html">registry pattern</a>. Suppose that you want to build a base <code>FileHandler</code> class. By using registry pattern and <code>__init_subclass__</code>, we can make it into a manager class, that will know which method of which subclass to call or which subclass to create based on an input (sort of like a factory pattern). </p>
+<p>Let's define <code>enum</code> that lists our choices:</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#888888;"># my_module/enums.py
+</span><span style="color:#8fbfdc;">from </span><span>enum </span><span style="color:#8fbfdc;">import </span><span>StrEnum
+</span><span>
+</span><span style="color:#8fbfdc;">class </span><span style="color:#ffb964;">FileType</span><span>(</span><span style="color:#ffb964;">StrEnum</span><span>):
+</span><span>    </span><span style="color:#ffb964;">CSV </span><span>= </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">csv</span><span style="color:#556633;">&quot;
+</span><span>    </span><span style="color:#ffb964;">JSON </span><span>= </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">json</span><span style="color:#556633;">&quot;
+</span></code></pre>
+<p>And the base file class:</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#888888;"># my_module/files.py
+</span><span style="color:#8fbfdc;">import </span><span>abc
+</span><span style="color:#8fbfdc;">from </span><span>typing </span><span style="color:#8fbfdc;">import </span><span>Type
+</span><span>
+</span><span style="color:#8fbfdc;">from .</span><span>enums </span><span style="color:#8fbfdc;">import </span><span>FileType
+</span><span>
+</span><span style="color:#8fbfdc;">class </span><span style="color:#ffb964;">FileHandler</span><span>(</span><span style="color:#ffb964;">abc.ABC</span><span>):
+</span><span>    </span><span style="color:#888888;"># 👇 Our registry from `registry_pattern` will be a dictionary
+</span><span>    _registry: dict[FileType, Type[</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">FileHandler</span><span style="color:#556633;">&quot;</span><span>]] = {}
+</span><span>
+</span><span>    </span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">__init_subclass__</span><span>(
+</span><span>        </span><span style="color:#ffb964;">cls</span><span>: Type[</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">FileHandler</span><span style="color:#556633;">&quot;</span><span>], *, </span><span style="color:#ffb964;">file_type</span><span>: FileType
+</span><span>    ) -&gt; None:
+</span><span>        </span><span style="color:#ffb964;">cls</span><span>._registry[file_type] = </span><span style="color:#ffb964;">cls
+</span><span>
+</span><span>    @</span><span style="color:#ffb964;">classmethod
+</span><span>    </span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">get_by_file_type</span><span>(</span><span style="color:#ffb964;">cls</span><span>, </span><span style="color:#ffb964;">file_type</span><span>: FileType) -&gt; Type[</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">FileHandler</span><span style="color:#556633;">&quot;</span><span>]:
+</span><span>        </span><span style="color:#8fbfdc;">try</span><span>:
+</span><span>            </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">cls</span><span>._registry[file_type]
+</span><span>        </span><span style="color:#8fbfdc;">except </span><span>KeyError </span><span style="color:#8fbfdc;">as </span><span>exc:
+</span><span>            </span><span style="color:#8fbfdc;">raise </span><span style="color:#ffb964;">ValueError</span><span>(</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Invalid file type provided.</span><span style="color:#556633;">&quot;</span><span>) </span><span style="color:#8fbfdc;">from </span><span>exc
+</span><span>    
+</span><span>    @abc.</span><span style="color:#ffb964;">abstractmethod
+</span><span>    </span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">generate_file</span><span>(</span><span style="color:#ffb964;">self</span><span>) -&gt; None:
+</span><span>        </span><span style="color:#8fbfdc;">raise </span><span>NotImplementedError
+</span></code></pre>
+<p>Breaking it down:</p>
+<ul>
+<li><code>FileHandler</code> is our <a href="https://docs.python.org/3/library/abc.html">Abstract Base Class</a>.</li>
+<li><code>_registry</code> is it's class field that is going to be of a type <code>dict</code> with key of type <code>FileType</code> and value as <code>FileHandler</code> class - <strong>type, not object</strong>. This will be part of our <code>registry-pattern</code>. </li>
+<li><code>get_by_file_type</code> is <em>public</em> class method that will allow us to fetch <code>FileHandler</code> type, based on given a <code>FileType</code> enum choice, from the registry - this will be entry point of a client and this is rest of our registry implementation. We use input as a key in the dictionary and if it is not there - we raise a <code>ValueError</code>. You could return <code>None</code> if the key is incorrect, but it is better to be <a href="https://peps.python.org/pep-0020/">explicit rather than implicit</a>.</li>
+<li><code>generate_file</code> is only for the sake of example. Abstract function which will generate our file™ - patent pending. Concrete implementation will be inside subclasses.</li>
+</ul>
+<p>Now we can implement our <code>__init_subclass__</code> method, which will only put our class type inside our registry. Notice how we didn't call <code>super().__init_subclass__()</code>. That's because base implementation does nothing, other than raising an error should it be called with any arguments, as stated in the documentation [2]. We already took care of that by doing:</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span>                                             👇👇
+</span><span> </span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">__init_subclass__</span><span>(</span><span style="color:#ffb964;">cls</span><span>: Type[FileHandler], *, </span><span style="color:#ffb964;">file_type</span><span>: FileType):
+</span><span>    ...
+</span></code></pre>
+<p>that <code>*</code> asterisk symbol means that any following function arguments need to be passed as <strong>keyword arguments</strong> only. Which means we will never have any unwanted arguments pass in here anyway. Neat!</p>
+<p>Now, onto concrete classes!</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#888888;"># my_module/specialized.py
+</span><span style="color:#8fbfdc;">from .</span><span>enums </span><span style="color:#8fbfdc;">import </span><span>FileType
+</span><span style="color:#8fbfdc;">from .</span><span>base </span><span style="color:#8fbfdc;">import </span><span>FileHandler
+</span><span>
+</span><span style="color:#8fbfdc;">class </span><span style="color:#ffb964;">CSVFileHandler</span><span>(</span><span style="color:#ffb964;">FileHandler</span><span>, </span><span style="color:#ffb964;">file_type</span><span>=</span><span style="color:#ffb964;">FileType.CSV</span><span>):
+</span><span>    </span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">generate_file</span><span>(</span><span style="color:#ffb964;">self</span><span>) -&gt; None:
+</span><span>        </span><span style="color:#888888;"># Brilliant example I know ;)
+</span><span>        </span><span style="color:#ffb964;">print</span><span>(</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Generating CSV</span><span style="color:#556633;">&quot;</span><span>) 
+</span><span>
+</span><span style="color:#8fbfdc;">class </span><span style="color:#ffb964;">JSONFileHandler</span><span>(</span><span style="color:#ffb964;">FileHandler</span><span>, </span><span style="color:#ffb964;">file_type</span><span>=</span><span style="color:#ffb964;">FileType.JSON</span><span>):
+</span><span>    </span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">generate_file</span><span>(</span><span style="color:#ffb964;">self</span><span>) -&gt; None:
+</span><span>        </span><span style="color:#ffb964;">print</span><span>(</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Generating JSON</span><span style="color:#556633;">&quot;</span><span>)
+</span></code></pre>
+<p>A careful reader will ask himself a question now, what will happen if you omit <code>file_type</code> in definition?</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#8fbfdc;">class </span><span style="color:#ffb964;">CSVFileHandler</span><span>(</span><span style="color:#ffb964;">FileHandler</span><span>):
+</span><span>    ...
+</span></code></pre>
+<p>And run it..</p>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#ffb964;">$</span><span> python file.py
+</span><span>
+</span><span style="color:#ffb964;">Traceback</span><span> (most recent call last):
+</span><span>  </span><span style="color:#ffb964;">File </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">D:\examples\file.py</span><span style="color:#556633;">&quot;</span><span>, line 38, in &lt;module&gt;
+</span><span>    </span><span style="color:#ffb964;">class</span><span> CSVFileHandler(FileHandler):
+</span><span>  </span><span style="color:#ffb964;">File </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">&lt;frozen abc&gt;</span><span style="color:#556633;">&quot;</span><span>, line 106, in __new__
+</span><span style="color:#ffb964;">TypeError:</span><span> FileHandler.__init_subclass__() </span><span style="color:#ffb964;">missing</span><span> 1 required keyword-only argument: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">file_type</span><span style="color:#556633;">&#39;
+</span></code></pre>
+<p>Nice! It threw an error during importing module, not when trying to instantiate the class! </p>
+<p>Anyways, back to the example. Remember that we defined everything inside a python module and we now want our client to use our file to well.. file! Let's expose that for him.</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#888888;"># my_module/__init__.py
+</span><span style="color:#8fbfdc;">from .</span><span>enums </span><span style="color:#8fbfdc;">import </span><span>FileType
+</span><span style="color:#8fbfdc;">from .</span><span>base </span><span style="color:#8fbfdc;">import </span><span>FileHandler
+</span><span>
+</span><span>__all__ = [</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">FileHandler</span><span style="color:#556633;">&quot;</span><span>, </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">FileType</span><span style="color:#556633;">&quot;</span><span>]
+</span></code></pre>
+<p>But how can a client create concrete instances of a class if he cannot access them from a module? That's what the helper method and registry are for! This is how he would be able to call them:</p>
+<pre data-lang="python" style="background-color:#151515;color:#e8e8d3;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#8fbfdc;">from </span><span>your_module </span><span style="color:#8fbfdc;">import </span><span>FileType, FileHandler
+</span><span>
+</span><span style="color:#8fbfdc;">def </span><span style="color:#fad07a;">process</span><span>() -&gt; None:
+</span><span>    file_type: FileType = </span><span style="color:#ffb964;">determine_file_from_very_hard_client_logic</span><span>() 
+</span><span>    </span><span style="color:#888888;"># You&#39;ve received a type, not an instance!
+</span><span>    file_class = FileHandler.</span><span style="color:#ffb964;">get_by_file_type</span><span>(file_type)
+</span><span>    </span><span style="color:#888888;"># Notice! 👇
+</span><span>    </span><span style="color:#ffb964;">file_class</span><span>().</span><span style="color:#ffb964;">generate_file</span><span>()
+</span></code></pre>
+<p>Notice also how easily extensible that approach is. If there will be new choice added in <code>FileType</code> enum, then the client does even not need to modify his own code to support other <code>file_type</code>s (other than updating our glorious module of course!).</p>
+<p>Alternatively, we could already return instance of a class from <code>get_by_file_type</code> rather than returning its type - this would be a proper factory then. </p>
+<p>Another example would be to use <code>registry</code> of <a href="https://en.wikipedia.org/wiki/Singleton_pattern#:~:text=In%20software%20engineering%2C%20the%20singleton,class%20to%20a%20singular%20instance.">Singletons</a>. Now we could define a proxy method, that would take <code>FileType</code> choice input and that would underneath invoke, correct corresponding method from singletons from the registry. Indeed lots of possibilities.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post, I showed you how you can leverage <code>__init_subclass__</code> mechanism to modify how your classes are defined. Hopefully I managed to show you something cool that you haven't seen before and you will be able to now succesfully use it for your own benefit. As a side note, it is worth mentioning that PEP-487 introduced yet another method called <code>__set_name__</code> which is <em>yet another</em> hook method that you can use, though for the purpose of the article, it was not necessary.</p>
+<h2 id="references">References</h2>
+<p>[1] <a href="https://peps.python.org/pep-0487/">PEP-487</a></p>
+<p>[2] <a href="https://docs.python.org/3/reference/datamodel.html#object.__init_subclass__">Python documentation</a></p>
+<p>[3] <a href="https://charlesreid1.github.io/python-patterns-the-registry.html">Registry Pattern explained</a> </p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinderdev.github.io/mmr-abuse/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">MMR Abuse in World of Warcraft Arena</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://revinderdev.github.io/favourite-tech-question/">
+                            <span class="button__text">My favourite interview question</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Revinder</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>
