@@ -1,5 +1,5 @@
 +++
-title = "Wonders of Python - ForgetfulDict"
+title = "The \"Forgetful\" pattern: A method for Deep Copying with unique instances"
 date = 2025-09-08
 
 [taxonomies]
@@ -12,7 +12,7 @@ In this article I will showcase you a recent trick I've learned when glancing th
 We'll break down its surprisingly simple implementation, understand the specific problem it solves within Python's copy module, and see how this pattern can be useful in other contexts.
 
 **Prerequisites**:
-- Basic python understanding
+- Basic **Python** understanding
 
 <!-- more -->
 --- 
