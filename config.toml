@@ -16,7 +16,7 @@ github_alerts = false
 
 [markdown.render_code]
 layout = "table"
-extra_attr = ["data-lang", "data-name"]
+extra_attr = "data-lang"
 
 [extra]
 

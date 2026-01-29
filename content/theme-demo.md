@@ -8,16 +8,31 @@ This page demonstrates the new theme features implemented from `terminus` and `a
 <!-- more -->
 
 ## 1. Terminus-style Code Blocks
-These blocks support language headers, line numbers, filenames, highlighted lines, and a copy button.
+These blocks support language headers, line numbers, and highlighted lines with syntax highlighting.
 
-```python, linenos
+### Basic Code Block with Line Numbers
+```python,linenos
 def greet(name):
-    # This line is highlighted!
+    # Regular code block
     print(f"Hello, {name}!")
 
 if __name__ == "__main__":
     greet("Terminus")
 ```
+
+### Code Block with Highlighted Lines
+To highlight specific lines, use the `hl_lines` parameter with space-separated line numbers:
+
+```python,linenos,hl_lines=2 3
+def greet(name):
+    # These lines are highlighted!
+    print(f"Hello, {name}!")
+
+if __name__ == "__main__":
+    greet("Terminus")
+```
+
+
 
 ## 2. Alerts (Shortcode)
 Implemented from `terminus`, styled for `gruvbox` with full borders and markdown support.

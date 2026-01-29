@@ -194,12 +194,11 @@ pre[data-lang] {
         overflow-x: auto;
         padding: 10px;
         background: none;
+        color: inherit;
 
         mark {
-            display: block;
-            margin-inline: -10px;
-            padding-inline: 10px;
-            background: rgba(215, 153, 33, 0.2); // Gruvbox Yellow
+            display: inline;
+            background: none;
             color: inherit;
         }
     }
@@ -215,21 +214,29 @@ pre[data-lang] {
             padding: 0;
         }
 
+        tr {
+            &:has(mark) {
+                background: #3c3836 !important; // Match Gruvbox darker
+            }
+        }
+
         tr td:first-child {
             color: #665c54;
             text-align: end;
             user-select: none;
-            padding: 5px 20px 5px 10px;
+            padding: 0 10px 0 10px;
             border-right: 1px solid var(--code-border);
             width: 3ch;
+            line-height: 1.5;
         }
         
         tr td:last-child {
-            padding: 5px 0 5px 15px;
+            padding: 0;
             width: 100%;
 
             code {
-                padding: 0;
+                padding: 10px;
+                display: block;
             }
         }
     }
