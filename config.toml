@@ -15,8 +15,8 @@ highlight_theme = "boron"
 
 [extra]
 
-accent_color = "orange"
-background_color = "orange"
+accent_color = "gruvbox"
+background_color = "gruvbox"
 
 logo_text = "Revinder"
 favicon = "/fav-icon.png"
