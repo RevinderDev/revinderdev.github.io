@@ -131,7 +131,7 @@ class CSVFileHandler(FileHandler):
     ...
 ```
 And run it..
-```bash, linenos
+```bash
 $ python file.py
 
 Traceback (most recent call last):

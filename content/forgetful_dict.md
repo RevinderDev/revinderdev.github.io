@@ -82,7 +82,7 @@ original_list = [a, a, b]
 
 Now let's check their ids:
 
-```sh, linenos
+```sh
 $ python test.py
 id(original_list)=128962585137664
 id(original_list[0])=128962572331216
@@ -100,7 +100,7 @@ copied_list_normal = copy.deepcopy(original_list, memo_normal)
 ```
 
 And now what we've created:
-```sh, linenos
+```sh
 $ python test.py
 id(copied_list_normal)=128962585135936
 id(copied_list_normal[0])=128962572909264
@@ -141,7 +141,7 @@ copied_list_forgetful = copy.deepcopy(original_list, memo_forgetful)
 
 And...
 
-```sh, linenos
+```sh
 $ python test.py
 id(copied_list_forgetful)=128962573070912
 id(copied_list_forgetful[0])=128962573100304
@@ -162,7 +162,9 @@ print(f"{copied_list_forgetful[0] is copied_list_forgetful[1]}")
 print(f"{copied_list_normal[0] is copied_list_normal[1]}")
 
 ...
+```
 
+```sh
 $ python test.py
 False
 True
@@ -186,7 +188,7 @@ copied_list = copy.deepcopy(recursive_list, memo_forgetful)
 print("We do not reach that point.")
 ```
 
-```sh, linenos
+```sh
 $ python test.py
   File "/usr/lib/python3.12/copy.py", line 136, in deepcopy
     y = copier(x, memo)
@@ -205,6 +207,9 @@ Whereas normal `deepcopy` deals with it appropriately.
 ```python, linenos
 copied_list = copy.deepcopy(recursive_list)
 print(f"{ copied_list =}")
+```
+
+```sh
 $ python test.py
  copied_list =[1, 2, [...]]
 ```

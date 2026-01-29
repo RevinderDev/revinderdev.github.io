@@ -7,6 +7,23 @@ This page demonstrates the new theme features implemented from `terminus` and `a
 
 <!-- more -->
 
+# H1
+
+## H2
+
+### H3
+
+#### H4
+
+##### H5
+
+* Item list
+* Item List
+    * Nested
+
+- [ ] Check box
+- [x] Check box
+
 ## 1. Terminus-style Code Blocks
 These blocks support language headers, line numbers, and highlighted lines with syntax highlighting.
 

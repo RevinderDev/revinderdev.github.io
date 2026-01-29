@@ -318,11 +318,11 @@ pub fn main() !void {
     thread2.join();
     std.debug.print("\tFinal counter value: {d}\n", .{global_counter});
 }
-````
+```
 
 Running this a couple of times we can see that, we did in fact succeeded in creating a bad code.
 
-```sh, linenos
+```sh
 $ zig build run
     Final counter value: 150368
 $ zig build run
@@ -389,7 +389,7 @@ pub fn main() !void {
 
 Results:
 
-```sh, linenos
+```sh
 $ zig build run
 Counter: 200000
 $ zig build run
