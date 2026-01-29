@@ -17,40 +17,41 @@ We'll break down its surprisingly simple implementation, understand the specific
 <!-- more -->
 --- 
 
-## ForgetfulDict
+# ForgetfulDict
 
 This is the full implementation of the class. And I mean it when I say it's **full implementation** - there is nothing more.
-> ```python
-> class _ForgetfulDict(dict):
->    """A dictionary that discards any items set on it. For use as `memo` in
->    `copy.deepcopy()` when every instance of a repeated object in the deepcopied
->    data structure should result in a separate copy.
->    """
->    def __setitem__(self, key, value):
->        pass
->    ```
+```python, linenos
+ class _ForgetfulDict(dict):
+    """A dictionary that discards any items set on it. For use as `memo` in
+    `copy.deepcopy()` when every instance of a repeated object in the deepcopied
+    data structure should result in a separate copy.
+    """
+    def __setitem__(self, key, value):
+        pass
+```
+
 <p align=center><a href="https://github.com/boto/boto3/blob/332640a9a2e01431d2a8e0952d61712f525f4ec6/boto3/dynamodb/transform.py#L25">boto3/dynamodb/transform.py#L25</a>
 
 
 Slightly below that, you can actually see how they use it:
 
-> ```python
-> def copy_dynamodb_params(params, **kwargs):
->    return copy.deepcopy(params, memo=_ForgetfulDict())
->
-> class DynamoDBHighLevelResource:
->    def __init__(self, *args, **kwargs):
->        super().__init__(*args, **kwargs)
->       # Apply handler that creates a copy of the user provided dynamodb
->       # item such that it can be modified.
->       self.meta.client.meta.events.register(
->           'provide-client-params.dynamodb',
->           copy_dynamodb_params,
->           unique_id='dynamodb-create-params-copy',
->       )
-> ```
+ ```python, linenos
+ def copy_dynamodb_params(params, **kwargs):
+    return copy.deepcopy(params, memo=_ForgetfulDict())
 
-## Lib/copy.py
+ class DynamoDBHighLevelResource:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+       # Apply handler that creates a copy of the user provided dynamodb
+       # item such that it can be modified.
+       self.meta.client.meta.events.register(
+           'provide-client-params.dynamodb',
+           copy_dynamodb_params,
+           unique_id='dynamodb-create-params-copy',
+       )
+ ```
+
+# Lib/copy.py
 
 So what actually is a `copy.py` module?
 `copy` is a python std library module that contains functions to perform shallow and deep copy operations. Unlike some other languages, in Python, when you do assignment statement (that is x = 1), you don't 
@@ -64,13 +65,13 @@ When you need a completely independent copy of a nested structure, deepcopy is w
 To prevent this, deepcopy cleverly uses an optional memo dictionary. This dictionary tracks objects that have already been copied during the current pass. When it encounters an object it has seen before, it simply reuses the existing copy from the memo instead of trying to copy it again. This not only solves the recursion problem but also ensures that shared object references within the original structure remain shared in the copied structure.
 Now we know what's the purpose of `memo` argument and we got a little bit closer to discovering what's the use of `ForgetfulDict`.
 
-### Usage example
+## Usage example
 
 Let's try to use the copy module to do some... well copying.
 
 First, create some dummy class and collection with nested objects.
 
-```python
+```python, linenos
 class T:
     pass
 
@@ -81,7 +82,7 @@ original_list = [a, a, b]
 
 Now let's check their ids:
 
-```sh
+```sh, linenos
 $ python test.py
 id(original_list)=128962585137664
 id(original_list[0])=128962572331216
@@ -93,13 +94,13 @@ Clearly you can see that both `a`s are the same object.
 
 Let's create a dummy dictionary memo so we can see what happens when we invoke properly `deepcopy`:
 
-```python
+```python, linenos
 memo_normal = {}
 copied_list_normal = copy.deepcopy(original_list, memo_normal)
 ```
 
 And now what we've created:
-```sh
+```sh, linenos
 $ python test.py
 id(copied_list_normal)=128962585135936
 id(copied_list_normal[0])=128962572909264
@@ -133,14 +134,14 @@ Now, the purpose of `ForgetfulDict` becomes clear. By overriding `__setitem__` w
 
 When passed to `copy.deepcopy` as the memo, it effectively disables the memoization mechanism. Every time `deepcopy` tries to save a copied object `(memo[id(original_obj)] = new_obj)`, `ForgetfulDict` does nothing. Consequently, `deepcopy` never finds any previously copied objects and is forced to create a fresh copy of every single item it encounters, even if it's a duplicate. Let's see it in action:
 
-```python
+```python, linenos
 memo_forgetful = _ForgetfulDict()
 copied_list_forgetful = copy.deepcopy(original_list, memo_forgetful)
 ```
 
 And...
 
-```sh
+```sh, linenos
 $ python test.py
 id(copied_list_forgetful)=128962573070912
 id(copied_list_forgetful[0])=128962573100304
@@ -155,7 +156,7 @@ Did you spot the difference? ;)
 Not only memo is empty (because we've given it a dictionary that never actually saves keys!) but our copied list, now has **3 references to 3 objects** instead of **3 references to 2 objects**!
 
 To hammer the point even further. Let's compare them and print them out.
-```python
+```python, linenos
 
 print(f"{copied_list_forgetful[0] is copied_list_forgetful[1]}")
 print(f"{copied_list_normal[0] is copied_list_normal[1]}")
@@ -168,11 +169,11 @@ True
 ```
 Our `deepcopy` operation created a new copy of every item, even separating the duplicates. Neat!
 
-### Warning ⚠️
+## Warning ⚠️
 
 As mentioned before, `memo` argument is used to prevent `RecursionError`. Using `ForgetfulDict` removes that roadblock, **so any recursive structure you have will cause an error**.
 
-```python
+```python, linenos
 
 import sys
 
@@ -185,7 +186,7 @@ copied_list = copy.deepcopy(recursive_list, memo_forgetful)
 print("We do not reach that point.")
 ```
 
-```sh
+```sh, linenos
 $ python test.py
   File "/usr/lib/python3.12/copy.py", line 136, in deepcopy
     y = copier(x, memo)
@@ -201,7 +202,7 @@ RecursionError: maximum recursion depth exceeded
 
 Whereas normal `deepcopy` deals with it appropriately.
 
-```python
+```python, linenos
 copied_list = copy.deepcopy(recursive_list)
 print(f"{ copied_list =}")
 $ python test.py
@@ -209,7 +210,7 @@ $ python test.py
 ```
 
 
-## Conclusion 
+# Conclusion 
 
 The `ForgetfulDict` is a brilliant, minimal solution to a very specific problem: how to force `deepcopy` to create a truly distinct copy of every single element in a data structure, breaking any shared references that might exist. It does so at the cost of safety.
 

@@ -22,7 +22,7 @@ As mentioned in the documentation [2], `__init_subclass__` is called, whenever a
 
 
 > To go slightly too much in depth, in CPython the method is called whenever new a *type* is defined with `type_new(...)` function. `type_new(...)` then calls `type_new_impl(...)`. That function creates new `PyObject` (more specifically `PyTypeObject` which is CPython equivalent of Python [`type`](https://docs.python.org/3/library/functions.html#type) object), that will be a new *type*, based on given `PyTypeObject` metatype structure. Gets confusing I know. It will also do all the heavy lifting of defining a new type such as calling `set_attrs`, putting slots, calling `set_names` and.. you guessed it - `init_subclass` too! How cool open source is?
-> ```C
+> ```C, linenos
 > ...
 > /* line 3438 */
 >static PyObject *
@@ -55,7 +55,7 @@ What can you use it for? Anything! Maybe additional logging, automatic property 
 
 
 Let's define `enum` that lists our choices:
-```python
+```python, linenos
 # my_module/enums.py
 from enum import StrEnum
 
@@ -65,7 +65,7 @@ class FileType(StrEnum):
 ```
 
 And the base file class:
-```python
+```python, linenos
 # my_module/files.py
 import abc
 from typing import Type
@@ -100,7 +100,7 @@ Breaking it down:
 * `generate_file` is only for the sake of example. Abstract function which will generate our file™ - patent pending. Concrete implementation will be inside subclasses.
 
 Now we can implement our `__init_subclass__` method, which will only put our class type inside our registry. Notice how we didn't call `super().__init_subclass__()`. That's because base implementation does nothing, other than raising an error should it be called with any arguments, as stated in the documentation [2]. We already took care of that by doing:
-```python
+```python, linenos
                                              👇👇
  def __init_subclass__(cls: Type[FileHandler], *, file_type: FileType):
     ...
@@ -109,7 +109,7 @@ that `*` asterisk symbol means that any following function arguments need to be 
 
 Now, onto concrete classes!
 
-```python
+```python, linenos
 # my_module/specialized.py
 from .enums import FileType
 from .base import FileHandler
@@ -126,12 +126,12 @@ class JSONFileHandler(FileHandler, file_type=FileType.JSON):
 
 A careful reader will ask himself a question now, what will happen if you omit `file_type` in definition?
 
-```python
+```python, linenos
 class CSVFileHandler(FileHandler):
     ...
 ```
 And run it..
-```bash
+```bash, linenos
 $ python file.py
 
 Traceback (most recent call last):
@@ -145,7 +145,7 @@ Nice! It threw an error during importing module, not when trying to instantiate 
 
 Anyways, back to the example. Remember that we defined everything inside a python module and we now want our client to use our file to well.. file! Let's expose that for him.
 
-```python
+```python, linenos
 # my_module/__init__.py
 from .enums import FileType
 from .base import FileHandler
@@ -155,7 +155,7 @@ __all__ = ["FileHandler", "FileType"]
 
 But how can a client create concrete instances of a class if he cannot access them from a module? That's what the helper method and registry are for! This is how he would be able to call them:
 
-```python
+```python, linenos
 from your_module import FileType, FileHandler
 
 def process() -> None:

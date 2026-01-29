@@ -233,7 +233,7 @@ Finally! We see some difference. For x86-64 it's the `lock` prefix that was intr
 
 But what's going on with ARM64? Our previous 3 instructions changed into 4 and there is additional label added somehow. What for? Let's go over each step.
 
-```asm
+```asm, linenos
 a:
 .L1:
     ldxr w8, [x0]      ; Load the value at address x0 into w8 (LL).
@@ -274,7 +274,7 @@ and thus having libraries that leverage POSIX work from the get go. Windows does
 There was another cool thing mentioned by the author, which I had never heard of before - `futex`! [7]
 On Linux all synchronization primitives are implemented using the `futex` system call. It is what's called "fast user-space mutex". Here is it's `libc` signature:
 
-```c
+```c, linenos
 long syscall(
         SYS_futex, 
         uint32_t *uaddr, 
@@ -299,7 +299,7 @@ There are still 2 more chapters - building our own lock and ideas and inspiratio
 
 Firstly, let's create a simple race condition.
 
-```zig
+```zig, linenos
 const std = @import("std");
 
 var global_counter: i32 = 0;
@@ -322,7 +322,7 @@ pub fn main() !void {
 
 Running this a couple of times we can see that, we did in fact succeeded in creating a bad code.
 
-```sh
+```sh, linenos
 $ zig build run
     Final counter value: 150368
 $ zig build run
@@ -333,7 +333,7 @@ $ zig build run
 
 We can obviously fix our function by using atomic like so:
 
-```zig
+```zig, linenos
 fn incrementer() !void {
     var i: usize = 0;
     while (i < 100_000) : (i += 1) {
@@ -344,7 +344,7 @@ fn incrementer() !void {
 
 But where is the fun in that! We wanted our own lock to be used for it! I am gonna go for SpinLock. Which is a lock that continuously 'spins' trying to unlock to get in. Sort of a busy waiting. Let's define `lock` and `unlock` methods on our struct:
 
-```zig
+```zig, linenos
 const std = @import("std");
 
 const SpinLock = struct {
@@ -364,7 +364,7 @@ const SpinLock = struct {
 
 And that's it! We can now use it to lock around our variable and have no race conditions.
 
-```zig
+```zig, linenos
 var my_lock = SpinLock{};
 
 var shared_counter: i32 = 0;
@@ -389,7 +389,7 @@ pub fn main() !void {
 
 Results:
 
-```sh
+```sh, linenos
 $ zig build run
 Counter: 200000
 $ zig build run

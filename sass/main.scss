@@ -33,22 +33,28 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   font-weight: bold;
   line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 h1 {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+  color: #b8bb26;
 }
 
 h2 {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  color: #fabd2f;
 }
 
 h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  color: #83a598;
 }
 
 h4, h5, h6 {
   font-size: 1.15rem;
+  color: #8ec07c;
 }
 
 
@@ -202,7 +208,7 @@ table {
   margin: 40px 0;
 }
 
-table, th, td {
+table:not(pre table), th, td {
   border: 1px dashed var(--accent);
   padding: 10px;
 }

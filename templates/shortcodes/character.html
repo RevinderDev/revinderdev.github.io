@@ -1,0 +1,17 @@
+{% set character_name = name | default(value="hooded") %}
+{% set character_text = body | default(value="") %}
+{% set character_position = position | default(value="right") %}
+
+<div class="character-note character-{{ character_position }}">
+    <div class="character-avatar">
+        <img src="{{ get_url(path = 'images/characters/' ~ character_name ~ '.png') }}"
+             alt="{{ character_name }}"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            {{ character_text | markdown | safe }}
+        </div>
+    </div>
+</div>
