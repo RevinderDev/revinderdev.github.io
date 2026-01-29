@@ -37,11 +37,7 @@
                 <a href="{{ logo_link | safe }}" style="text-decoration: none;">
                     <div class="logo">
                       {% block logo_content %}
-                        {%- if config.extra.logo_text %}
-                            {{ config.extra.logo_text }}
-                        {% else %}
-                            Terminimal theme
-                        {% endif -%}
+                        <span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><span class="logo__path">~/revinder-blog{% if current_path and current_path != "/" %}{{ current_path | trim_end_matches(pat="/") }}{% endif %}</span><span class="logo__bracket">]</span><span class="logo__symbol">$</span>
                         {% endblock logo_content %}
                     </div>
                 </a>
