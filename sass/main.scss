@@ -126,19 +126,22 @@ figure {
 code {
   font-family: Hack, DejaVu Sans Mono, Monaco, Consolas, Ubuntu Mono, monospace;
   font-feature-settings: normal;
-  background: var(--accent-alpha-20);
-  padding: 1px 6px;
+  background: #3c3836;
+  color: #ebdbb2;
+  padding: 2px 4px;
+  border-radius: 3px;
   margin: 0 2px;
   font-size: .95rem;
 }
 
 pre {
   font-family: Hack, DejaVu Sans Mono, Monaco, Consolas, Ubuntu Mono, monospace;
-  padding: 20px;
+  padding: 24px;
   font-size: .95rem;
   overflow: auto;
-  border-top: 1px solid rgba(255, 255, 255, .1);
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  background: #1d2021;
+  border-radius: 4px;
+  margin: 20px 0;
 
   @media (max-width: $phone-max-width) {
     white-space: pre-wrap;

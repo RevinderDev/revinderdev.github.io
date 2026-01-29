@@ -11,7 +11,7 @@ taxonomies = [{ name = "tags" }]
 # Code highlighting
 [markdown]
 highlight_code = true
-highlight_theme = "boron"
+highlight_theme = "gruvbox-dark"
 
 [extra]
 
