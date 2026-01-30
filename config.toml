@@ -1,6 +1,6 @@
 # Be sure to change these!
 base_url = "https://revinderdev.github.io/"
-title = "RevinderDev Blog"
+title = "Revinder Blog"
 
 # Sass compilation is required
 compile_sass = true
