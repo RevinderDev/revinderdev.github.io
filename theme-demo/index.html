@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Revinder Blog</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://revinderdev.github.io/style.css">
+    <link rel="stylesheet" href="https://revinderdev.github.io/color/gruvbox.css">
+
+    <link rel="stylesheet" href="https://revinderdev.github.io/font-hack.css">
+
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    </head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://revinderdev.github.io/" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                        <span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><span class="logo__path">~/revinder-blog&#x2F;theme-demo</span><span class="logo__bracket">]</span><span class="logo__symbol">$</span>
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinderdev.github.io/">Blog</a></li>
+            
+                <li><a href="https://revinderdev.github.io//tags">Tags</a></li>
+            
+                <li><a href="https://revinderdev.github.io//archive">Archive</a></li>
+            
+                <li><a href="https://revinderdev.github.io//about">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinderdev.github.io/theme-demo/">Theme Features Showcase</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-01-01
+        </span>
+
+    </div>
+
+    
+
+        
+        <div class="post-content">
+            <p>This page demonstrates the new theme features implemented all styled with a consistent <code>gruvbox</code> dark palette.</p>
+<span id="continue-reading"></span><h1 id="h1">H1</h1>
+<h2 id="h2">H2</h2>
+<h3 id="h3">H3</h3>
+<h4 id="h4">H4</h4>
+<h5 id="h5">H5</h5>
+<ul>
+<li>Item list</li>
+<li>Item List
+<ul>
+<li>Nested</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Check box</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Check box</li>
+</ul>
+<h2 id="1-code-blocks">1. Code Blocks</h2>
+<p>These blocks support language headers, line numbers, and highlighted lines with syntax highlighting.</p>
+<h3 id="basic-code-block-with-line-numbers">Basic Code Block with Line Numbers</h3>
+<pre data-linenos data-lang="python" style="background-color:#282828;color:#fdf4c1aa;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>1</td><td><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">greet</span><span>(</span><span style="color:#fdf4c1;">name</span><span>):
+</span></td></tr><tr><td>2</td><td><span>    </span><span style="font-style:italic;color:#928374;"># Regular code block
+</span></td></tr><tr><td>3</td><td><span>    </span><span style="color:#fabd2f;">print</span><span style="color:#fdf4c1;">(</span><span style="color:#fa5c4b;">f</span><span style="color:#b8bb26;">&quot;Hello, </span><span style="color:#fdf4c1;">{name}</span><span style="color:#b8bb26;">!&quot;</span><span style="color:#fdf4c1;">)
+</span></td></tr><tr><td>4</td><td><span>
+</span></td></tr><tr><td>5</td><td><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">__name__ </span><span style="color:#fe8019;">== </span><span style="color:#b8bb26;">&quot;__main__&quot;</span><span>:
+</span></td></tr><tr><td>6</td><td><span>    </span><span style="color:#fdf4c1;">greet(</span><span style="color:#b8bb26;">&quot;Terminus&quot;</span><span style="color:#fdf4c1;">)
+</span></td></tr></tbody></table></code></pre>
+<h3 id="code-block-with-highlighted-lines">Code Block with Highlighted Lines</h3>
+<p>To highlight specific lines, use the <code>hl_lines</code> parameter with space-separated line numbers:</p>
+<pre data-linenos data-lang="python" style="background-color:#282828;color:#fdf4c1aa;" class="language-python "><code class="language-python" data-lang="python"><table><tbody><tr><td>1</td><td><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">greet</span><span>(</span><span style="color:#fdf4c1;">name</span><span>):
+</span></td></tr><tr><td><mark style="background-color:#3c3836;">2</mark></td><td><mark style="background-color:#3c3836;"><span>    </span><span style="font-style:italic;color:#928374;"># These lines are highlighted!
+</span></mark></td></tr><tr><td><mark style="background-color:#3c3836;">3</mark></td><td><mark style="background-color:#3c3836;"><span>    </span><span style="color:#fabd2f;">print</span><span style="color:#fdf4c1;">(</span><span style="color:#fa5c4b;">f</span><span style="color:#b8bb26;">&quot;Hello, </span><span style="color:#fdf4c1;">{name}</span><span style="color:#b8bb26;">!&quot;</span><span style="color:#fdf4c1;">)
+</span></mark></td></tr><tr><td>4</td><td><span>
+</span></td></tr><tr><td>5</td><td><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">__name__ </span><span style="color:#fe8019;">== </span><span style="color:#b8bb26;">&quot;__main__&quot;</span><span>:
+</span></td></tr><tr><td>6</td><td><span>    </span><span style="color:#fdf4c1;">greet(</span><span style="color:#b8bb26;">&quot;Terminus&quot;</span><span style="color:#fdf4c1;">)
+</span></td></tr></tbody></table></code></pre>
+<h2 id="2-alerts-shortcode">2. Alerts (Shortcode)</h2>
+<section class="alert info" role="note" aria-labelledby="Ogv2KkZn">
+    <div class="alert-icon alert-icon-info"></div>
+    <div class="alert-content" role="presentation">
+        <strong id="Ogv2KkZn" class="alert-title" aria-hidden="true">INFO</strong>
+        <p>This is an <strong>Information</strong> alert. It supports <strong>Markdown</strong> syntax like <code>code</code> and <a href="https://google.com">links</a>.</p>
+
+    </div>
+</section>
+<section class="alert warning" role="note" aria-labelledby="cOP3aLod">
+    <div class="alert-icon alert-icon-warning"></div>
+    <div class="alert-content" role="presentation">
+        <strong id="cOP3aLod" class="alert-title" aria-hidden="true">Check this out!</strong>
+        <p>Fully framed alert box.</p>
+
+    </div>
+</section>
+<section class="alert danger" role="note" aria-labelledby="qIgs6zrb">
+    <div class="alert-icon alert-icon-danger"></div>
+    <div class="alert-content" role="presentation">
+        <strong id="qIgs6zrb" class="alert-title" aria-hidden="true">DANGER</strong>
+        <p><strong>Danger!</strong> Something went wrong here.</p>
+
+    </div>
+</section>
+<h2 id="3-character-shortcodes">3. Character Shortcodes</h2>
+
+
+
+
+<div class="character-note character-left">
+    <div class="character-avatar">
+        <img src="https://revinderdev.github.io/images/characters/CoolPizza.png"
+             alt="CoolPizza"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>"Welcome to the blog! The character image is now correctly linked and displayed."</p>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinderdev.github.io/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>"And I can appear on the right side too, with a mirrored avatar!"</p>
+
+        </div>
+    </div>
+</div>
+<h2 id="quotes-or-poems">Quotes or Poems</h2>
+<div class="quote-shortcode">
+    <p class="quote-text">Something something
+Bigger quote
+Multi line
+Lorem ipsum</p>
+</div>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                
+                    <span class="button next">
+                        <a href="https://revinderdev.github.io/mmr-abuse/">
+                            <span class="button__text">MMR Abuse in World of Warcraft Arena</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2026
+ Revinder</span>
+                    <span class="copyright-theme">
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+    <script src="https://revinderdev.github.io/js/copy-code-to-clipboard.js"></script>
+</body>
+
+</html>
