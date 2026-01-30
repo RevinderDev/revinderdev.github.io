@@ -262,3 +262,21 @@ pre[data-lang] {
         }
     }
 }
+
+.quote-shortcode {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 2rem 0;
+
+    .quote-text {
+        text-align: left;
+        font-style: italic;
+        white-space: pre-wrap;
+        margin: 0;
+        padding: 1.5rem;
+        border: 2px dashed #fe8019;
+        border-radius: 8px;
+        background-color: rgba(#fe8019, 0.05);
+    }
+}
