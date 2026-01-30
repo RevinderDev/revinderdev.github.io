@@ -3,7 +3,7 @@ title = "Theme Features Showcase"
 date = 2020-01-01
 +++
 
-This page demonstrates the new theme features implemented from `terminus` and `apollo`, all styled with a consistent `gruvbox` dark palette.
+This page demonstrates the new theme features implemented all styled with a consistent `gruvbox` dark palette.
 
 <!-- more -->
 
@@ -24,7 +24,7 @@ This page demonstrates the new theme features implemented from `terminus` and `a
 - [ ] Check box
 - [x] Check box
 
-## 1. Terminus-style Code Blocks
+## 1. Code Blocks
 These blocks support language headers, line numbers, and highlighted lines with syntax highlighting.
 
 ### Basic Code Block with Line Numbers
@@ -52,7 +52,6 @@ if __name__ == "__main__":
 
 
 ## 2. Alerts (Shortcode)
-Implemented from `terminus`, styled for `gruvbox` with full borders and markdown support.
 
 {% alert(type="info") %}
 This is an **Information** alert. It supports **Markdown** syntax like `code` and [links](https://google.com).
@@ -66,13 +65,21 @@ Fully framed alert box.
 **Danger!** Something went wrong here.
 {% end %}
 
-## 3. Apollo Character Shortcodes
-Imported from the `apollo` theme with working assets.
+## 3. Character Shortcodes
 
 {% character(name="CoolPizza", position="left") %}
 "Welcome to the blog! The character image is now correctly linked and displayed."
 {% end %}
 
-{% character(name="CoolPizza", position="right") %}
+{% character(name="Monk", position="right") %}
 "And I can appear on the right side too, with a mirrored avatar!"
+{% end %}
+
+## Quotes or Poems
+
+{% quote() %}
+Something something
+Bigger quote
+Multi line
+Lorem ipsum
 {% end %}
