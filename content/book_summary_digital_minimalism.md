@@ -104,7 +104,7 @@ As about seasonal and weekly leisure plan. My week is kind of already packed, bu
 ##### Not exactly digital minimalism
 
 I enjoy the competetive aspect of online games. I like the community, I like the events and I used to compete. Often I found myself not exactly playing the game that I am actively playing. So for this leisure time, I will leave you out with something a dear french friend of mine Turaxy said - be a gamer.
-Don't circle around dalaran fountain. Queue up or log out. Running around jumping, waiting for something to happen is wasting time of a wasting time. That's not even playing the game. Don't endless watch streams while changing tabs to run around and coming back to streams. Play the game yourself or leave and do something else.
+Don't circle around dalaran fountain. Queue up or log out. Running around jumping, waiting for something to happen is wasting time of a wasting time. That's not even playing the game. Don't endlessly watch streams while changing tabs to run around and coming back to streams. Rinse and repeat. It's terrible. Play the game yourself or leave and do something else.
 
 
 ## My personal Attention Resistance
