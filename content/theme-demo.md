@@ -81,5 +81,5 @@ Fully framed alert box.
 Something something
 Bigger quote
 Multi line
-Lorem ipsum
+Lorem ipsum!
 {% end %}
