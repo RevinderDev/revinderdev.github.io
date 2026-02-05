@@ -7,7 +7,7 @@ tags = ["Book", "Productivity"]
 +++
 
 In summer of 2024 I went to Turkey for summer holidays. We were in Alanya and unfortunately (or fortunately) the WiFi was pricey.
-Not only that but given that we were in Asian part of Turkey, it meant that my mobile internet was simply not working.
+Not only that, but given that we were in the Asian part of Turkey, it meant that my mobile internet was simply not working.
 This made my phone regress entirely to... being a phone again.
 
 
@@ -23,12 +23,12 @@ It was useless. I don't get calls or SMS on a daily basis, other than one time l
 I couldn't check discord, I couldn't browse reddit, I couldn't swipe instagram and... I loved it.
 
 I felt so much better. Less anxious about someone or something wanting me to do stuff. I was *relieved* that I was unreachable.
-Instead browsing my phone on the beach, being worried that it might be stolen from my bag or be thrown into a sand, I was just reading the newspaper.
+Instead of browsing my phone on the beach, being worried that it might be stolen from my bag or be thrown into the sand, I was just reading the newspaper.
 Then a collection of short crime stories. Then entire book! I found out that I can still focus for hours while reading. My attention wasn't divided.
 
 Coming back home I wasn't ready to give that up.
 
-Having not read about Digital Minimalism community, I came up with a rules of mine own:
+Having not read about the Digital Minimalism community, I came up with rules of my own:
 
 - Ban apps from my phone that contain scrollable short videos - Youtube/Instagram
 - Disable notifications for **everything** with few exceptions. SMS, whatsapp and slack (for work) still had functional notifications, but that's it. No messenger notifications and no discord notifications.
@@ -37,8 +37,7 @@ Having not read about Digital Minimalism community, I came up with a rules of mi
 
 I still had however, some games on my phone, still had reddit and Facebook.
 
-This has worked and I felt the difference, for example by being able to read technical documentation and not be bored halfway through one article, however
-I felt like it was not enough.
+This has worked and I felt the difference, for example by being able to read technical documentation and not be bored halfway through one article; however, I felt like it was not enough.
 
 This is where I found myself reading Digital Minimalism by Cal Newport.
 
@@ -51,11 +50,11 @@ I think the quote that best describes what (or rather who) digital minimalist is
 
 
 {% quote () %}
-A philosophy of technology use in which you focus your online time on a small number of carefully selected and optimised activites that strongly support things you value, and then happily miss out on everything else.
+A philosophy of technology use in which you focus your online time on a small number of carefully selected and optimised activities that strongly support things you value, and then happily miss out on everything else.
 {% end %}
 
-Mr. Newport put into writing exactly how I felt about the technology but couldn't word it precisely enough. I felt validated while reading
-through it. Given that I am programmer and I very meticulously set up my development environment to look as decluttered as possible ([ my .dots ](https://github.com/RevinderDev/.dotfiles)) it felt extremely familiar to hear that:
+Mr. Newport put into writing exactly how I felt about the technology, but couldn't word it precisely enough. I felt validated while reading
+through it. Given that I am a programmer and I very meticulously set up my development environment to look as decluttered as possible ([ my .dots ](https://github.com/RevinderDev/.dotfiles)), it felt extremely familiar to hear that:
 * Clutter is costly - too many apps doing too many things, multiple ways of doing the same task.
 * Intentionality and optimisation is important - how we engage with our phone, apps and services. Picking which one is necessary and which can be skipped.
 
@@ -64,16 +63,16 @@ more time on your phone.
 
 I now happily recommend this to anyone who wants to listen to me rambling about modern internet.
 
-Digital practises however, was not aimed at me, as in a sense, I already did that and implemented it before reading this book. 
-This form was just more formalised version of what I was already doing. With an exception of...
+Digital practices, however, were not aimed at me, as in a sense, I already did that and implemented it before reading this book. 
+This form was just a more formalised version of what I was already doing. With an exception of...
 
 #### Solitude & High Quality Leisure
 
-Those section are by far the most important ones in the book for me. First of all, it never occurred to me that there is something as beneficial solitude.
-It makes complete sense in retrospect, that one must give himself time to process his life, his choices and his path but I never realised how much I've been
-depraving myself of it. Author gives a strong stance that we as a society are deeply lacking it.
+Those sections are by far the most important ones in the book for me. First of all, it never occurred to me that there is something as beneficial as solitude.
+It makes complete sense in retrospect, that one must give himself time to process his life, his choices and his path, but I never realised how much I've been
+depriving myself of it. Author gives a strong stance that we as a society are deeply lacking it.
 
-I like to listen. I listen to podcasts, I listen to the music and I listen to audiobooks. In fact, thanks to audiobooks, I've listened to a lot more books 
+I like to listen. I listen to podcasts, I listen to music and I listen to audiobooks. In fact, thanks to audiobooks, I've listened to a lot more books 
 than I would have read, had I been just trying to read them.
 I used to do it on every opportunity. Going to the shop? Listening. Gym? Listening. Walking somewhere by myself? Listening. Shower? Believe it or not, also listening through a speaker. Not once did I have a moment to be confronted by my own thoughts. 
 
@@ -86,37 +85,37 @@ scheduling, or simply planning my week ahead. Remembering stuff better and be mo
 will make it easier to minimise low quality diversions. To seek physical / analog skills.  
 
 I am a programmer and a gamer at heart. This means that a lot of what I like to do is digital unfortunately.
-As a somewhat creative and problem solver myself, I found myself getting joy out of creating something, but given that my time was mostly spent on something
-digital, I never really developed any skill to do something in a physical world. Chapter about leisures made me realise that I should do something that
+As a somewhat creative person and problem solver myself, I found myself getting joy out of creating things, but given that my time was mostly spent on digital
+matters, I never really developed any skill to do something in the physical world. Chapter about leisures made me realise that I should do something that
 combines the love of digital with the love of making, but force it to make it physical. 
 
-The quest to discover what would that be, led me to realise that I don't exactly need to make it physical, but rather I need to be intentional about 
-what kind of leisure I have. So from that I came to a following:
+The quest to discover what that would be, led me to realise that I don't exactly need to make it physical, but rather I need to be intentional about 
+what kind of leisure I have. So from that I came to the following:
 - Force myself to try new things - new music albums, listened from A to Z, not skipping any song. Read new books, try cooking new recipes. See new places.
 - Schedule more IRL time with friends and families rather than keeping up with them. This is also what the author recommends doing in Chapter 5.
 - Combine my love of programming with something physical... and get into embedded programming! I actually have an eye on a project I could start soon.
 - Continue and expand my love for sports but with expansion on trying to go Skiing / Hiking more often.
 - Get deeper into board games! I used to love watching my brother paint LotR figures and playing imaginary battles with him later on.
 
-As about seasonal and weekly leisure plan. My week is kind of already packed, but my seasonal plan is to just travel more. City breaks, small museums, you name it.
+As for seasonal and weekly leisure plan. My week is kind of already packed, but my seasonal plan is to just travel more. City breaks, small museums, you name it.
 
 
 ##### Not exactly digital minimalism
 
-I enjoy the competetive aspect of online games. I like the community, I like the events and I used to compete. Often I found myself not exactly playing the game that I am actively playing. So for this leisure time, I will leave you out with something a dear french friend of mine Turaxy said - be a gamer.
-Don't circle around dalaran fountain. Queue up or log out. Running around jumping, waiting for something to happen is wasting time of a wasting time. That's not even playing the game. Don't endlessly watch streams while changing tabs to run around and coming back to streams. Rinse and repeat. It's terrible. Play the game yourself or leave and do something else.
+I enjoy the competitive aspect of online games. I like the community, I like the events and I used to compete. Often I found myself not exactly playing the game that I am actively playing. So for this leisure time, I will leave you with something a dear French friend of mine Turaxy said - be a gamer.
+Don't circle around dalaran fountain. Queue up or log out. Running around jumping, waiting for something to happen is wasting time on top of wasting time. That's not even playing the game. Don't endlessly watch streams while changing tabs to run around and coming back to streams. Rinse and repeat. It's terrible. Play the game yourself or leave and do something else.
 
 
 ## My personal Attention Resistance
 
 My feelings, once shy, now fully validated are in a full swing. I have since improved upon my decluttering of my devices.
 Here is a list of things I did to help myself be focused more.
-- Absolute and non negotiable ban on "shorts". I blocked shorts on my PC using browsers extensions. No Youtube, Instagram app on phone.
+- Absolute and non-negotiable ban on "shorts". I blocked shorts on my PC using browser extensions. No Youtube, Instagram app on phone.
 - Using browser extension I blocked myself from seeing recommended videos on youtube. This made actually quite a bit of impact, since I used to drown 
 in scrolling youtube.
-- Using browser extension to block access to Twitter and reddit/r/all. I do however, have an access do /r/worldnews and /r/news but the key insight is that
+- Using browser extension to block access to Twitter and reddit/r/all. I do however, have access to /r/worldnews and /r/news, but the key insight is that
 they are *not attractive* for me. I generally go there, see political news, read 1 - 2 articles and bounce away. Similarly to HackerNews. I do not scroll these. Given that the quality of information I receive from them, I opted to keep both.
-- Uninstall reddit, games, Facebook, twitter, youtube and instagram from my phone. I even experimented with making my phone very unattractive by swapping out default android launcher to [Minimalist Phone: Launcher](https://play.google.com/store/apps/details?id=com.qqlabs.minimalistlauncher&hl=en) but my nature for things looking just right did make me go back to Niagara. I tweaked it to make it look slick and minimal, while also providing smooth funcionality.
+- Uninstall reddit, games, Facebook, twitter, youtube and instagram from my phone. I even experimented with making my phone very unattractive by swapping out default android launcher to [Minimalist Phone: Launcher](https://play.google.com/store/apps/details?id=com.qqlabs.minimalistlauncher&hl=en) but my nature for things looking just right did make me go back to Niagara. I tweaked it to make it look slick and minimal, while also providing smooth functionality.
 
 
 {{ image(src="/images/DigitalMinimalismPhone.png", alt="Cal Newport", style='width: 150px;') }}
@@ -128,5 +127,5 @@ they are *not attractive* for me. I generally go there, see political news, read
 
 ## Conclusion
 
-The book is lengthy for what it's trying to convey. I feel like some of the stuff leaned more into pragmatism and life coaching, rather than pure digital minimalism. That being said, most if not all the advice in the book is worth taking in. If you are a digital consumer in this day and age, you definetely should 
-incorporate intention to your devices. We are all fighting upheal battle and it's getting increasingly more difficult, but I do feel like the resistance is there. Listen to your local hacker. Be mindful of your own privacy. And if you are feeling braver than I do, perhaps try to [DeGoogle](https://en.wikipedia.org/wiki/DeGoogle) as a next step?
+The book is lengthy for what it's trying to convey. I feel like some of the stuff leaned more into pragmatism and life coaching, rather than pure digital minimalism. That being said, most if not all the advice in the book is worth taking in. If you are a digital consumer in this day and age, you definitely should 
+incorporate intention to your devices. We are all fighting an uphill battle and it's getting increasingly more difficult, but I do feel like the resistance is there. Listen to your local hacker. Be mindful of your own privacy. And if you are feeling braver than I do, perhaps try to [DeGoogle](https://en.wikipedia.org/wiki/DeGoogle) as a next step?
