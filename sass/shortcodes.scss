@@ -107,18 +107,18 @@ $alert-colors: (
         img {
             width: 80px;
             height: 80px;
-            border-radius: 10%;
-            background: #3c3836;
+            /* border-radius: 10%; */
+            /* background: #83a598; */
         }
     }
 
     .character-bubble {
-        background: #3c3836;
+        background: #79740e;
         border: 1px solid #504945;
         border-radius: 8px;
         padding: 10px 20px;
         position: relative;
-        color: #ebdbb2;
+        color: #f9f5d7;
 
         &::after {
             content: '';
@@ -130,12 +130,12 @@ $alert-colors: (
 
     &.character-left .character-bubble::after {
         left: -20px;
-        border-right-color: #3c3836;
+        border-right-color: #79740e;
     }
 
     &.character-right .character-bubble::after {
         right: -20px;
-        border-left-color: #3c3836;
+        border-left-color: #79740e;
     }
 }
 
