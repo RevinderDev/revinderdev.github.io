@@ -155,8 +155,8 @@ pre {
   margin: 20px 0;
 
   @media (max-width: $phone-max-width) {
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    white-space: pre;
+    word-wrap: normal;
   }
 
   code {
