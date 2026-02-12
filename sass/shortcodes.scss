@@ -113,8 +113,8 @@ $alert-colors: (
     }
 
     .character-bubble {
-        background: rgba(#fabd2f, 0.1);
-        border: 1px solid #fabd2f;
+        background: rgba(#98971a, 0.1);
+        border: 1px solid #98971a;
         border-radius: 8px;
         padding: 10px 20px;
         position: relative;
@@ -130,12 +130,12 @@ $alert-colors: (
 
     &.character-left .character-bubble::after {
         left: -14px;
-        border-right-color: #fabd2f;
+        border-right-color: #98971a;
     }
 
     &.character-right .character-bubble::after {
         right: -14px;
-        border-left-color: #fabd2f;
+        border-left-color: #98971a;
     }
 }
 

@@ -71,7 +71,7 @@ CONTAINER ID   IMAGE           COMMAND                  CREATED          STATUS 
 ```
 
 
-{% alert(type="warning", title="Warning!") %}
+{% alert(type="Danger", title="Careful!") %}
 The database `mydb` will only be created if the directory for data (that is `pgdata:/var/lib/postgresql/data`) is **empty**. In other words, during the first run and not afterwards!
 {% end %}
 
