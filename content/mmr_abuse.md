@@ -6,8 +6,6 @@ date = 2021-06-25
 tags = ["World of Warcraft", "Exploit"]
 +++
 
-## Introduction
-
 Arenas are one of the two rated PvP game modes in World of Warcraft. In this article I will present how players abuse MMR system that was designed to match players based on skill to gain rewards that they shouldn't have gained in the first place. I will also propose solutions which can be implemented to more or less address the presented issues. I am not advocating MMR abuses nor will I name anyone personally. This article is meant to be strictly informative and it's only purpose is to highlight already glaring issues. 
 
 <!-- more -->

@@ -6,8 +6,6 @@ date = 2025-09-08
 tags = ["Python", "Programming"]
 +++
 
-## Introduction
-
 In this article I will showcase you a recent trick I've learned when glancing through boto3 source code. There was a particular class which name was even stranger than its usage: `ForgetfulDict`.
 We'll break down its surprisingly simple implementation, understand the specific problem it solves within Python's copy module, and see how this pattern can be useful in other contexts.
 
