@@ -227,3 +227,5 @@ This elegant pattern teaches us two things:
 2. Embrace simple interfaces: By creating a class that adheres to the dictionary interface (`__setitem__`), you can fundamentally change the behavior of a standard library function without rewriting it.
 
 So, the next time you need to ensure every object in a copy is unique, remember the power of being a little forgetful.
+
+You can see entire script on [Github](https://gist.github.com/RevinderDev/86bb05b6ef04e47887de7363faa736d4).
