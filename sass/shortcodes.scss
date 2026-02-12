@@ -113,8 +113,8 @@ $alert-colors: (
     }
 
     .character-bubble {
-        background: rgba(#98971a, 0.1);
-        border: 1px solid #98971a;
+        background: rgba(#458588, 0.1);
+        border: 1px solid #458588;
         border-radius: 8px;
         padding: 10px 20px;
         position: relative;
@@ -130,12 +130,12 @@ $alert-colors: (
 
     &.character-left .character-bubble::after {
         left: -14px;
-        border-right-color: #98971a;
+        border-right-color: #458588;
     }
 
     &.character-right .character-bubble::after {
         right: -14px;
-        border-left-color: #98971a;
+        border-left-color: #458588;
     }
 }
 
@@ -194,7 +194,7 @@ pre[data-lang] {
         overflow-x: auto;
         padding: 10px;
         background: none;
-        color: inherit;
+        color: #ebdbb2;
 
         mark {
             display: inline;

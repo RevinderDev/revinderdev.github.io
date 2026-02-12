@@ -460,7 +460,7 @@ This is unfortunately a real story...
 `\gdesc` to the rescue! It tells you the data types of the query output *without* executing it—including aliases!
 
 ```txt
-\gdesc
+mydb=# \gdesc
     Column    |      Type
 --------------+-----------------
  username     | text
@@ -469,6 +469,11 @@ This is unfortunately a real story...
  member_since | date
  is_popular   | boolean
 ```
+
+{% character(name="CoolPizza", position="left") %}
+You are now a psql power user! Spread the word!
+{% end %}
+
 
 
 ### Styling
