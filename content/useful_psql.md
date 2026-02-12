@@ -6,9 +6,9 @@ date = 2026-02-12
 tags = ["Databases", "Programming", "Postgresql"]
 +++
 
-I think we all love Postgres. It's fast, it's efficient and it's free to use. Nowadays when I am thinking of creating SQL like database, I am choosing Postgres as my primary target.
-For local development it is pretty much always deployed by me in a docker container, but the question is - how do you access it? Some people use built into IDEs database management interfaces, some use dedicated tools (such as pgAdmin or DBeaver) but me personally, for my basic development needs, I get away with using `psql` (and it's in terminal!).
-In this article I will show you what are the common useful things one can do with it. 
+I think we all love Postgres. It's fast, efficient, and free to use. Nowadays, when I'm thinking of creating a SQL database, I choose Postgres as my primary target.
+For local development, I pretty much always deploy it in a Docker container, but the question is—how do you access it? Some people use database management interfaces built into IDEs, some use dedicated tools (such as pgAdmin or DBeaver), but for my basic development needs, I stick with `psql` (and it's in the terminal!).
+In this article, I'll show you the common useful things you can do with it. 
 
 **Prerequisites**:
 - Basic **SQL** understanding
@@ -28,7 +28,7 @@ You can see the script on [Github](https://gist.github.com/RevinderDev/ed01a4b87
 
 ## Setup
 
-Imagine we deploy our Postgres in docker using docker compose, perhaps you will do it roughly like so:
+Imagine we deploy our Postgres in Docker using Docker Compose, perhaps you'll do it roughly like this:
 
 ```yaml
   my-db:
@@ -49,20 +49,20 @@ Imagine we deploy our Postgres in docker using docker compose, perhaps you will 
       retries: 10
 ```
 
-I like to include the `healthcheck` key because it can be leveraged in `depends_on` clause for my web service.
-Naturally, I am going to be particularly original about naming and I am going to name my variables like so:
+I like to include the `healthcheck` key because it can be leveraged in the `depends_on` clause for my web service.
+Naturally, I'm going to be particularly original about naming and name my variables like so:
 
 {% alert(type="warning", title="Warning!") %}
 This `healthcheck` checks if the database server accepts connections **only**. It does not check if the database exists. For purposes of a web server, this is fine, but perhaps you might want to avoid it and make it see if the database exists in the first place!
 {% end %}
 
-```env
+```sh
 POSTGRES__DB_USER=postgres
 POSTGRES__DB_PASSWORD=postgres
 POSTGRES__DB=mydb
 ```
 
-We up it with `$ docker compose up` and voilà! Our database is alive:
+We bring it up with `$ docker compose up` and voilà! Our database is alive:
 
 ```sh
 $ docker ps
@@ -76,7 +76,7 @@ The database `mydb` will only be created if the directory for data (that is `pgd
 {% end %}
 
 
-So now, in order to get our psql running, we can connect to the docker like so:
+Now, to get our psql running, we can connect to the Docker container like this:
 
 ```sh
 $ docker exec -it my-db psql -U postgres -d mydb
@@ -90,11 +90,11 @@ And we are in!
 
 ## psql and what can we do with it
 
-So what is [psql](https://www.postgresql.org/docs/current/app-psql.html)? As docs define it, it is a frontend terminal based application for Postgres. It enables you to query database but also has a shell like behaviour you would expect from a normal shell. It does have some meta commands on top of it, some of which I will showcase today!
+So what is [psql](https://www.postgresql.org/docs/current/app-psql.html)? As the docs define it, it is a frontend terminal-based application for Postgres. It enables you to query the database and also has shell-like behavior you would expect from a normal shell. It has some meta commands on top of it, some of which I'll showcase today!
 
 Let's list available databases for us by running:
 
-```psql
+```txt
 mydb=# \l+
                                                                                       List of databa
 ses
@@ -129,7 +129,7 @@ That's because your terminal is too small to show the entire table! You can use 
 
 Let's do just that!
 
-```psql
+```txt
 mydb=# \x auto
 Expanded display is used automatically.
 mydb=# \l+
@@ -193,23 +193,23 @@ Description       |
 Nice! It fits! And we've learned here two meta commands:
 
 - `\x [ on | off | auto ]` - (or `\pset expanded`) which outputs stuff in expanded mode. You can also have it be supplied automatically when invoking `psql` itself by adding `-x` to it.
-- `\l` or `\list` `[ pattern ]` - lists you database or a specific database that matches `[ pattern ]`. e.g. `\l postgres`
+- `\l` or `\list` `[ pattern ]` - lists your databases or a specific database that matches `[ pattern ]`. e.g. `\l postgres`
 
-But what is that `+` I have added to `\l` before? It allows to display extra information about database objects. You can think of it as verbose flag. For the `\l` it adds `Size`, `Tablespace` and `Description` columns. More often than not, I am surprised how little space my databases are taking thanks to the `Size` column ;).
+But what is that `+` I added to `\l`? It displays extra information about database objects. You can think of it as a verbose flag. For `\l`, it adds `Size`, `Tablespace`, and `Description` columns. More often than not, I'm surprised how little space my databases are taking thanks to the `Size` column ;).
 
 With that, let's keep going!
 
-* `\c` or `\connect [ -reuse-previous=on|off ] [ dbname [ username ] [ host ] [ port ] | conninfo ]` - allows you to connect to a different database. As you  can see based on arguments, you can specify different username and host as well, though I have never used it this way. I only use it to simply swap to another db listed from `\l` by doing `\c postgres`. 
+- `\c` or `\connect [ -reuse-previous=on|off ] [ dbname [ username ] [ host ] [ port ] | conninfo ]` - allows you to connect to a different database. As you can see from the arguments, you can specify a different username and host as well, though I've never used it this way. I only use it to swap to another database listed from `\l` by doing `\c postgres`. 
 
 ## Describe
 
-Describe or display is a meta command `\d` which helps you, well, display database objects on the screen.
-And this is pretty comprehensive, as it allows to display *everything*. Sequences, indexes, tables, views - you name it! 
-The docs themselves are [pretty readable](https://www.postgresql.org/docs/current/app-psql.html#APP-PSQL-META-COMMAND-D), though they do not give clear examples, but this is where this article will help you out.
+Describe or display is a meta command `\d` which helps you display database objects.
+It's quite comprehensive—it allows you to display *everything*: sequences, indexes, tables, views, and more. 
+The docs themselves are [pretty readable](https://www.postgresql.org/docs/current/app-psql.html#APP-PSQL-META-COMMAND-D), though they lack clear examples. That's where this article will help you.
 
 On our mock database, let's see what's in here:
 
-```psql
+```txt
 mydb=# \d
                       List of relations
  Schema |             Name             |   Type   |  Owner
@@ -224,7 +224,7 @@ mydb=# \d
 
 What about list of just tables?
 
-```psql
+```txt
 mydb=# \dt+
 List of relations
 -[ RECORD 1 ]-+--------------
@@ -258,7 +258,7 @@ Description   |
 
 So we have 3 tables, each of which has `16 kB` and is stored on heap. Do we have any custom data types?
 
-```psql
+```txt
 mydb=# \dT
            List of data types
  Schema |      Name       | Description
@@ -276,7 +276,7 @@ That... is not that useful.. Just the name of the data type?
 You forgot the `+` for detailed information!
 {% end %}
 
-```psql
+```txt
 mydb=# \dT+
 List of data types
 -[ RECORD 1 ]-----+----------------
@@ -295,7 +295,7 @@ Description       |
 So we have an Enum with 3 elements. But what about the tables themselves? What's on them?
 Let's examine `users` table.
 
-```psql
+```txt
 mydb=# \d users
                                          Table "public.users"
    Column   |           Type           | Collation | Nullable |                Default
@@ -313,29 +313,29 @@ Referenced by:
     TABLE "user_profiles" CONSTRAINT "user_profiles_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ```
 
-O, nice! We actually learned quite a bit. Our table has 5 columns. It's using 2 indexes, one of which has to be unique. It's referenced by two tables `posts` and `user_profiles`. Feel free to experiment yourself with `+` here ;).
+Oh, nice! We actually learned quite a bit. Our table has 5 columns. It uses 2 indexes, one of which must be unique. It's referenced by two tables: `posts` and `user_profiles`. Feel free to experiment with `+` yourself ;).
 
 Let's summarise what we've used:
-- `\d` lets us see all entities within db - sequences, views, tables, materialised views and so on.
+- `\d` lets us see all entities within the database—sequences, views, tables, materialized views, and so on.
 - `\dt` lists all the *tables* only.
 - `\dT` lists all the *data types*. For me, this has been extremely handy for ENUMs.
-- `\d [table_name]` allows me get detailed description of a specified entity. For tables, this is columns, indexes and references. Try yourself for sequences and views!
-- `\df` lists all the functions. (And a corresponding `\sf [function_name]` for code of a view)
+- `\d [table_name]` allows me to get a detailed description of a specified entity. For tables, this includes columns, indexes, and references. Try it yourself for sequences and views!
+- `\df` lists all the functions. (And a corresponding `\sf [function_name]` for the code of a function)
 - `\ds` lists all the sequences.
-- `\dv` lists all the views. (And a corresponding `\sv [view]` for code of a view)
+- `\dv` lists all the views. (And a corresponding `\sv [view]` for the code of a view)
 
 {% alert(type="info", title="Entity Relationship Diagram") %}
-One would kinda see that with multiple references and multiple tables, reading the output here will be much more harder than seeing the Entity Relationship diagram. That is unfortunately a limit of `psql` utility, as I was not able to find a way to create one. For that, your best bet is to use something like `pgAdmin` or `DBeaver` to see the entire diagram. Fortunately, this is rarely needed for my own workflow.
+With multiple references and multiple tables, reading the output will be much harder than seeing an Entity Relationship diagram. Unfortunately, this is a limit of the `psql` utility, as I was unable to find a way to create one. For that, your best bet is to use something like `pgAdmin` or `DBeaver` to see the entire diagram. Fortunately, this is rarely needed for my workflow.
 {% end %}
 
 ## But what exactly is meta command?
 
 Okay, we've seen some pretty cool examples. But what are those? Programs? Scripts? And why bother using them myself if I can always query it directly using postgres native functions such as `pg_database_size(oid)`?
 
-Those are good questions and an indication of a curiosity. Valuable trait for an engineer!
-You can run the `psql` with `-E` flag, which let's you do *internal query peeking*. From that point onwards, if you run a meta command, you will see corresponding executed SQL query to get the data - thus answering all your questions from above:
+Those are good questions and show curiosity—a valuable trait for an engineer!
+You can run `psql` with the `-E` flag, which lets you do *internal query peeking*. From that point on, if you run a meta command, you'll see the corresponding SQL query executed to fetch the data—thus answering all your questions from above:
 
-```psql
+```txt
 mydb=# \dt
 /******** QUERY *********/
 SELECT n.nspname as "Schema",
@@ -362,13 +362,13 @@ ORDER BY 1,2;
 (3 rows)
 ```
 
-It is pretty verbose though, so you might wanna skip it. Nevertheless, extremely valuable to learn how internals are working.
+It's quite verbose though, so you might want to skip it. Nevertheless, it's extremely valuable for learning how the internals work.
 
 ## Becoming a psql power user
 
-By now, you are hopefully hooked on psql. But let me showcase more of a cool stuff:
+By now, you're hopefully hooked on psql. But let me showcase more cool stuff:
 
-```psql
+```txt
 mydb=# SELECT * FROM users;
 mydb=# \watch 2
                      Thu 12 Feb 2026 01:29:25 PM UTC (every 2s)
@@ -384,9 +384,9 @@ mydb=# \watch 2
 ...
 ```
 
-`\watch` let's you rerun your previous query every specified interval - in this case 2 seconds.
+`\watch` lets you rerun your previous query every specified interval—in this case, 2 seconds.
 
-```psql
+```txt
 mydb=# \timing
 Timing is on.
 mydb=# select * from users;
@@ -396,11 +396,11 @@ mydb=# select * from users;
 Time: 0.296 ms
 ```
 
-`\timinig` let's you quickly see the time of an execution by a query. Please do not substitute it for proper query plan analysis, just add it as another tool. See [EXPLAIN](https://www.postgresql.org/docs/current/sql-explain.html)
+`\timing` lets you quickly see the execution time of a query. Please don't substitute it for proper query plan analysis; just add it as another tool. See [EXPLAIN](https://www.postgresql.org/docs/current/sql-explain.html)
 
-`\! [command]` lets you run shell command without leaving psql.
+`\! [command]` lets you run shell commands without leaving psql.
 
-```psql
+```txt
 mydb=# \! ls
 bin   dev                         etc   lib    media  opt   root  sbin  sys  usr
 boot  docker-entrypoint-initdb.d  home  lib64  mnt    proc  run   srv   tmp  var
@@ -408,7 +408,7 @@ boot  docker-entrypoint-initdb.d  home  lib64  mnt    proc  run   srv   tmp  var
 
 `\p` prints the current query buffer. Essentially "where am i?". If it's empty though, this will show last executed query.
 
-```psql
+```txt
 mydb=# is this my buffer?
 mydb-# hello?
 mydb-# ah i haven't finished with ';' yet
@@ -425,12 +425,12 @@ mydb=#
 ```
 
 
-Arguably, when in doubt, consult the docs.. or stay in terminal and consult them in another way!
-- `\help` gives you rough summary of docs for given SQL syntax. Try it with `\help EXPLAIN`!
-- `\?` gives you the information about psql itself and all the meta command it supports.
+Arguably, when in doubt, consult the docs—or stay in the terminal and consult them another way!
+- `\help` gives you a rough summary of the docs for given SQL syntax. Try it with `\help EXPLAIN`!
+- `\?` gives you information about psql itself and all the meta commands it supports.
 
-Now onto the hidden gem of psql. The cherry on top itself. Coup de grâce of meta commands - `\gdesc`!
-Imagine long complex query, my example wont be like that, but just use your imagination dammit! 
+Now for the hidden gem of psql—the cherry on top, the Pièce de résistance of meta commands: `\gdesc`!
+Imagine a long, complex query. My example won't be like that, but just use your imagination! 
 
 ```sql
 SELECT
@@ -443,16 +443,16 @@ FROM users u
 LEFT JOIN posts p ON u.user_id = p.author_id;
 ```
 
-What will be the result of that? What data type is in each column? What if your query is 1000s line long, does regex filtering, switch case filtering and is partially building HTML through multiple window functions, joins and unholy shit stain of a table structure and all you needed from it is a simple god damn foreign key id? What then?
+What will the result be? What data type is in each column? What if your query is thousands of lines long, does regex filtering, switch case filtering, and is partially building HTML through multiple window functions, joins, and a unholy table structure—and all you need is a simple god damn foreign key ID? What then?
 
 
 {% character(name="Monk", position="right") %}
 This is unfortunately a real story...
 {% end %}
 
-`\gdesc` to the rescue! It will tell you the data types of output of the query, *without* executing it. Including aliases!
+`\gdesc` to the rescue! It tells you the data types of the query output *without* executing it—including aliases!
 
-```psql
+```txt
 \gdesc
     Column    |      Type
 --------------+-----------------
@@ -466,12 +466,12 @@ This is unfortunately a real story...
 
 ### Styling
 
-And just because I like when my terminal looks nice. You can also style your psql. As with everything, there are many options. Here are just some of it:
+And since I like my terminal to look nice, you can also style your psql. As with everything, there are many options. Here are just a few:
 
 
 `\pset border [x]` - changes the style of a border around tables:
 
-```psql
+```txt
 mydb=# \pset border 2
 Border style is 2.
 mydb=# select * from users;
@@ -486,14 +486,14 @@ mydb=# select * from users;
 ```
 
 
-By default, psql uses ASCII characters in it's output, but you can also instruct it to use unicode characters too:
+By default, psql uses ASCII characters in its output, but you can also instruct it to use Unicode characters:
 
 `\pset linestyle unicode`
 
 
 And now:
 
-```psql
+```txt
 mydb=# \pset linestyle unicode
 Line style is unicode.
 mydb=# select * from users;
@@ -508,24 +508,24 @@ mydb=# select * from users;
 (4 rows)
 ```
 
-You can even change the prompt itself by using `\set PROMPT1`. In this case, lets set this to:
+You can even change the prompt itself using `\set PROMPT1`. In this case, let's set it to:
 
-```psql
+```txt
 mydb=# \set PROMPT1 '(%n@%M:%>) %`date +%H:%M:%S` [%/] \n%x%# '
 (postgres@[local]:5432) 13:57:28 [mydb]
 #
 ```
 
-This specific prompt shows time, user, database and host information. Pretty neat. 
-At this point you are thinking to yourself - 'Okay, that's a bit too much for terminal based utility'.
-Oh my sweet summer child, I have not even began to be close to the best of us.
-Here is a code that makes your shell colored: https://github.com/rin-nas/postgresql-patterns-library/blob/master/psqlrc/psqlrc - enjoy!
+This prompt shows time, user, database, and host information. Pretty neat.
+At this point, you're thinking to yourself, "Okay, that's a bit much for a terminal-based utility."
+Oh, my sweet summer child, I've barely begun to scratch the surface.
+Here's code that makes your shell colored: https://github.com/rin-nas/postgresql-patterns-library/blob/master/psqlrc/psqlrc—enjoy!
 
 ### `.psqlrc` 
 
-By now, I've shown a lot of commands. Some of which are sane defaults for every psql invocation (such as `\x` or `\timing`). But writing them every time you open psql will be tedious at best, unproductive at worst. So what can you do about it?
+By now, I've shown you a lot of commands. Some of these are sane defaults for every psql invocation (such as `\x` or `\timing`). But writing them every time you open psql will be tedious at best and unproductive at worst. So what can you do about it?
 
-Introducing `.psqlrc` file. Just like `.zshrc` and `.bashrc` this let's you specify your configuration beforehand to be loaded. There are several ways of creating and storing it, so I wont go over all of them, but you can create one in `$HOME/.psqlrc` location. Alternatively you can specify `PSQLRC` environmental variable with a path to a config file.
+Introducing the `.psqlrc` file. Just like `.zshrc` and `.bashrc`, it lets you specify your configuration beforehand to be loaded. There are several ways to create and store it, so I won't go over all of them, but you can create one at `$HOME/.psqlrc`. Alternatively, you can specify the `PSQLRC` environment variable with a path to a config file.
 
 
 So far however, we've been running our psql inside the docker, and for that you have two options. Both of these require you to have your `.psqlrc` reachable from within your project folder.
@@ -535,7 +535,7 @@ So far however, we've been running our psql inside the docker, and for that you 
 
 In either case, this is what sample `.psqlrc` file could look like:
 
-```psql
+```txt
 \pset border 2
 \pset linestyle unicode
 \timing on
@@ -545,12 +545,12 @@ In either case, this is what sample `.psqlrc` file could look like:
 
 ### Storing Queries
 
-Some of you may notice that writing queries in a shell is not exactly ideal. And that is true. That's why I usually have my `.git/info/exclude` file with additional line `database/` which stores all queries that I am writing for a given project. It acts like a scratch pad for me - if I need to run a query that's more complex than just fetching all the columns, I will add it there with small note on what it does and move on. That way if I need it ever again, I can always come back to it.
-It's pretty handy and it allows me to use my own editor for writing the queries thus sidestepping the issue of a shell storing and writing queries.
+Some of you may notice that writing queries in a shell isn't exactly ideal. And that's true. That's why I usually have a `database/` directory (added to `.git/info/exclude`) which stores all the queries I write for a given project. It acts as a scratch pad for me—if I need to run a query that's more complex than just fetching all the columns, I add it there with a small note on what it does. That way, if I need it again, I can always come back to it.
+It's quite handy and allows me to use my own editor for writing queries, thus sidestepping the limitations of a shell for query storage and writing.
 
 ### Restoring DB from dump
 
-This isn't exactly postgres nor psql specific, but I like to always have a quick way to restore my database from a given `*.sql` database dump. I have a separate script for that and it looks more or less like so:
+This isn't Postgres or psql specific, but I like to always have a quick way to restore my database from a given `*.sql` database dump. I have a separate script for that, and it looks roughly like this:
 
 ```sh
 #!/usr/bin/sh
@@ -561,7 +561,7 @@ docker exec -i my-db psql -U ${POSTGRES__DB_USER} -c "CREATE DATABASE ${POSTGRES
 cat "$DUMP_FILE" | docker exec -i my-db psql -U ${POSTGRES__DB_USER} -d ${POSTGRES__DB}
 ```
 
-This is being run when all the given `.envs` are already exported so all I need to do is:
+This runs when all the given `.env` variables are already exported, so all I need to do is:
 
 ```sh
 # Just make sure it's executable first
@@ -571,8 +571,7 @@ $ ./restore.sh ./01-12-1887db.sql
 
 ## Conclusion
 
-It goes without saying that this is just a fraction of what's available for psql. For more details (and fun!) look no further than https://postgresql.org docs. It is a fantastic resource and is a crown jewel in a beauty that is postgres itself.
-In my experience, psql is not picked up by developers in favour of built in database tools inside their IDEs or heavy dedicated tools such as DBeaver. They are good. They do the job. But they are also heavier.
-Are they always needed? I found that I rarely have to bring the big guns and I am more than capable of just
-writing a few simple commands by hand. Especially when meta commands are shortcuts to most of what I need.
-Hopefully I've convinced you at least to try them at some point.
+It goes without saying that this is just a fraction of what's available for psql. For more details (and fun!), look no further than the [PostgreSQL docs](https://postgresql.org/docs). It's a fantastic resource and a crown jewel in the beauty that is Postgres itself.
+In my experience, psql isn't favored by developers in favor of built-in database tools inside their IDEs or heavier dedicated tools like DBeaver. They're good. They do the job. But they're also heavier.
+Are they always needed? I've found that I rarely need to bring out the big guns and I'm more than capable of writing a few simple commands by hand. Especially when meta commands are shortcuts to most of what I need.
+Hopefully, I've convinced you to at least try them at some point.
