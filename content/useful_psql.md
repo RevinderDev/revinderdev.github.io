@@ -19,9 +19,9 @@ In this article, I'll show you the common useful things you can do with it.
 
 
 {% alert(type="info", title="AI Notice") %}
-AI was **not** used in writing this article. 
+This article was **not** written by AI.
 
-AI was however used in generating a script for a mock database.
+AI was however used in generating a script for a mock database and for spotting typos.
 You can see the script on [Github](https://gist.github.com/RevinderDev/ed01a4b876dffd7c5854c0f8d8013d6c)
 {% end %}
 
@@ -71,7 +71,7 @@ CONTAINER ID   IMAGE           COMMAND                  CREATED          STATUS 
 ```
 
 
-{% alert(type="Danger", title="Careful!") %}
+{% alert(type="danger", title="Careful!") %}
 The database `mydb` will only be created if the directory for data (that is `pgdata:/var/lib/postgresql/data`) is **empty**. In other words, during the first run and not afterwards!
 {% end %}
 
@@ -200,6 +200,13 @@ But what is that `+` I added to `\l`? It displays extra information about databa
 With that, let's keep going!
 
 - `\c` or `\connect [ -reuse-previous=on|off ] [ dbname [ username ] [ host ] [ port ] | conninfo ]` - allows you to connect to a different database. As you can see from the arguments, you can specify a different username and host as well, though I've never used it this way. I only use it to swap to another database listed from `\l` by doing `\c postgres`. 
+
+```txt
+postgres=# \c mydb
+You are now connected to database "mydb" as user "postgres".
+mydb=# \c postgres
+You are now connected to database "postgres" as user "postgres".
+```
 
 ## Describe
 
@@ -512,6 +519,7 @@ You can even change the prompt itself using `\set PROMPT1`. In this case, let's 
 
 ```txt
 mydb=# \set PROMPT1 '(%n@%M:%>) %`date +%H:%M:%S` [%/] \n%x%# '
+-- That's my new prompt underneath..
 (postgres@[local]:5432) 13:57:28 [mydb]
 #
 ```
@@ -519,7 +527,7 @@ mydb=# \set PROMPT1 '(%n@%M:%>) %`date +%H:%M:%S` [%/] \n%x%# '
 This prompt shows time, user, database, and host information. Pretty neat.
 At this point, you're thinking to yourself, "Okay, that's a bit much for a terminal-based utility."
 Oh, my sweet summer child, I've barely begun to scratch the surface.
-Here's code that makes your shell colored: https://github.com/rin-nas/postgresql-patterns-library/blob/master/psqlrc/psqlrc—enjoy!
+Here's code that makes your shell colored: [rin-nas/postgresql-patterns-library]( https://github.com/rin-nas/postgresql-patterns-library/blob/master/psqlrc/psqlrc ) enjoy!
 
 ### `.psqlrc` 
 
