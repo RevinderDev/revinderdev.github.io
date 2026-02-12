@@ -113,8 +113,8 @@ $alert-colors: (
     }
 
     .character-bubble {
-        background: #79740e;
-        border: 1px solid #504945;
+        background: rgba(#fabd2f, 0.1);
+        border: 1px solid #fabd2f;
         border-radius: 8px;
         padding: 10px 20px;
         position: relative;
@@ -124,18 +124,18 @@ $alert-colors: (
             content: '';
             position: absolute;
             top: 20px;
-            border: 10px solid transparent;
+            border: 7px solid transparent;
         }
     }
 
     &.character-left .character-bubble::after {
-        left: -20px;
-        border-right-color: #79740e;
+        left: -14px;
+        border-right-color: #fabd2f;
     }
 
     &.character-right .character-bubble::after {
-        right: -20px;
-        border-left-color: #79740e;
+        right: -14px;
+        border-left-color: #fabd2f;
     }
 }
 
