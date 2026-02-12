@@ -432,12 +432,12 @@ mydb=#
 ```
 
 
-Arguably, when in doubt, consult the docs—or stay in the terminal and consult them another way!
+Arguably, when in doubt, consult the docs — or stay in the terminal and consult them another way!
 - `\help` gives you a rough summary of the docs for given SQL syntax. Try it with `\help EXPLAIN`!
 - `\?` gives you information about psql itself and all the meta commands it supports.
 
-Now for the hidden gem of psql—the cherry on top, the Pièce de résistance of meta commands: `\gdesc`!
-Imagine a long, complex query. My example won't be like that, but just use your imagination! 
+Now for the hidden gem of psql. The cherry on top. The Pièce de résistance of meta commands. 
+Behold `\gdesc`! What does it do? Imagine a long and complex query (my example won't be like that, but just use your imagination!):
 
 ```sql
 SELECT
@@ -450,7 +450,7 @@ FROM users u
 LEFT JOIN posts p ON u.user_id = p.author_id;
 ```
 
-What will the result be? What data type is in each column? What if your query is thousands of lines long, does regex filtering, switch case filtering, and is partially building HTML through multiple window functions, joins, and a unholy table structure—and all you need is a simple god damn foreign key ID? What then?
+What will the result be? What data type is in each column? What if your query is thousands of lines long, does regex filtering, switch case filtering, and is partially building HTML through multiple window functions, joins, and a unholy table structure — and all you need is a simple god damn foreign key ID? What then?
 
 
 {% character(name="Monk", position="right") %}
