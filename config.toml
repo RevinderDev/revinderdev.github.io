@@ -1,7 +1,7 @@
 # Be sure to change these!
 base_url = "https://revinder.dev/"
-title = "Revinder Blog"
-description = "Personal blog of Revinder"
+title = "Revinder’s Save States"
+description = "Howdy👋! Welcome to my blog. I write about IT, games and anything that comes to my mind!"
 default_language = "en"
 
 # Sass compilation is required
