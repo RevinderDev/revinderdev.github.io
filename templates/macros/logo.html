@@ -11,5 +11,28 @@
     {%- else -%}
         {%- set display_url = current_url -%}
     {%- endif -%}
-    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="{{ base_url_clean }}" class="logo__breadcrumb logo__home">~/revinder</a>{%- if display_url and display_url != base_url_clean and display_url != base_url_clean ~ "/" -%}{%- set url_path = display_url | replace(from=base_url_clean ~ "/", to="") | trim_end_matches(pat="/") -%}{%- if url_path -%}{%- set path_parts = url_path | split(pat="/") -%}{%- for i in range(end=path_parts | length) -%}{%- set part = path_parts[i] -%}{%- if part -%}{%- if part == "page" and i + 1 < path_parts | length -%}{%- set link_path = path_parts | slice(end=i) | join(sep="/") -%}{%- else -%}{%- set link_path = path_parts | slice(end=i+1) | join(sep="/") -%}{%- endif -%}<span class="logo__separator">/</span><a href="{{ base_url_clean }}/{{ link_path }}" class="logo__breadcrumb">{{ part }}</a>{%- endif -%}{%- endfor -%}{%- endif -%}{%- endif -%}<span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
+    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="{{ base_url_clean }}" class="logo__breadcrumb logo__home">~/revinder</a>
+    {%- if display_url and display_url != base_url_clean and display_url != base_url_clean ~ "/" -%}
+        {%- set url_path = display_url | replace(from=base_url_clean ~ "/", to="") | trim_end_matches(pat="/") -%}
+        {%- if url_path -%}
+            {%- set path_parts = url_path | split(pat="/") -%}
+            {%- for i in range(end=path_parts | length) -%}
+                {%- set part = path_parts[i] -%}
+                {%- if part -%}
+                    {%- if part == "page" and i + 1 < path_parts | length -%}
+                        {%- set link_path = path_parts | slice(end=i) | join(sep="/") -%}
+                    {%- else -%}
+                        {%- set link_path = path_parts | slice(end=i+1) | join(sep="/") -%}
+                    {%- endif -%}
+                    <span class="logo__separator">/</span>
+                    {%- if is_paginated_first_page and part == "1" and i == path_parts | length - 1 -%}
+                        <span class="logo__breadcrumb">{{ part }}</span>
+                    {%- else -%}
+                        <a href="{{ base_url_clean }}/{{ link_path }}" class="logo__breadcrumb">{{ part }}</a>
+                    {%- endif -%}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endif -%}
+    <span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
 {%- endmacro breadcrumb_logo %}
