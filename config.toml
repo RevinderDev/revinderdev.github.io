@@ -32,7 +32,7 @@ author = "Revinder"
 
 menu_items = [
     { name = "Home", url = "$BASE_URL" },
-    { name = "Blog", url = "$BASE_URL/blog/" },
+    { name = "Blog", url = "$BASE_URL/blog" },
     { name = "Tags", url = "$BASE_URL/tags" },
     { name = "About me", url = "$BASE_URL/about-me" },
     { name = "GitHub", url = "https://github.com/RevinderDev", newtab = true },
