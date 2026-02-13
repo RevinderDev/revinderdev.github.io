@@ -9,8 +9,21 @@
 <html lang="{%- if config.default_language -%}{{ config.default_language }}{%- else -%}en{%- endif -%}">
 
 <head>
+    <meta charset="utf-8">
     <title>{%- block title %}{{ config.title }}{% endblock title -%}</title>
+    
     {{ head_macros::head(config=config) }}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ current_url | default(value=config.base_url) | safe }}">
+    <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ config.title }}{% endif %}">
+    <meta property="og:description" content="{% if page.description %}{{ page.description }}{% elif page.summary %}{{ page.summary | striptags | truncate(length=150) }}{% else %}{{ config.description }}{% endif %}">
+    
+    {# If you have a specific image for the post, use it; otherwise, use a default site image #}
+    {% if page.extra.image %}
+        <meta property="og:image" content="{{ get_url(path=page.extra.image) | safe }}">
+    {% elif config.extra.og_image %}
+        <meta property="og:image" content="{{ get_url(path=config.extra.og_image) | safe }}">
+    {% endif %}
 
     {% block rss %}
       <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path="rss.xml", trailing_slash=false) }}">

@@ -1,6 +1,7 @@
 +++
 title = "Become poweruser with psql"
 date = 2026-02-12
+description = "Short introduction into meta commands of psql."
 
 [taxonomies]
 tags = ["Databases", "Programming", "Postgresql", "SQL"]

@@ -23,6 +23,7 @@ extra_attr = "data-lang"
 
 [extra]
 
+og_image = "images/characters/CoolPizza.png"
 accent_color = "gruvbox"
 background_color = "gruvbox"
 
