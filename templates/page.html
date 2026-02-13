@@ -5,7 +5,7 @@
 {%- endblock -%}
 
 {% block logo_content %}
-    {{ logo_macros::breadcrumb_logo(config=config, current_url=page.permalink) }}
+    {{ logo_macros::breadcrumb_logo(config=config, current_url=page.permalink, is_paginated_first_page=false) }}
 {% endblock logo_content %}
 
 {% block content %}

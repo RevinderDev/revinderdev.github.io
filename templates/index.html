@@ -37,7 +37,8 @@
             <div class="header__logo">
                 <a href="#" style="text-decoration: none;" onclick="return false;">
                     {% block logo_content %}
-                        {{ logo_macros::breadcrumb_logo(config=config, current_url=current_url | default(value="")) }}
+                        {%- set is_first_page = paginator and not paginator.previous -%}
+                        {{ logo_macros::breadcrumb_logo(config=config, current_url=current_url | default(value=""), is_paginated_first_page=is_first_page) }}
                     {% endblock logo_content %}
                 </a>
             </div>
