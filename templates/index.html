@@ -1,5 +1,6 @@
 {% import "macros/date.html" as date_macros -%}
 {% import "macros/head.html" as head_macros -%}
+{% import "macros/logo.html" as logo_macros -%}
 {% import "macros/menu.html" as menu_macros -%}
 {% import "macros/post.html" as post_macros -%}
 {% import "macros/title.html" as title_macros -%}
@@ -34,17 +35,10 @@
         {% endblock header_menu %}
         <div class="header__inner">
             <div class="header__logo">
-                {%- if config.logo_home_link %}
-                    {% set logo_link = config.logo_home_link %}
-                {% else %}
-                    {% set logo_link = config.base_url %}
-                {% endif -%}
-                <a href="{{ logo_link | safe }}" style="text-decoration: none;">
-                    <div class="logo">
-                      {% block logo_content %}
-                        <span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><span class="logo__path">~/revinder{% if current_path and current_path != "/" %}{{ current_path | trim_end_matches(pat="/") }}{% endif %}</span><span class="logo__bracket">]</span><span class="logo__symbol">$</span>
-                        {% endblock logo_content %}
-                    </div>
+                <a href="#" style="text-decoration: none;" onclick="return false;">
+                    {% block logo_content %}
+                        {{ logo_macros::breadcrumb_logo(config=config, current_url=current_url | default(value="")) }}
+                    {% endblock logo_content %}
                 </a>
             </div>
         </div>

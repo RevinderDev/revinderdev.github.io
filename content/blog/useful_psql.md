@@ -3,7 +3,7 @@ title = "Become poweruser with psql"
 date = 2026-02-12
 
 [taxonomies]
-tags = ["Databases", "Programming", "Postgresql"]
+tags = ["Databases", "Programming", "Postgresql", "SQL"]
 +++
 
 I think we all love Postgres. It's fast, efficient, and free to use. Nowadays, when I'm thinking of creating a SQL database, I choose Postgres as my primary target.

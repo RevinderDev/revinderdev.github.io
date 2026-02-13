@@ -24,4 +24,29 @@
     color: #fabd2f;
     margin-left: 5px;
   }
+
+  &__breadcrumb {
+    color: #83a598;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #a3c898;
+      text-decoration: underline;
+    }
+  }
+
+  &__home {
+    color: #83a598;
+
+    &:hover {
+      color: #a3c898;
+    }
+  }
+
+  &__separator {
+    color: #83a598;
+    margin: 0 2px;
+  }
 }
