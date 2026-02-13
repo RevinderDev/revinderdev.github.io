@@ -29,6 +29,9 @@
 <div class="container">
     {% block header %}
     <header class="header">
+        {% block header_menu %}
+        {{ menu_macros::menu(config=config, current_path=current_path) }}
+        {% endblock header_menu %}
         <div class="header__inner">
             <div class="header__logo">
                 {%- if config.logo_home_link %}
@@ -45,10 +48,6 @@
                 </a>
             </div>
         </div>
-
-        {% block header_menu %}
-        {{ menu_macros::menu(config=config, current_path=current_path) }}
-        {% endblock header_menu %}
     </header>
     {% endblock header %}
 
