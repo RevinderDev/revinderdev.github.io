@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+
+{%- block title -%}
+{{ config.title }}
+{%- endblock -%}
+
+{% block content %}
+<div class="home-sections">
+    <!-- About Section -->
+    <div class="home-section about-section">
+        <h2>About</h2>
+        {% set about_page = get_page(path="pages/about_blog.md") %}
+        <div class="section-content">
+            {{ about_page.content | safe }}
+        </div>
+    </div>
+
+    <!-- Archive Section -->
+    <div class="home-section archive-section">
+        <h2>Posts</h2>
+        {% set section = get_section(path="blog/_index.md") %}
+        <div class="section-content">
+            {{ post_macros::list_posts_short(pages=section.pages) }}
+        </div>
+    </div>
+</div>
+{% endblock content %}

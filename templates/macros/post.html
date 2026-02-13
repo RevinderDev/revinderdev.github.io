@@ -83,6 +83,27 @@
     </ul>
 {% endmacro list_posts %}
 
+{% macro list_posts_short(pages) %}
+    <ul>
+    {%- for page in pages %}
+        {%- if page.draft %}
+            {% continue %}
+        {% endif -%}
+        {%- set title = page.title -%}
+        {%- if title | length > 60 -%}
+            {%- set display_title = title | truncate(length=57, end="(...)") -%}
+        {% else %}
+            {%- set display_title = title -%}
+        {% endif -%}
+        <li class="post-list">
+            <a href="{{ page.permalink | safe }}">
+                <span class="post-date">{{ page.date }}</span>
+                :: <span class="post-list-title">{{ display_title }}</span></a>
+        </li>
+    {% endfor -%}
+    </ul>
+{% endmacro list_posts_short %}
+
 
 {% macro tags(page, short=false) %}
     {%- if page.taxonomies and page.taxonomies.tags %}

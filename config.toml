@@ -31,13 +31,12 @@ favicon = "/fav-icon.png"
 author = "Revinder"
 
 menu_items = [
-    { name = "All", url = "$BASE_URL" },
-    { name = "Programming", url = "$BASE_URL/tags/programming" },
+    { name = "Home", url = "$BASE_URL" },
+    { name = "Blog", url = "$BASE_URL/blog/" },
     { name = "Tags", url = "$BASE_URL/tags" },
-    { name = "Archive", url = "$BASE_URL/archive" },
-    { name = "About me", url = "$BASE_URL/about" },
+    { name = "About me", url = "$BASE_URL/about-me" },
     { name = "GitHub", url = "https://github.com/RevinderDev", newtab = true },
-    { name = "RSS", url = "$BASE_URL/atom.xml", newtab = true },                # Add this
+    { name = "RSS", url = "$BASE_URL/atom.xml", newtab = true },
 ]
 
 enable_post_view_navigation = true

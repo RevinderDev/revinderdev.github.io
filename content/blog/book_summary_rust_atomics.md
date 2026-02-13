@@ -1,5 +1,5 @@
 +++
-title = "Book summary and review #0: Mara Bos - Rust Atomics and Locks"
+title = "Book review #0: Mara Bos - Rust Atomics and Locks"
 date = 2025-06-20
 
 [taxonomies]
