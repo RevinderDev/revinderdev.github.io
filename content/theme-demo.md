@@ -53,6 +53,10 @@ if __name__ == "__main__":
 
 ## 2. Alerts (Shortcode)
 
+{% alert(type="note") %}
+This is an **Note** alert. It supports **Markdown** syntax like `code` and [links](https://google.com).
+{% end %}
+
 {% alert(type="info") %}
 This is an **Information** alert. It supports **Markdown** syntax like `code` and [links](https://google.com).
 {% end %}

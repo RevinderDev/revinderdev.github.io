@@ -6,9 +6,11 @@
 {%- set label_id = get_hash(literal=type ~ title ~ icon ~ text, sha_type=256) | truncate(length=8, end="") -%}
 
 <section class="alert {{ type }}" role="note" aria-labelledby="{{ label_id }}">
-    <div class="alert-icon alert-icon-{{ icon }}"></div>
-    <div class="alert-content" role="presentation">
-        <strong id="{{ label_id }}" class="alert-title" aria-hidden="true">{{ title | safe }}</strong>
-        {{ text | markdown | safe }}
+    <div class="alert-icon alert-icon-{{ icon }}" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="{{ label_id }}" class="alert-title">{{ title | safe }}</strong>
+        <div class="alert-body">
+            {{ text | markdown | safe }}
+        </div>
     </div>
 </section>
