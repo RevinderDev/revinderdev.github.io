@@ -1,9 +1,12 @@
 # Be sure to change these!
 base_url = "https://revinderdev.github.io/"
 title = "Revinder Blog"
+description = "Personal blog of Revinder"
+default_language = "en"
 
 # Sass compilation is required
 compile_sass = true
+generate_feeds = true
 
 # Optional: enable tags
 taxonomies = [{ name = "tags" }]
@@ -28,13 +31,13 @@ favicon = "/fav-icon.png"
 author = "Revinder"
 
 menu_items = [
-    { name = "Blog", url = "$BASE_URL" },
-
+    { name = "All", url = "$BASE_URL" },
+    { name = "Programming", url = "$BASE_URL/tags/programming" },
     { name = "Tags", url = "$BASE_URL/tags" },
     { name = "Archive", url = "$BASE_URL/archive" },
     { name = "About me", url = "$BASE_URL/about" },
-
     { name = "GitHub", url = "https://github.com/RevinderDev", newtab = true },
+    { name = "RSS", url = "$BASE_URL/atom.xml", newtab = true },                # Add this
 ]
 
 enable_post_view_navigation = true

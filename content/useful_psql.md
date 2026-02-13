@@ -125,7 +125,7 @@ postgres=CTc/postgres |         |            |
 ```
 
 {% character(name="Monk", position="right") %}
-Hey!! That looks terrible! the characters are everywhere and lines don't match. It's unreadable!!
+Hey!! That looks terrible! The characters are everywhere and lines don't match. It's unreadable!!
 {% end %}
 
 {% character(name="CoolPizza", position="left") %}
