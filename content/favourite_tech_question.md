@@ -3,7 +3,7 @@ title = "My favourite interview question"
 date = 2025-02-16
 
 [taxonomies]
-tags = ["Interview", "Recruitment"]
+tags = ["Interview", "Recruitment", "Programming"]
 +++
 
 I've been a technical interviewer where I work for the last year for various positions in various countries, and since then, I've worked out a flow for interviews that I want to conduct. The approach, of course, has to differ depending on the candidate's experience and for what position they are applying. After all, data engineering/machine learning departments have different requirements than backend teams. Nevertheless, the goal is always to get to know the applicant better and understand their thought process, so that I can accurately judge their experience.

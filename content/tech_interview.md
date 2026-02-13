@@ -3,7 +3,7 @@ title = "Tech interview process improvements"
 date = 2025-03-20
 
 [taxonomies]
-tags = ["Interview", "Recruitment"]
+tags = ["Interview", "Recruitment", "Programming"]
 +++
 
 I've been a technical interviewer where I work for the last year for various positions in various countries. 
