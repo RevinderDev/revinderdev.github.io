@@ -1,6 +1,7 @@
 +++
 title = "Tech interview process improvements"
 date = 2025-03-20
+description = "Some thoughts about our internal recuirtment improvements."
 
 [taxonomies]
 tags = ["Interview", "Recruitment", "Programming"]

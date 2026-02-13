@@ -1,6 +1,7 @@
 +++
 title = "The \"Forgetful\" pattern: A method for Deep Copying with unique instances"
 date = 2025-09-08
+description = "Surprising method of leveraging python copy module for distinct copying."
 
 [taxonomies]
 tags = ["Python", "Programming"]

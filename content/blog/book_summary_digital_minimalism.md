@@ -1,6 +1,7 @@
 +++
 title = "Book review #1: Cal Newport - Digital Minimalism"
 date = 2026-02-03
+description = "Book summary and review of a Digital Minimalism book from Cal Newport."
 
 [taxonomies]
 tags = ["Book", "Productivity"]

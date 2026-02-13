@@ -1,6 +1,7 @@
 +++
 title = "Poetry detour and my first Tanka"
 date = 2026-01-24
+description = "Small story about how I ended up writing some poetry in Italy."
 
 [taxonomies]
 tags = ["Poetry"]

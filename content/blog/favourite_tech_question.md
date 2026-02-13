@@ -1,6 +1,7 @@
 +++
 title = "My favourite interview question"
 date = 2025-02-16
+description = "Details of my favourite recruitment questions I give to candidates."
 
 [taxonomies]
 tags = ["Interview", "Recruitment", "Programming"]

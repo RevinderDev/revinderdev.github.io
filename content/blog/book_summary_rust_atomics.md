@@ -1,6 +1,7 @@
 +++
 title = "Book review #0: Mara Bos - Rust Atomics and Locks"
 date = 2025-06-20
+description = "Book summary and review of a fantastic low level book on concurrency by Mara Bos."
 
 [taxonomies]
 tags = ["Rust", "Book", "Programming"]

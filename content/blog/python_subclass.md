@@ -1,6 +1,7 @@
 +++
 title = "Python `__init_subclass__` demystified"
 date = 2023-03-11
+description = "Deep dive into Python's mysterious `__init_subclass__`. What is it, what does it do and how you can use it."
 
 [taxonomies]
 tags = ["Python", "Programming"]

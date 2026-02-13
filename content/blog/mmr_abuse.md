@@ -1,6 +1,7 @@
 +++
 title = "MMR Abuse in World of Warcraft Arena"
 date = 2021-06-25
+description = "World of Warcraft arena stories how MMR is abused to gain unfair advantage and earn quick money."
 
 [taxonomies]
 tags = ["World of Warcraft", "Exploit"]
