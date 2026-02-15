@@ -3,6 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <meta name="robots" content="noodp"/>
 
+    <link rel="preload" href="{{ get_url(path="fonts/JetBrainsMono-Regular.woff2") }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ get_url(path="style.css", trailing_slash=false) | safe }}">
 
 {%- if config.extra.accent_color %}
@@ -17,9 +18,4 @@
     {% endif -%}
 {% endif -%}
 
-{%- if config.extra.use_full_hack_font %}
-    <link rel="stylesheet" href="{{ get_url(path="font-hack.css", trailing_slash=false) | safe }}">
-{% else %}
-    <link rel="stylesheet" href="{{ get_url(path="font-hack-subset.css", trailing_slash=false) | safe }}">
-{% endif -%}
 {% endmacro head %}
