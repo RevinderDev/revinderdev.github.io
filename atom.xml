@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Revinder’s Save States</title>
+    <subtitle>Howdy👋! Welcome to my blog. I write about IT, games and anything that comes to my mind!</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://revinder.dev/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://revinder.dev/"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-02-12T00:00:00+00:00</updated>
+    <id>https://revinder.dev/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Become poweruser with psql</title>
+        <published>2026-02-12T00:00:00+00:00</published>
+        <updated>2026-02-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/useful-psql/"/>
+        <id>https://revinder.dev/blog/useful-psql/</id>
+        
+        <summary type="html">&lt;p&gt;I think we all love Postgres. It&#x27;s fast, efficient, and free to use. Nowadays, when I&#x27;m thinking of creating a SQL database, I choose Postgres as my primary target.
+For local development, I pretty much always deploy it in a Docker container, but the question is—how do you access it? Some people use database management interfaces built into IDEs, some use dedicated tools (such as pgAdmin or DBeaver), but for my basic development needs, I stick with &lt;code&gt;psql&lt;&#x2F;code&gt; (and it&#x27;s in the terminal!).
+In this article, I&#x27;ll show you the common useful things you can do with it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Prerequisites&lt;&#x2F;strong&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Basic &lt;strong&gt;SQL&lt;&#x2F;strong&gt; understanding&lt;&#x2F;li&gt;
+&lt;li&gt;Terminal&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Book review #1: Cal Newport - Digital Minimalism</title>
+        <published>2026-02-03T00:00:00+00:00</published>
+        <updated>2026-02-03T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/book-summary-digital-minimalism/"/>
+        <id>https://revinder.dev/blog/book-summary-digital-minimalism/</id>
+        
+        <summary type="html">&lt;p&gt;In summer of 2024 I went to Turkey for summer holidays. We were in Alanya and unfortunately (or fortunately) the WiFi was pricey.
+Not only that, but given that we were in the Asian part of Turkey, it meant that my mobile internet was simply not working.
+This made my phone regress entirely to... being a phone again.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Poetry detour and my first Tanka</title>
+        <published>2026-01-24T00:00:00+00:00</published>
+        <updated>2026-01-24T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/tanka-haiku/"/>
+        <id>https://revinder.dev/blog/tanka-haiku/</id>
+        
+        <summary type="html">&lt;p&gt;During my high school years, I strongly disliked &quot;Polish Language and Literature&quot; classes. I thought they were boring and couldn&#x27;t understand why poets and writers overthought and elaborated on even the simplest of things. Naturally, back then, I couldn&#x27;t even fathom changing my mind. It is, therefore, very surprising to me that I now find myself not only enjoying reading short poems but also writing them, albeit terribly..&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>The &quot;Forgetful&quot; pattern: A method for Deep Copying with unique instances</title>
+        <published>2025-09-08T00:00:00+00:00</published>
+        <updated>2025-09-08T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/forgetful-dict/"/>
+        <id>https://revinder.dev/blog/forgetful-dict/</id>
+        
+        <summary type="html">&lt;p&gt;In this article I will showcase you a recent trick I&#x27;ve learned when glancing through boto3 source code. There was a particular class which name was even stranger than its usage: &lt;code&gt;ForgetfulDict&lt;&#x2F;code&gt;.
+We&#x27;ll break down its surprisingly simple implementation, understand the specific problem it solves within Python&#x27;s copy module, and see how this pattern can be useful in other contexts.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Prerequisites&lt;&#x2F;strong&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Basic &lt;strong&gt;Python&lt;&#x2F;strong&gt; understanding&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Book review #0: Mara Bos - Rust Atomics and Locks</title>
+        <published>2025-06-20T00:00:00+00:00</published>
+        <updated>2025-06-20T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/book-summary-rust-atomics/"/>
+        <id>https://revinder.dev/blog/book-summary-rust-atomics/</id>
+        
+        <summary type="html">&lt;p&gt;My TL over at &lt;a href=&quot;https:&#x2F;&#x2F;www.stxnext.com&#x2F;&quot;&gt;STX&lt;&#x2F;a&gt; has given me a good self-improvement idea - for every book I&#x27;ve read, I should write something about it.
+It can be some kind of side project that uses the ideas from the book or a blog post summarising it. In this series, I am going to do a little bit of both.
+Going over the most interesting points to me that I&#x27;ve got to known thanks to said book, as well as try (more or less) use it practically.&lt;&#x2F;p&gt;
+&lt;p&gt;The book we put on the spot as a first one is (one that I&#x27;ve read most recently since hearing mentioned advice) - &lt;strong&gt;Rust Atomics and Locks&lt;&#x2F;strong&gt; by Mara Bos.
+Mara is an excellent engineer, current Rust library team dev and a fantastic writer. You can get to know her more on one of following websites:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.m-ou.se&#x2F;&quot;&gt;Blog&lt;&#x2F;a&gt; - can not recommend that one enough!&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;bsky.app&#x2F;profile&#x2F;mara.bsky.social&quot;&gt;Bluesky&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;x.com&#x2F;m_ou_se&quot;&gt;Twitter&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;marabos.nl&#x2F;atomics&#x2F;&quot;&gt;Link to a book&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Since I am not a book reviewer, I don&#x27;t exactly know how to conduct one, so I am going to approach it how I see it make most sense - going chapter by chapter.
+This article is for those who are not yet sure if this book is worth a read (spoiler - it is) and is mainly targeted for someone interested in a little bit lower level of concurrency, with a sprinkle of Rust, than what&#x27;s usually used. We rarely, if ever, write these structures ourselves.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Tech interview process improvements</title>
+        <published>2025-03-20T00:00:00+00:00</published>
+        <updated>2025-03-20T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/tech-interview/"/>
+        <id>https://revinder.dev/blog/tech-interview/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;ve been a technical interviewer where I work for the last year for various positions in various countries.
+I&#x27;ve come to realise that our interview process is flawed and so in this article I will try to justify my position on it as well as propose improvements.
+Before you read further, if there is one thing that you should get out of this article, it&#x27;s this: &lt;strong&gt;The candidate is entitled to receive proper feedback from the interview&lt;&#x2F;strong&gt;. You probably received one of those before (I did too): &quot;we&#x27;ve found someone else&quot;, &quot;we are looking for someone more qualified&quot; or simply ghosting you AFTER you&#x27;ve done a take-home task, on-site interview and 2 HR calls. Laughably pathetic and speaks volumes on the place you were trying to get into. Either way, moving on...&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>My favourite interview question</title>
+        <published>2025-02-16T00:00:00+00:00</published>
+        <updated>2025-02-16T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/favourite-tech-question/"/>
+        <id>https://revinder.dev/blog/favourite-tech-question/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;ve been a technical interviewer where I work for the last year for various positions in various countries, and since then, I&#x27;ve worked out a flow for interviews that I want to conduct. The approach, of course, has to differ depending on the candidate&#x27;s experience and for what position they are applying. After all, data engineering&#x2F;machine learning departments have different requirements than backend teams. Nevertheless, the goal is always to get to know the applicant better and understand their thought process, so that I can accurately judge their experience.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Python `__init_subclass__` demystified</title>
+        <published>2023-03-11T00:00:00+00:00</published>
+        <updated>2023-03-11T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/python-subclass/"/>
+        <id>https://revinder.dev/blog/python-subclass/</id>
+        
+        <summary type="html">&lt;p&gt;In this article I will try to demystify less commonly known function &lt;code&gt;__init_subclass__&lt;&#x2F;code&gt; introduced in &lt;a href=&quot;https:&#x2F;&#x2F;peps.python.org&#x2F;pep-0487&#x2F;&quot;&gt;PEP 487&lt;&#x2F;a&gt;, explain how it works and show you real life example of how you can leverage it in Python 3.11 for your own benefit.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Prerequisites&lt;&#x2F;strong&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Basic python understanding&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>MMR Abuse in World of Warcraft Arena</title>
+        <published>2021-06-25T00:00:00+00:00</published>
+        <updated>2021-06-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/blog/mmr-abuse/"/>
+        <id>https://revinder.dev/blog/mmr-abuse/</id>
+        
+        <summary type="html">&lt;p&gt;Arenas are one of the two rated PvP game modes in World of Warcraft. In this article I will present how players abuse MMR system that was designed to match players based on skill to gain rewards that they shouldn&#x27;t have gained in the first place. I will also propose solutions which can be implemented to more or less address the presented issues. I am not advocating MMR abuses nor will I name anyone personally. This article is meant to be strictly informative and it&#x27;s only purpose is to highlight already glaring issues.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Theme Features Showcase</title>
+        <published>2020-01-01T00:00:00+00:00</published>
+        <updated>2020-01-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://revinder.dev/posts/theme-demo/"/>
+        <id>https://revinder.dev/posts/theme-demo/</id>
+        
+        <summary type="html">&lt;p&gt;This page demonstrates the new theme features implemented all styled with a consistent &lt;code&gt;gruvbox&lt;&#x2F;code&gt; dark palette.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+</feed>
