@@ -13,7 +13,8 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: Hack, DejaVu Sans Mono, Monaco, Consolas, Ubuntu Mono, monospace;
+  font-family: 'Iosevka Web', 'Iosevka', 'Courier New', monospace;
+  font-variant-ligatures: normal;
   font-size: 1rem;
   line-height: 1.54;
   background-color: var(--background);
@@ -135,7 +136,7 @@ figure {
 }
 
 code {
-  font-family: Hack, DejaVu Sans Mono, Monaco, Consolas, Ubuntu Mono, monospace;
+  font-family: 'Iosevka Web', 'Iosevka', 'Courier New', monospace;
   font-feature-settings: normal;
   background: #3c3836;
   color: #ebdbb2;
@@ -146,7 +147,7 @@ code {
 }
 
 pre {
-  font-family: Hack, DejaVu Sans Mono, Monaco, Consolas, Ubuntu Mono, monospace;
+  font-family: 'Iosevka Web', 'Iosevka', 'Courier New', monospace;
   padding: 24px;
   font-size: .95rem;
   overflow: auto;

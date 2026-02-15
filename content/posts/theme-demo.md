@@ -21,6 +21,7 @@ This page demonstrates the new theme features implemented all styled with a cons
 * Item List
     * Nested
 
+-> <-
 - [ ] Check box
 - [x] Check box
 
