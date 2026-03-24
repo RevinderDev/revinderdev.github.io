@@ -1,7 +1,7 @@
 +++
-title = "Some observations on AI"
-date = 2026-03-20
-description = "My personal thoughts and some anecdotes that make me question if AI is the miracle tool that all tech bros shill for."
+title = "Dits, Slop and the Dead Internet"
+date = 2026-03-24
+description = "My personal thoughts and some anecdotes that make me question if AI is the miracle tool that all tech bros shill for and why I believe that AI isn't the miracle tool management was promised to be."
 
 [taxonomies]
 tags = ["AI", "Python"]
@@ -14,12 +14,12 @@ Because I'm relatively young and love learning, I try to live on the cutting edg
 {% alert(type="note", icon="robot", title="AI Notice") %}
 This article was **not** written by AI.
 
-AI was, however, used for spotting typos. 
+AI was, however, used for spotting typos and to generate markdown table (not it's content!).
 
 AI was also used as a case study in a Python code example, though it's clearly indicated there which one did what.
 
 ---
-**Models**: MiniMax M2.5
+**Models**: MiniMax M2.5, Gemini 3.1 Pro
 
 **Tool**: Opencode v1.2.27
 {% end %}
@@ -142,33 +142,35 @@ Going one step further, maybe like me, you've invested time in trying various mo
 Sure the code somewhat works, but the edge cases are there, it's overly verbose, over-engineered, there is A LOT of it, and you don't even understand it fully. Most importantly: *you haven't learned anything while writing it*.
 Doesn't that make you feel anxious? I know it does me. I don't want to push generated code and be responsible for it. At least not when I don't understand it fully.
 
-
 I don't know what the future holds, I can, however, show you what's happening now:
-1. [It turns out that they've done a study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/#methodology) on the impact of AI on 16 *very* experienced developers from open-source communities. They were sometimes allowed, sometimes not allowed, to use AI on an open issue. Shockingly to LinkedIn managers, they took on average, **19% longer to complete issues**. The fun bit is all of them *thought* that AI was increasing their speed by around 24%. 
-2. AI hasn't contributed to substantial growth in apps according to: ["Where's the shovelware?"](https://mikelovesrobots.substack.com/p/wheres-the-shovelware-why-ai-coding). The author asked a good question: if developers are so much more productive with AI, why isn't there more shovelware? To back it up, he brought up the number of domains registered each year, new GitHub repositories, new Steam games, new Android apps and new iPhone apps. The trend is the same. Not much really has changed. 
-3. Adoption of AI is accelerating, but general confidence of the public in AI dropped by 19%, [as reported by Forbes](https://fortune.com/2026/01/21/ai-workers-toxic-relationship-trust-confidence-collapses-training-manpower-group/).
-4. Less than 1/3rd of AI-assisted research [is reproducible](https://aimultiple.com/reproducible-ai). Corporate labs are much more luxurious places to be at for scientists and they are not for knowledge. They are for profit. By definition, then, they will not want to share the full results of their work. That in itself is not a bad thing, after all research can be driven by the idea of immense profit, but when the vast majority of work is done this way, it does feel like we as a society will have a net negative from it, not a net positive.
-5. Open-source projects are rebelling against blind AI usage with most opting for clear AI usage disclosure. That includes:
+
+
+1. Productivity boost is a lie
+* [It turns out that they've done a study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/#methodology) on the impact of AI on 16 *very* experienced developers. Shockingly, they took on average **19% longer to complete issues**. The fun bit is all of them *thought* they were 24% faster.
+* AI hasn't contributed to substantial growth in apps. Michael Hart asked a good question in ["Where's the shovelware?"](https://mikelovesrobots.substack.com/p/wheres-the-shovelware-why-ai-coding): if developers are so much more productive, why isn't there a spike in new GitHub repos, Steam games, or mobile apps? The trend is the same. Nothing has changed.
+* Microsoft is simultaneously boasting about [how 30% of its code is AI-written](https://timesofindia.indiatimes.com/technology/tech-news/less-than-a-year-after-ceo-satya-nadella-said-30-of-microsofts-code-is-ai-written-company-appoints-an-engineering-quality-head/articleshow/128116076.cms) while dealing with reports that [almost all major Windows 11 core features are broken](https://www.neowin.net/news/microsoft-finally-admits-almost-all-major-windows-11-core-features-are-broken/). Do we not see a connection yet?
+
+2. Open source is under attack
+* Projects are rebelling against blind AI usage. That includes:
    * Popular terminal Ghostty, as denoted [by its AI Policy](https://github.com/ghostty-org/ghostty/blob/main/AI_POLICY.md).
    * Debian - which flat out [bans AI-generated contributions](https://lwn.net/Articles/1061544/)
-   * Hacker News also bans [AI-generated comments](https://news.ycombinator.com/newsguidelines.html#generated).
+   * Hacker News bans [AI-generated comments](https://news.ycombinator.com/newsguidelines.html#generated).
    * Pydantic AI (oh the irony..) who are in trouble for having too much AI slop and is now resorting to harsher [contribution rules](https://old.reddit.com/r/Python/comments/1ry99ce/open_source_contributions_to_pydantic_ai/?share_id=KtxYHyj9-WnNQO25zDNB-) to keep up.
-   * .. and many more ..
-6. The internet is accelerating toward *the dead internet theory*, with bots being rampant - one of them tried to [blackmail an open-source developer after its PR was rejected](https://www.fastcompany.com/91492228/matplotlib-scott-shambaugh-opencla-ai-agent). Another one [applied for a job](https://www.adriankrebs.ch/blog/dead-internet/) without its owner's approval.
-7. [In a simulated stress test environment](https://www.anthropic.com/research/agentic-misalignment), researchers found AI (at least in some of the cases) to behave in a malicious way towards humans. 
-8. Microsoft is simultaneously boasting about [how 30% of its code is AI-written](https://timesofindia.indiatimes.com/technology/tech-news/less-than-a-year-after-ceo-satya-nadella-said-30-of-microsofts-code-is-ai-written-company-appoints-an-engineering-quality-head/articleshow/128116076.cms) and how [all major Windows 11 core features are broken](https://www.neowin.net/news/microsoft-finally-admits-almost-all-major-windows-11-core-features-are-broken/). Do we not see a connection yet?
-
-Then we get to **really** depressive stuff:
-
-9. There is [Malus](https://malus.sh/) project which "liberates from open source license obligations" by... recreating any open-source project from scratch using AI agents, essentially bypassing any licensing issues. Or does it? What if AST representation remains the same, but the implementation differs? I have no idea, I am not a lawyer.
+* Conversely, there is the [Malus](https://malus.sh/) project, which attempts to "liberate" from open-source license obligations by using AI agents to recreate projects from scratch, essentially laundering AST representations to bypass licensing. 
 
 {% character(name="CoolPizza", position="left") %}
 Going after people who made the choice to share their work for free for you to use, just based on a promise of yours to be fair according to their wishes? **Real cool bro**.
 {% end %}
 
-10. [A new website popped up](https://rentahuman.ai/) for AI agents to rent... a human. Because even an AI agent sometimes needs a human to do real life work. Black mirror stuff..
-11. [AI is already used in war.](https://thebulletin.org/2026/03/unready-for-war-ai-may-already-be-causing-deadly-mistakes/) 
+3. Scientific collaboration collapse
+* Despite accelerating adoption, public confidence in AI has dropped by 19%, [as reported by Forbes](https://fortune.com/2026/01/21/ai-workers-toxic-relationship-trust-confidence-collapses-training-manpower-group/).
+* Less than 1/3rd of AI-assisted research [is reproducible](https://aimultiple.com/reproducible-ai). Corporate labs prioritize profit over shared knowledge, creating a net negative for society's actual technological progression.
 
+4. The dead internet theory isn't a theory anymore
+* We have bots [blackmailing open source developers](https://www.fastcompany.com/91492228/matplotlib-scott-shambaugh-opencla-ai-agent), bots [applying for jobs](https://www.adriankrebs.ch/blog/dead-internet/) autonomously, and [simulated stress tests](https://www.anthropic.com/research/agentic-misalignment) showing AI behaving maliciously toward humans.
+* And for the truly depressive stuff: a [new website popped up](https://rentahuman.ai/) for AI agents to *rent a human*. Because even an AI agent sometimes needs a human to do real life work. Black Mirror season 6.
+
+And the coup de grace we all saw coming.. [AI may already used in a war.](https://thebulletin.org/2026/03/unready-for-war-ai-may-already-be-causing-deadly-mistakes/)
 
 If all of that makes you feel uneasy, you are not alone. That, unfortunately, however, is what makes a lot of difference.
 The breaking point of AI, the so-called "Technological Singularity", does not need to occur at its full potential, for it to have a huge impact on society. 
