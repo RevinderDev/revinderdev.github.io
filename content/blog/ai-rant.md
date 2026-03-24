@@ -96,35 +96,63 @@ Maybe like me you are hoping for AI bubble to finally burst?
 Will it happen this year? Will it happen next year? Or maybe we will finally achieve true AGI?
 Nobody knows. Nobody *can* know. And that makes all of us uneasy. 
 
----
 
 Going one step further, maybe like me, you've invested time to try various models. Maybe you tried opencode, claude code or codex and run up an agent to do your work, and... you are disappointed.
 
 Sure the code somewhat works, but the edge cases are there, it's overly verbose, over engineered, there is A LOT of it and you don't even understand it fully. Most importantly: *you haven't learned anything while writing it*.
-Doesn't that make you feel anxious? I know it does for me. I don't want to push that code and be responsible for it. At least not when I don't understand it fully.
+Doesn't that make you feel anxious? I know it does me. I don't want to push generated code and be responsible for it. At least not when I don't understand it fully.
 
 
-I don't know what future holds, I can however, show you that it's not as bad for programmers as other show it to be:
+I don't know what future holds, I can however, show you what's happening now:
 1. [It turns out that they've done a study ](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/#methodology) on impact of AI on 16 *very* experienced developers from open source communities. They were sometimes allowed, sometimes not allowed, to use AI on opened issue. Shockingly to LinkedIn managers, they took on average, **19% longer to complete issues**. The fun bit is all of them *thought* that AI was increasing their speed by around 24%. 
-2. There is a great article by Mike Judge - ["Where's the shovelware?"](https://mikelovesrobots.substack.com/p/wheres-the-shovelware-why-ai-coding) He asked the question - if developers are so much more productive with AI, why there isn't more shovelware? To back it up, he brought up amount of domains registered each year, new Github repositories, new steam games, new android apps and new iPhone apps. The trend is the same. Not much really has changed.
+2. AI hasn't contributed to substational growth in apps according to: ["Where's the shovelware?"](https://mikelovesrobots.substack.com/p/wheres-the-shovelware-why-ai-coding) Author asked a good question - if developers are so much more productive with AI, why there isn't more shovelware? To back it up, he brought up amount of domains registered each year, new Github repositories, new steam games, new android apps and new iPhone apps. The trend is the same. Not much really has changed. 
 3. Adoption of AI is accelerating, but general confidence of public in AI dropped by 19%, [as reported by Forbes](https://fortune.com/2026/01/21/ai-workers-toxic-relationship-trust-confidence-collapses-training-manpower-group/).
-4. Less than 1/3rd of AI assisted research [is reproducible](https://aimultiple.com/reproducible-ai).
-5. Open source projects are rebelling about blind AI usage with most opting for clear AI usage disclosure.
-   * That includes popular terminal Ghostty, as denoted [by it's AI Policy](https://github.com/ghostty-org/ghostty/blob/main/AI_POLICY.md).
-   * Debian flat out [bans AI-generated contributions](https://lwn.net/Articles/1061544/)
-   * Hackernews bans [AI generated comments](https://news.ycombinator.com/newsguidelines.html#generated).
-   * Pydantic AI (oh the irony..)  are in trouble for having too much AI slop and are now resorting to harsher [contribution rules](https://old.reddit.com/r/Python/comments/1ry99ce/open_source_contributions_to_pydantic_ai/?share_id=KtxYHyj9-WnNQO25zDNB-) to keep up.
+4. Less than 1/3rd of AI assisted research [is reproducible](https://aimultiple.com/reproducible-ai). Corporate labs are much more luxiourious places to be at for scientists and they are not for knowledge. They are for profit. By definition then, they will not want to share full result of their works. That in itself is not a bad thing, after all research can be driven by idea of immense profit, but when vast majority of work is done this way, it does feel like we as a society will have a net negative from it, not net positive.
+5. Open source projects are rebelling about blind AI usage with most opting for clear AI usage disclosure. That includes:
+   * Popular terminal Ghostty, as denoted [by it's AI Policy](https://github.com/ghostty-org/ghostty/blob/main/AI_POLICY.md).
+   * Debian - which flat out [bans AI-generated contributions](https://lwn.net/Articles/1061544/)
+   * Hackernews also bans [AI generated comments](https://news.ycombinator.com/newsguidelines.html#generated).
+   * Pydantic AI (oh the irony..) who are in trouble for having too much AI slop and are now resorting to harsher [contribution rules](https://old.reddit.com/r/Python/comments/1ry99ce/open_source_contributions_to_pydantic_ai/?share_id=KtxYHyj9-WnNQO25zDNB-) to keep up.
+   * .. and many more ..
 6. Internet is more and more going towards *the dead internet theory*, with bots being rampart - one of them tried to [blackmail one of the open source developers after it's PR was rejected](https://www.fastcompany.com/91492228/matplotlib-scott-shambaugh-opencla-ai-agent). Another one [applied to a job](https://www.adriankrebs.ch/blog/dead-internet/) without it's owners approval.
 7. [In a simulated stress test environment](https://www.anthropic.com/research/agentic-misalignment), researchers found AI (at least in some of the cases) to behave in malicious way towards humans. 
 
 
 Then we get to **really** depressive stuff:
 
-8. There is [Malus](https://malus.sh/) project which "liberates from open source license obligations" by... recreating any open source project from scratch. How is that even a thing?
+8. There is [Malus](https://malus.sh/) project which "liberates from open source license obligations" by... recreating any open source project from scratch using AI agents, essentially bypassing any licensing issues. Or does it? What if AST representation remains the same, but the implementation differs? I have no idea, I am not a lawyer.
 
 {% character(name="CoolPizza", position="left") %}
-Going after people who made choice of sharing their work for free for you to use, just based on a promise of yours to be fair according to said license? **Real cool bro**.
+Going after people who made a choice of sharing their work for free for you to use, just based on a promise of yours to be fair according to their wishes? **Real cool bro**.
 {% end %}
 
-9. There [is a website](https://rentahuman.ai/) for AI agents to rent... a human. Because even AI agent sometimes needs a human to do real life work.
-10. AI is possibly to be at fault for hitting the school of children in Iran. We can't know for sure, it's too early to say, but so far it's been thrown around as combination of data error and human error.
+9. [A new websited popped up](https://rentahuman.ai/) for AI agents to rent... a human. Because even AI agent sometimes needs a human to do real life work. Black mirror stuff..
+10. [AI is already used in war.](https://thebulletin.org/2026/03/unready-for-war-ai-may-already-be-causing-deadly-mistakes/) There are links of AI to recent attack on school of children in Iran by US, but so far nothing has been confirmed yet, so I will refrain from wearing tinfoil hat this time, but boy is it horrifying.
+
+
+If all of that makes you feel uneasy, you are not alone. That unfortunately however, is what makes a lot of difference.
+The breaking point of AI, so called "Technological Singularity", does not need to occur at it's full potential, for it to have a huge impact on society. 
+As stated by [Cam Pedersen in his "Singularity" piece](https://campedersen.com/singularity):
+> *The curve [of AI Potential] does not need to reach the pole, it just needs to look like it will. (...) And the uncomfortable answer is: <b>it's already happening</b>*.
+
+## Final Thoughts
+
+So where does this leave us at? I am not happy. When it comes down to IT sector, the thing that always
+grinded my gears was corporate stuff. Boring meetings, people with no expertise telling me what is worth doing
+and what is not (why is it always tests and refactors..) or incoherent vision for a project. It feels to me, that
+the current AI landscape magnifies these issues to absolute extremes. It feels like my projects are:
+- Sloppier with no real understanding in choice of tooling.
+- Overpromised by managers with a hook on AI solving every single of our problems.
+- Same managers are also cutting on every expense possible. Somehow I am meant to pay for all these tokens myself for work, but if I don't use AI, I am also told I am not working the best way I can. Another markdown file will fix it for sure.
+- Somehow not deterministic because in the contract it was stated that the AI agent must be involved, so we had to include it somewhere.
+- Insecure, riddled with holes.
+
+This is not why I've fell in love with this field. 
+
+I went in because I liked computers. 
+I like code. I liked engineering parts of the problems and I liked when solutions worked.
+I liked caring about developer ergonomic. I liked when being thorough paid off with stability. 
+But it seems with AI it matters less and less.
+When asked if one should go into IT, I used to say 'absolutely yes if you are feeling it'.
+No longer I can say that with clear conscience, because I don't know if I will be able to even work 
+in the field myself in a few years and that makes me sad..
