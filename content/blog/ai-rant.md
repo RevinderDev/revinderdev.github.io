@@ -34,9 +34,9 @@ To showcase this, take a look at this (very sensible) production code and let's 
 
 ```python
 def f(my_name, my_age, my_favourite_numbers = None):
-       my_age +=10
-       if not my_favourite_numbers:
-            my_favourite_numbers = {"odd": [1,3], "even": [2,4]} 
+    my_age +=10
+    if not my_favourite_numbers:
+         my_favourite_numbers = {"odd": [1,3], "even": [2,4]} 
 
     return {
        "name": my_name,
