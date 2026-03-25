@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Revinder’s Save States</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="preload" href="https://revinder.dev/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://revinder.dev/style.css">
+    <link rel="stylesheet" href="https://revinder.dev/color/gruvbox.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://revinder.dev/blog/favourite-tech-question/">
+    <meta property="og:title" content="My favourite interview question">
+    <meta property="og:description" content="Details of my favourite recruitment questions I give to candidates.">
+    
+    
+    
+        <meta property="og:image" content="https://revinder.dev/images/characters/CoolPizza.png">
+    
+
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://revinder.dev/rss.xml">
+    
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinder.dev/">Home</a></li>
+            
+                <li><a href="https://revinder.dev//blog">Blog</a></li>
+            
+                <li><a href="https://revinder.dev//tags">Tags</a></li>
+            
+                <li><a href="https://revinder.dev//about-me">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            
+                <li><a href="https://revinder.dev//atom.xml" target="_blank" rel="noopener noreferrer">RSS</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+        <div class="header__inner">
+            <div class="header__logo">
+                <a href="#" style="text-decoration: none;" onclick="return false;">
+                    
+    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="https:&#x2F;&#x2F;revinder.dev" class="logo__breadcrumb logo__home">~/revinder</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog" class="logo__breadcrumb">blog</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog&#x2F;favourite-tech-question" class="logo__breadcrumb">favourite-tech-question</a><span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
+
+                </a>
+            </div>
+        </div>
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinder.dev/blog/favourite-tech-question/">My favourite interview question</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2025-02-16
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/interview/">#Interview</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/recruitment/">#Recruitment</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/programming/">#Programming</a></span>
+    
+
+        
+        <div class="post-content">
+            <p>I've been a technical interviewer where I work for the last year for various positions in various countries, and since then, I've worked out a flow for interviews that I want to conduct. The approach, of course, has to differ depending on the candidate's experience and for what position they are applying. After all, data engineering/machine learning departments have different requirements than backend teams. Nevertheless, the goal is always to get to know the applicant better and understand their thought process, so that I can accurately judge their experience.</p>
+<span id="continue-reading"></span>
+<p>First, I obviously start with introductions. I will briefly explain who I am, what we will be doing, and what are the next steps after the interview is over. Then I will usually ask the candidate about their work experience – companies they've worked at, projects they've completed. In this section, my goal is to have initial assessments of their abilities as a developer. I want to see what kind of problems they had to deal with and how they came up with solutions. I want to see if they were in the project long enough to understand its architecture. It's common, for example, for people to mention "we've had a microservice architecture," but often, when asked afterwards, "how did these microservices communicate?" I don't get straightforward answers, but guesses/assumptions, which, to me, is not what I want to hear from a senior person. Once I conclude that I've heard enough about their experience, I move onto <em>the question</em>, and here it is:</p>
+<blockquote>
+<p><em>Imagine you were selected as a tech lead for a new project in [Web Framework] that will utilize [Database].</em>
+<em>Using best practices that are known to you, describe to me how you would set up a perfect CI/CD in a VCS of your choosing (please be git).</em>
+<em>In your explanation, be as detailed as possible. You can use any tools that you want. No money or time constraints on the project.</em></p>
+</blockquote>
+<p>I absolutely love that.</p>
+<p>At this point, some of the candidates will jump straight into an answer (usually a bad sign) or will ask for a few minutes to think this through, perhaps write or draw a few things on a piece of paper or on a computer before jumping to an answer.</p>
+<h1 id="why-it-s-so-good">Why it's so good</h1>
+<p><strong>1. It's open</strong></p>
+<p>There are as many answers to that question as there are developers working on these. And that is the point. They choose what is important to them. They choose the setup. Will they choose a hot new technology or stick to plain old, boring one? Will they choose to run integration tests or only unit tests? Lots of choices they have to make and each of them is telling you yet another thing about them.</p>
+<p><strong>2. It's easy to follow it up</strong></p>
+<p>Suppose they mention testing. Great! Testing is important. How will you run tests? Will you include integration tests? If integration tests require a database, then how will you set it up? Your test cases are running slowly, what can we do to improve that? When will the tests run?</p>
+<p>As you can see, you can go on and on and on. And it is not limited by tests only; there are plenty of steps that one can include in their pipeline – linting, formatting, deploying the application, building containers. Each of these can be followed up with tons of questions like above, and it can go on as long as you need.</p>
+<p><strong>3. It touches up pretty much everything</strong></p>
+<p>Docker, git, testing, databases, the Python ecosystem of packages, DevOps, good practices, cloud, deployments. This question really can be pointed towards any topic, all of which can be delved deeper.</p>
+<p><strong>4. It's easy to make it harder</strong></p>
+<p>You can make this question harder by introducing more constraints. Come up with additional services that are required for deployment, additional caching tools, or specific cloud providers and their best CI/CD tools. Introduce time constraints, ephemeral environments, fail-safe redundancy, data migrations – you name it! Sky is the limit. Anything that lets you gauge a candidate's limit is important, as it is the most defining factor of their actual seniority, rather than years of experience.</p>
+<p><strong>5. It's easy to answer <em>something</em></strong></p>
+<p>Some people are more difficult than others in terms of how much they talk. That doesn't necessarily mean anything about their experience (yet), just that they don't use too many buzzwords or are stressed – which, obviously, is understandable. Since this question is easy to start with, <strong>every</strong> candidate I've ever asked this was able to say <em>something</em>. Some answers were not so great, but that's when we follow it up, and sometimes, the follow-ups were fantastic, even though the initial answer was not so great.</p>
+<h1 id="why-it-is-not-so-good">Why it is not so good</h1>
+<p>I have to admit. This question is not perfect. It is a good thing to talk about, but it tells you nothing about the practical skills of a candidate. You won't be able to tell if someone knows Python well. For that, you need a practical question. Perhaps it's a take-home task or live coding session. But here again, there are as many strategies to that as there are developers conducting these interviews and this is yet another one:)</p>
+<blockquote>
+<p><em>Trzech polaków, cztery zdania</em> - J. K.</p>
+</blockquote>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinder.dev/blog/python-subclass/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Python `__init_subclass__` demystified</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://revinder.dev/blog/tech-interview/">
+                            <span class="button__text">Tech interview process improvements</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2026
+ Revinder</span>
+                    <span class="copyright-theme">
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+    <script src="https://revinder.dev/js/copy-code-to-clipboard.js"></script>
+</body>
+</html>
