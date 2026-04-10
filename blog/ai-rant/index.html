@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Revinder’s Save States</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="preload" href="https://revinder.dev/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://revinder.dev/style.css">
+    <link rel="stylesheet" href="https://revinder.dev/color/gruvbox.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://revinder.dev/blog/ai-rant/">
+    <meta property="og:title" content="Dicts, Slop and the Dead Internet">
+    <meta property="og:description" content="My personal thoughts and some anecdotes that make me question if AI is the miracle tool that all tech bros shill for and why I believe that AI isn&#x27;t the miracle tool management was promised to be.">
+    
+    
+    
+        <meta property="og:image" content="https://revinder.dev/images/characters/CoolPizza.png">
+    
+
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://revinder.dev/rss.xml">
+    
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinder.dev/">Home</a></li>
+            
+                <li><a href="https://revinder.dev//blog">Blog</a></li>
+            
+                <li><a href="https://revinder.dev//tags">Tags</a></li>
+            
+                <li><a href="https://revinder.dev//about-me">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            
+                <li><a href="https://revinder.dev//atom.xml" target="_blank" rel="noopener noreferrer">RSS</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+        <div class="header__inner">
+            <div class="header__logo">
+                <a href="#" style="text-decoration: none;" onclick="return false;">
+                    
+    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="https:&#x2F;&#x2F;revinder.dev" class="logo__breadcrumb logo__home">~/revinder</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog" class="logo__breadcrumb">blog</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog&#x2F;ai-rant" class="logo__breadcrumb">ai-rant</a><span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
+
+                </a>
+            </div>
+        </div>
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinder.dev/blog/ai-rant/">Dicts, Slop and the Dead Internet</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2026-03-24
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/ai/">#AI</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/python/">#Python</a></span>
+    
+
+        
+        <div class="post-content">
+            <p>Because I'm relatively young and love learning, I try to live on the cutting edge of technology. I don't <em>try</em> every tool there is, but I read about all of them. With some I experiment. I know roughly what's available and how it functions. In this article I will share some of my thoughts, use cases and observations that surprised me, though my general feeling has been rather negative.</p>
+<span id="continue-reading"></span>
+<hr />
+<section class="alert note" role="note" aria-labelledby="&#x2F;d4efTCD">
+    <div class="alert-icon alert-icon-robot" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="&#x2F;d4efTCD" class="alert-title">AI Notice</strong>
+        <div class="alert-body">
+            <p>This article was <strong>not</strong> written by AI.</p>
+<p>AI was, however, used for spotting typos and to generate markdown table (not its content!).</p>
+<p>AI was also used as a case study in a Python code example, though it's clearly indicated there which one did what.</p>
+<hr />
+<p><strong>Models</strong>: MiniMax M2.5, Gemini 3.1 Pro</p>
+<p><strong>Tool</strong>: Opencode v1.2.27</p>
+
+        </div>
+    </div>
+</section>
+<h2 id="to-dict-or-not-to-dict">To Dict or not to dict</h2>
+<p>For a while whenever I did any Python work, I kept wondering:</p>
+<blockquote>
+<p><em>Why do most LLMs propose an obviously deprecated way of type hinting my code?</em></p>
+</blockquote>
+<p>To showcase this, take a look at this (very sensible) production code and let's ask various models how they would type hint it.</p>
+<pre data-lang="python" style="background-color:#282828;color:#fdf4c1aa;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">f</span><span>(</span><span style="color:#fdf4c1;">my_name</span><span>, </span><span style="color:#fdf4c1;">my_age</span><span>, </span><span style="color:#fdf4c1;">my_favourite_numbers </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">None</span><span>):
+</span><span>    my_age </span><span style="color:#fe8019;">+=</span><span style="color:#d3869b;">10
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fe8019;">not </span><span>my_favourite_numbers:
+</span><span>         my_favourite_numbers </span><span style="color:#fe8019;">= </span><span>{</span><span style="color:#b8bb26;">&quot;odd&quot;</span><span>: [</span><span style="color:#d3869b;">1</span><span>,</span><span style="color:#d3869b;">3</span><span>], </span><span style="color:#b8bb26;">&quot;even&quot;</span><span>: [</span><span style="color:#d3869b;">2</span><span>,</span><span style="color:#d3869b;">4</span><span>]} 
+</span><span>
+</span><span>    </span><span style="color:#fa5c4b;">return </span><span>{
+</span><span>       </span><span style="color:#b8bb26;">&quot;name&quot;</span><span>: my_name,
+</span><span>       </span><span style="color:#b8bb26;">&quot;my_age&quot;</span><span>: my_age,
+</span><span>       </span><span style="color:#b8bb26;">&quot;numbers&quot;</span><span>: my_favourite_numbers,
+</span><span>    }
+</span></code></pre>
+
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>Nobody writes code like that, this example doesn't make sense!</p>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="character-note character-left">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/CoolPizza.png"
+             alt="CoolPizza"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>Chillax. In this case, it really does not matter; the point was to have some kind of nested dictionary with an optional field.</p>
+
+        </div>
+    </div>
+</div>
+<p>So how would you type hint that to make it cleaner?</p>
+<ol>
+<li>You could have added regular <code>dict</code>, <code>list</code> and <code>|</code> (union) types.</li>
+<li>You could have added a custom <code>TypedDict</code> instance.</li>
+<li>You could have altered the return type of a function to instead use DTOs in the form of <code>dataclasses</code> or <code>pydantic models</code>. In general this is my preferred method as I find passing around dictionary objects to be a code smell. It does, however, come with the cost of increased maintenance as you need to define a type, preferably make it reusable and all that jazz.</li>
+<li>And now the crucial bit.. IF you are running Python (&lt;3.9) then you could have suggested using <code>Dict</code>, <code>Optional</code>, and <code>List</code> from the <code>typing</code> module.</li>
+</ol>
+<p>For some reason, as of March 2026, most of the models still suggest point 4, which is an obviously inferior way of doing it. It is advised against by Python developers, but not yet deprecated.
+Worse than that, they offer it <em>regardless</em> of which version of Python you are running or without asking you to clarify it.
+As a case study, I asked several different models with a prompt "Can you type hint this function?" and here are summaries of their proposed solutions:</p>
+<table><thead><tr><th>Model</th><th>Primary Types Suggested</th><th>Return Type / Extras</th></tr></thead><tbody>
+<tr><td>MiniMax M2.5</td><td><code>Dict</code>, <code>List</code>, <code>Optional</code>, <code>Union</code></td><td>TypedDict (return only), bugged field duplication. Pretty bad.</td></tr>
+<tr><td>Chat GPT-5.4</td><td><code>dict</code>, <code>list</code>, |</td><td>Extracted types to variables with clear names. Actually pretty good usage.</td></tr>
+<tr><td>Gemini 3 Flash</td><td><code>Dict</code>, <code>List</code>, <code>Optional</code>, <code>Any</code></td><td><code>Dict[str, Any]</code>. Awful.</td></tr>
+<tr><td>Gemini 3.1 Pro</td><td><code>dict</code>, <code>list</code>, <code>Any</code></td><td><code>dict[str, Any]</code>. Still awful.</td></tr>
+<tr><td>Claude Haiku 4.5</td><td><code>Dict</code>, <code>List</code>, <code>Optional</code></td><td>Avoided using <code>Any</code>, but still awful.</td></tr>
+<tr><td>Claude Sonnet 4.6</td><td><code>dict</code>, <code>list</code></td><td>Suggested TypedDict (return only, not input). Not bad, but not great. 3.6</td></tr>
+</tbody></table>
+
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>You should have used the [insert your favourite AI]! It's better for coding! And wait until [next generation] comes in and it will be fixed then!</p>
+
+        </div>
+    </div>
+</div>
+<p>Ehh.. yeah yeah.. alongside the price going up substantially.</p>
+<p>Okay, I think I've proven my point. So why does it happen?
+It could be that my prompt is not that good; after all, I could have specified not to use the <code>typing</code> module.
+It could be that the AI wants the code that will run on <em>most</em> available Python versions, and most Python code is probably written in Python (&lt;=3.9).
+It could be that the most available training data is what uses the <code>typing</code> module; therefore, the AI is biased toward using it.</p>
+<h2 id="illusion-of-competence">Illusion of competence</h2>
+<p>You might feel like my <code>dict</code> example is cherry-picked, perhaps by the language of my choice or the nature of the error itself. I can assure you - <strong>it's not</strong>.
+That issue is actually magnified by different versions of languages, different libraries, and different environments.
+I've had similar issues with Pydantic migrating from v1 to v2. Functions are deprecated, and AI is continuously suggesting them.</p>
+<p>Can it be fixed by RAG or by giving the model access to the internet? To some degree yes, but there is a catch - it's the illusion of competence.
+AI is always sure of its answer. It never hesitates. It's the job of a human now to question it, but for some reason, most people don't.
+To a manager, generating 500 lines of code in 10 seconds looks like a miracle. To a senior developer, the same code might be a ticking time bomb of technical debt, just waiting for the perfect moment.
+Sure, it might work most of the time and be kinda slow and be kinda okay, but if mediocrity is all you are after, then go ahead and vibe all you want. That's just not for me. I want my code to be artisan.</p>
+<p>The keyword, however, in this is <strong>senior</strong>. Unfortunately, I've noticed the disturbing trend of more junior colleagues of mine being over-reliant on AI to a point where
+they are <em>very</em> confident in delivering far more than they can. And again, another keyword: <strong>delivering</strong> NOT <strong>maintaining</strong>.
+Maintenance is never considered. I've seen personally a situation where a junior backend developer suggested to a manager that he could make an entire email form link to a custom-made frontend
+which would collect the answers for the backend over the next 2-3 days. I tried talking him out of it, to let the FE team handle it, but try and convince a manager, who heard from one very
+respectable junior that "yes it's possible", that your view is the correct one.
+All I could do is watch this train wreck of a situation, which predictably crashed on: deployment, authentication, and authorization to the backend, security issues with emails, company branding being incorrectly made, and more.
+AI never told him about these problems initially - it was only as he worked through it he saw the issues piling up. He had no prior experience, so he couldn't have known about it.
+And because it wasn't specified by him, the AI didn't know either. That <em>illusion</em> was enough to convince the manager to green-light it and the train went off.</p>
+<p>In this case, the mistake wasn't costly. A few days of developer time at most. Maybe some architectural pivot required. But it could have been a lot worse, had the functionality been critical <em>and</em> successfully deployed to the public.
+In a scenario like this - how is a junior who accepts LLM output frequently without asking questions meant to succeed? And how can he keep asking questions of an LLM when the managers are over his shoulder for more efficiency,
+more code committed and more PRs done? How is he meant to grow as an engineer?</p>
+<p>It feels like the endgame to this situation is a market of a very small number of bad juniors.</p>
+<h2 id="systemic-loop">Systemic loop</h2>
+<p>This got me <strong>thinking</strong>.</p>
+<div class="quote-shortcode">
+    <p class="quote-text">If more and more code is AI-generated, and AI generates mostly what it has seen in training data, so the more volume of something there is the more likely it is to propagate it as the answer. Wouldn't that mean it will become harder and harder to introduce syntax/semantic changes to your tools? How will people in the future know there is a newer and better way of writing something, if the AI gives them only what it has seen in the past and the only way they write code is through AI?</p>
+</div>
+<p>It turns out this problem is pretty common in the industry and is often referred to as <a href="https://www.nature.com/articles/s41586-024-07566-y"><em>Model Collapse</em></a>. As models train on data that was generated by other models, the quality and diversity of their outputs degrade. It is a known fact and there are no good answers to it yet. They are trying. Billions of dollars are on it after all.</p>
+<p>Combine that with <a href="https://en.wikipedia.org/wiki/False_consensus_effect">The Consensus Bias</a> - where models favor the most statistically frequent answer rather than the correct one (how would they know which one is correct though!) and suddenly, the Python typing issue makes sense. The models aren't malicious; <em>they are just aggressively mediocre by design. They enforce stagnation</em>.</p>
+<p>And all of this is possible because a lot of the tireless and thankless work by open source developers was stolen to be included as datasets for AI companies to profit off of.</p>
+<h2 id="breaking-point">Breaking point</h2>
+<p>If by any chance you browse LinkedIn / Twitter / YouTube nowadays and are a developer, you might be feeling less secure about your job.
+You see all these posts about Claude or Gemini one-shotting several tasks, clearing entire backlogs, success stories of delivering something over the course of a few days.
+Every one of these posts is repeating roughly the same mantra - coding is no more. Entire departments laid off because of it. Nobody needs programmers anymore.
+Maybe you've actually been laid off because of the AI hype? If that happened, I am sorry to hear that.
+Maybe like me, you are hoping for the AI bubble to finally burst?
+Will it happen this year? Will it happen next year? Or maybe we will finally achieve true AGI?
+Nobody knows. Nobody <em>can</em> know. And that makes all of us uneasy.</p>
+<p>Going one step further, maybe like me, you've invested time in trying various models. Maybe you tried OpenCode, Claude Code or Codex and ran an agent to do your work, and... you are disappointed.</p>
+<p>Sure, the code somewhat works, but the edge cases are there, it's overly verbose, over-engineered, there is A LOT of it, and you don't even understand it fully. Most importantly: <em>you haven't learned anything while writing it</em>.
+Doesn't that make you feel anxious? I know it does me. I don't want to push generated code and be responsible for it. At least not when I don't understand it fully.</p>
+<p>I don't know what the future holds, I can, however, show you what's happening now:</p>
+<ol>
+<li>Productivity boost is a lie</li>
+</ol>
+<ul>
+<li><a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/#methodology">It turns out that they've done a study</a> on the impact of AI on 16 <em>very</em> experienced developers. Shockingly, they took, on average, <strong>19% longer to complete issues</strong>. The fun bit is all of them <em>thought</em> they were 24% faster.</li>
+<li>AI hasn't contributed to substantial growth in apps. Michael Hart asked a good question in <a href="https://mikelovesrobots.substack.com/p/wheres-the-shovelware-why-ai-coding">"Where's the shovelware?"</a>: if developers are so much more productive, why isn't there a spike in new GitHub repos, Steam games, or mobile apps? The trend is the same. Nothing has changed.</li>
+<li>Microsoft is simultaneously boasting about <a href="https://timesofindia.indiatimes.com/technology/tech-news/less-than-a-year-after-ceo-satya-nadella-said-30-of-microsofts-code-is-ai-written-company-appoints-an-engineering-quality-head/articleshow/128116076.cms">how 30% of its code is AI-written</a> while dealing with reports that <a href="https://www.neowin.net/news/microsoft-finally-admits-almost-all-major-windows-11-core-features-are-broken/">almost all major Windows 11 core features are broken</a>. Do we not see a connection yet?</li>
+</ul>
+<ol start="2">
+<li>Open source is under attack</li>
+</ol>
+<ul>
+<li>Projects are rebelling against blind AI usage. That includes:
+<ul>
+<li>Popular terminal Ghostty, as denoted <a href="https://github.com/ghostty-org/ghostty/blob/main/AI_POLICY.md">by its AI Policy</a>.</li>
+<li>Debian - which flat out <a href="https://lwn.net/Articles/1061544/">bans AI-generated contributions</a></li>
+<li>Hacker News bans <a href="https://news.ycombinator.com/newsguidelines.html#generated">AI-generated comments</a>.</li>
+<li>Pydantic AI (oh the irony..) who are in trouble for having too much AI slop and is now resorting to harsher <a href="https://old.reddit.com/r/Python/comments/1ry99ce/open_source_contributions_to_pydantic_ai/?share_id=KtxYHyj9-WnNQO25zDNB-">contribution rules</a> to keep up.</li>
+</ul>
+</li>
+<li>Conversely, there is the <a href="https://malus.sh/">Malus</a> project, which attempts to "liberate" from open-source license obligations by using AI agents to recreate projects from scratch, essentially laundering AST representations to bypass licensing.</li>
+</ul>
+
+
+
+
+<div class="character-note character-left">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/CoolPizza.png"
+             alt="CoolPizza"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>Going after people who made the choice to share their work for free for you to use, just based on a promise of yours to be fair according to their wishes? <strong>Real cool bro</strong>.</p>
+
+        </div>
+    </div>
+</div>
+<ol start="3">
+<li>Scientific collaboration collapse</li>
+</ol>
+<ul>
+<li>Despite accelerating adoption, public confidence in AI has dropped by 19%, <a href="https://fortune.com/2026/01/21/ai-workers-toxic-relationship-trust-confidence-collapses-training-manpower-group/">as reported by Forbes</a>.</li>
+<li>Less than 1/3rd of AI-assisted research <a href="https://aimultiple.com/reproducible-ai">is reproducible</a>. Corporate labs prioritize profit over shared knowledge, creating a net negative for society's actual technological progression.</li>
+</ul>
+<ol start="4">
+<li>The dead internet theory isn't a theory anymore</li>
+</ol>
+<ul>
+<li>We have bots <a href="https://www.fastcompany.com/91492228/matplotlib-scott-shambaugh-opencla-ai-agent">blackmailing open source developers</a>, bots <a href="https://www.adriankrebs.ch/blog/dead-internet/">applying for jobs</a> autonomously, and <a href="https://www.anthropic.com/research/agentic-misalignment">simulated stress tests</a> showing AI behaving maliciously toward humans.</li>
+<li>And for the truly depressive stuff: a <a href="https://rentahuman.ai/">new website popped up</a> for AI agents to <em>rent a human</em>. Because even an AI agent sometimes needs a human to do real life work. Black Mirror season 6.</li>
+</ul>
+<p>And the coup de grace we all saw coming.. <a href="https://thebulletin.org/2026/03/unready-for-war-ai-may-already-be-causing-deadly-mistakes/">AI may already be used in a war.</a></p>
+<p>If all of that makes you feel uneasy, you are not alone. That, unfortunately, is what makes a lot of difference.
+The breaking point of AI, the so-called "Technological Singularity", does not need to occur at its full potential, for it to have a huge impact on society.
+As stated by <a href="https://campedersen.com/singularity">Cam Pedersen in his "Singularity" piece</a>:</p>
+<blockquote>
+<p><em>The curve [of AI Potential] does not need to reach the pole, it just needs to look like it will. (...) And the uncomfortable answer is: <b>it's already happening</b></em>.</p>
+</blockquote>
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>So where does this leave us? I am not happy. When it comes down to the IT sector, the thing that always
+ground my gears was corporate stuff. Boring meetings, people with no expertise telling me what is worth doing
+and what is not (why is it always tests and refactors..) or an incoherent vision for a project. It feels to me that
+the current AI landscape magnifies these issues to absolute extremes. It feels like my projects are:</p>
+<ul>
+<li>Sloppier with no real understanding in the choice of tooling.</li>
+<li>Over-promised by managers with a hook of AI solving every single one of our problems.</li>
+<li>Same managers are also cutting on every expense possible. Somehow I am meant to pay for all these tokens myself for work, but if I don't use AI, I am also told I am not working the best way I can. Another markdown file will fix it for sure.</li>
+<li>Somehow not deterministic because in the contract it was stated that the AI agent must be involved, so we had to include it somewhere.</li>
+<li>Insecure, riddled with holes.</li>
+</ul>
+<p>This is not why I've fallen in love with this field.</p>
+<p>I went in because I liked computers.
+I like code. I liked engineering parts of the problems and I liked when solutions worked.
+I liked caring about developer ergonomics. I liked when being thorough paid off with stability.
+But it seems with AI it matters less and less.
+When asked if one should go into IT, I used to say 'absolutely yes if you are feeling it'.
+No longer can I say that with a clear conscience, because I don't know if I will be able to even work
+in the field myself in a few years and that makes me sad..</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinder.dev/blog/useful-psql/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Become poweruser with psql</span>
+                        </a>
+                    </span>
+                
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2026
+ Revinder</span>
+                    <span class="copyright-theme">
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+    <script src="https://revinder.dev/js/copy-code-to-clipboard.js"></script>
+</body>
+</html>
