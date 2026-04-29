@@ -7,7 +7,7 @@ description = "Small set of functions that I found particularly useful in my loc
 tags = ["Programming", "Shell"]
 +++
 
-In this article I will show you a small set of cool tools that I've gathered that enchance my developer experience on Linux.
+In this article I will show you a small set of cool tools that I've gathered that enhance my developer experience on Linux.
 My hope for this is that you walk away from this article with something meaningful and useful for your daily workflow. If you would rather just look at the source code, you can find it on [Github](https://github.com/RevinderDev/.dotfiles/blob/master/.zshrc).
 <!-- more -->
 --- 
@@ -16,7 +16,7 @@ My hope for this is that you walk away from this article with something meaningf
 This article was **not** written by AI.
 
 AI was, however, used for spotting typos and to generate `helprev`, `secrets_edit` and `secrets_encrypt` functions.
-All scripts however were read, understood, checked and ran by human.
+All scripts however were read, understood, checked and run by human.
 
 
 ---
@@ -27,8 +27,8 @@ All scripts however were read, understood, checked and ran by human.
 
 ## Hurl
 
-I work primarly in web development, that usually means creating some kind of Backend Service. I always disliked having to use GUI apps such as
-Postman or Insomnia, but at the same time, writing curls wasn't exactly pleasant experience with BIG json inputs. Lucikly, French company Orange released open source tool called [Hurl](https://github.com/Orange-OpenSource/hurl). It's a CLI tool that executes HTTP requests defined in plain text format and it's surprisingly powerful. Less portable than curl, but slightly nicer syntax. For example:
+I work primarily in web development, that usually means creating some kind of Backend Service. I always disliked having to use GUI apps such as
+Postman or Insomnia, but at the same time, writing curls wasn't exactly a pleasant experience with BIG json inputs. Luckily, French company Orange released open source tool called [Hurl](https://github.com/Orange-OpenSource/hurl). It's a CLI tool that executes HTTP requests defined in plain text format and it's surprisingly powerful. Less portable than curl, but slightly nicer syntax. For example:
 
 ```hurl
 # Simple get
@@ -97,8 +97,8 @@ echo_cyan()   { echo -e "\033[36m$*\033[0m"; }
 
 ## Secrets
 
-A lot of the times, the tools that I use on my machine require some kind of 3rd party API key. In AI age, it's especcially prevelent as
-all agents require at least one key to be given. It doesn't really sit well with me having them just laying around in some unencrypted file so I've figured I will do something about it. Sure you could use a secret vault, but I didn't really want to roll out one. I wanted something that is somewhat secure while at the same time has an ease of use and is entirely local. GPG to the rescue! First I defined function to create secret file:
+A lot of the times, the tools that I use on my machine require some kind of 3rd party API key. In AI age, it's especially prevalent as
+all agents require at least one key to be given. It doesn't really sit well with me having them just lying around in some unencrypted file so I've figured I will do something about it. Sure you could use a secret vault, but I didn't really want to roll out one. I wanted something that is somewhat secure while at the same time has an ease of use and is entirely local. GPG to the rescue! First I defined function to create secret file:
 
 ```zsh
 typeset -g default_secret_file="$HOME/secrets.sh"
@@ -154,7 +154,7 @@ For my own purposes, I only use default secret file, stored at:
 typeset -g secret_asc="$HOME/secrets.sh.asc"
 ```
 
-Which is why my loading secrets is not taking any file as an argument, but that shouldn't be an issue for you to tweak it. Let it be an exercises for a reader! Moving on...
+Which is why my loading secrets is not taking any file as an argument, but that shouldn't be an issue for you to tweak it. Let it be an exercise for the reader! Moving on...
 
 ```sh
 load_secrets() {
@@ -259,7 +259,7 @@ And that's it! Our file was edited, was never present unencrypted on disc, and i
 
 ## Git 
 
-Andrej Karpathy had a fun idea of using [llm](https://llm.datasette.io/en/stable/) to create small script that produces commit message for given changes. Since this idea is entirely copied from him, I wont provide full implementation here, but rather send you to his [Github Gists page](https://gist.github.com/karpathy/1dd0294ef9567971c1e4348a90d69285). My extension of it however tweaked the prompts to generate semantic commits and allowed editing commit message - in case the generated one is off only by few words or just one. Saves a little bit of tokens. I'm cheap yall sorry! Here is how it looks:
+Andrej Karpathy had a fun idea of using [llm](https://llm.datasette.io/en/stable/) to create small script that produces commit message for given changes. Since this idea is entirely copied from him, I won't provide full implementation here, but rather send you to his [Github Gists page](https://gist.github.com/karpathy/1dd0294ef9567971c1e4348a90d69285). My extension of it however tweaked the prompts to generate semantic commits and allowed editing commit message - in case the generated one is off only by few words or just one. Saves a little bit of tokens. I'm cheap y'all sorry! Here is how it looks:
 
 ```sh
 typeset -g llm_model="openrouter/deepseek/deepseek-v4-flash"
@@ -300,7 +300,7 @@ gitcl() {
 }
 ```
 
-Those are both for when I am working locally and want to commit locally, which will later be pushed. However, a lot of the times I find myself having PR open with bunch of commits and that PR requires proper description as well as proper commit message for when all the commits get squashed when merging. For that, I opted for much less saner approach, but one that still works, of using [opencode](https://opencode.ai/) agent to do the work for me:
+Those are both for when I am working locally and want to commit locally, which will later be pushed. However, a lot of the time I find myself having PR open with bunch of commits and that PR requires proper description as well as proper commit message for when all the commits get squashed when merging. For that, I opted for much less saner approach, but one that still works, of using [opencode](https://opencode.ai/) agent to do the work for me:
 
 ```zsh
 gitprdesc() {
@@ -352,7 +352,7 @@ gitprc() {
 
 {% character(name="CoolPizza", position="left") %}
 One should really question PR description shortcut. On one hand it speeds up writing it quite a bit, but on the other writing it slowly by hand
-makes you think about your changes much more and makes intent of the them more deliberate. There is a good argument to be made to write these by hand still.
+makes you think about your changes much more and makes the intent of them more deliberate. There is a good argument to be made to write these by hand still.
 {% end %}
 
 Let's test it out by running against this, at that moment unfinished, article:
@@ -425,13 +425,13 @@ d8"                   88    88      88      88               88    8b,    a8P   
 88888888888           88    88      88      88               88    `"Y8888P'    `"YbbdP"'
 ```
 
-When it finishes, it plays a terminal bell sound but you could easily silent it and just have `notify-send` be used instead for small popup.
+When it finishes, it plays a terminal bell sound but you could easily silence it and just have `notify-send` be used instead for small popup.
 
 ## Last words
 
-I admit, these are not perfect solutiosn to those problems, but that misses the point. The point is that these are *my* solutions, to *my* specific problems and so far, they have been working nicely. The reason for this entire article was that perhaps, you might find them useful. Or even better, perhaps you will find inspiriation to write your own custom tools and share them with me. Either way it's a win.
+I admit, these are not perfect solutions to those problems, but that misses the point. The point is that these are *my* solutions, to *my* specific problems and so far, they have been working nicely. The reason for this entire article was that perhaps, you might find them useful. Or even better, perhaps you will find inspiration to write your own custom tools and share them with me. Either way it's a win.
 
-Lastly, you can see how it might be easy to get lost at the sea of not-exactly-best names of these functions. So for that, with the help of AI, I wrote custom parser of `.zshrc` to allow documenting it and printing out nicely formatted help. 
+Lastly, you can see how it might be easy to get lost in the sea of not-exactly-best names of these functions. So for that, with the help of AI, I wrote custom parser of `.zshrc` to allow documenting it and printing out nicely formatted help. 
 
 ```zsh
 helprev() {
@@ -449,7 +449,7 @@ helprev() {
 hurljq() { command hurl "$@" | jq }
 ```
 
-You can see already usage of it - just define `# @desc My description` comment above the function you wish to document. If you ever forget one and it's syntax, just run the `helprev`:
+You can see already usage of it - just define `# @desc My description` comment above the function you wish to document. If you ever forget one and its syntax, just run the `helprev`:
 
 ```sh
 $ helprev
@@ -462,7 +462,7 @@ Helper functions:
   gitprc               Generate pull request *commit* using opencode agent.
   gitcs                Generate short concise, one-line commit message using llm.
   gitcl                Generate longer semantic commit message using llm.
-  pomodoro             Start pomodoro timer. Support [pomodoro work] | [pomodoro break]
+  pomodoro             Start pomodoro timer. Supports [pomodoro work] | [pomodoro break]
   secrets_edit         Allows to edit secrets.sh.asc file in RAM.
   secrets_encrypt      Allows to encrypt given file. Original file is removed.
   load_secrets         Loads the secrets to given shell session.
