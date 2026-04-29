@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Revinder’s Save States</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="preload" href="https://revinder.dev/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://revinder.dev/style.css">
+    <link rel="stylesheet" href="https://revinder.dev/color/gruvbox.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://revinder.dev/blog/zshrc-helpers/">
+    <meta property="og:title" content="Useful stuff for your terminal">
+    <meta property="og:description" content="Small set of functions that I found particularly useful in my local development environment.">
+    
+    
+    
+        <meta property="og:image" content="https://revinder.dev/images/characters/CoolPizza.png">
+    
+
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://revinder.dev/rss.xml">
+    
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinder.dev/">Home</a></li>
+            
+                <li><a href="https://revinder.dev//blog">Blog</a></li>
+            
+                <li><a href="https://revinder.dev//tags">Tags</a></li>
+            
+                <li><a href="https://revinder.dev//about-me">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            
+                <li><a href="https://revinder.dev//atom.xml" target="_blank" rel="noopener noreferrer">RSS</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+        <div class="header__inner">
+            <div class="header__logo">
+                <a href="#" style="text-decoration: none;" onclick="return false;">
+                    
+    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="https:&#x2F;&#x2F;revinder.dev" class="logo__breadcrumb logo__home">~/revinder</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog" class="logo__breadcrumb">blog</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog&#x2F;zshrc-helpers" class="logo__breadcrumb">zshrc-helpers</a><span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
+
+                </a>
+            </div>
+        </div>
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinder.dev/blog/zshrc-helpers/">Useful stuff for your terminal</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2026-04-28
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/programming/">#Programming</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/shell/">#Shell</a></span>
+    
+
+        
+        <div class="post-content">
+            <p>In this article I will show you a small set of cool tools that I've gathered that enhance my developer experience on Linux.
+My hope for this is that you walk away from this article with something meaningful and useful for your daily workflow. If you would rather just look at the source code, you can find it on <a href="https://github.com/RevinderDev/.dotfiles/blob/master/.zshrc">Github</a>.</p>
+<span id="continue-reading"></span>
+<hr />
+<section class="alert note" role="note" aria-labelledby="39hUyRAD">
+    <div class="alert-icon alert-icon-robot" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="39hUyRAD" class="alert-title">AI Notice</strong>
+        <div class="alert-body">
+            <p>This article was <strong>not</strong> written by AI.</p>
+<p>AI was, however, used for spotting typos and to generate <code>helprev</code>, <code>secrets_edit</code> and <code>secrets_encrypt</code> functions.
+All scripts however were read, understood, checked and run by human.</p>
+<hr />
+<p><strong>Models</strong>: DeepSeek V4 Flash</p>
+<p><strong>Tool</strong>: Opencode v1.2.27</p>
+
+        </div>
+    </div>
+</section>
+<h2 id="hurl">Hurl</h2>
+<p>I work primarily in web development, that usually means creating some kind of Backend Service. I always disliked having to use GUI apps such as
+Postman or Insomnia, but at the same time, writing curls wasn't exactly a pleasant experience with BIG json inputs. Luckily, French company Orange released open source tool called <a href="https://github.com/Orange-OpenSource/hurl">Hurl</a>. It's a CLI tool that executes HTTP requests defined in plain text format and it's surprisingly powerful. Less portable than curl, but slightly nicer syntax. For example:</p>
+<pre data-lang="hurl" style="background-color:#282828;color:#fdf4c1aa;" class="language-hurl "><code class="language-hurl" data-lang="hurl"><span># Simple get
+</span><span>GET https://meowfacts.herokuapp.com/?count=3
+</span><span>
+</span><span>
+</span><span># With body
+</span><span>POST https://example.org/api/tests
+</span><span>{
+</span><span>    &quot;id&quot;: &quot;4568&quot;,
+</span><span>    &quot;evaluate&quot;: true
+</span><span>}
+</span></code></pre>
+<p>And that's all it takes!</p>
+<p>Invoking it we get:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">$ hurl cat.hurl
+</span><span style="color:#fdf4c1;">{</span><span style="color:#b8bb26;">&quot;data&quot;</span><span style="color:#fdf4c1;">:[</span><span style="color:#b8bb26;">&quot;In 1987 cats overtook dogs as the number one pet in America.&quot;</span><span style="color:#fdf4c1;">,</span><span style="color:#b8bb26;">&quot;Some common houseplants poisonous to cats include: English Ivy, iris, mistletoe, philodendron, and yew.&quot;</span><span style="color:#fdf4c1;">,</span><span style="color:#b8bb26;">&quot;Today there are about 100 distinct breeds of the domestic cat.&quot;</span><span style="color:#fdf4c1;">]</span><span>}</span><span style="color:#fdf4c1;">%
+</span></code></pre>
+
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>That's not really readable JSON..</p>
+
+        </div>
+    </div>
+</div>
+<p>Correct! Let's write a small shortcut function using another, fantastic tool: <a href="https://jqlang.org/">jq</a>. Throw in <a href="https://csvkit.readthedocs.io/en/latest/scripts/csvlook.html">csvlook</a> for when we work with CSV output.</p>
+<pre data-lang="zsh" style="background-color:#282828;color:#fdf4c1aa;" class="language-zsh "><code class="language-zsh" data-lang="zsh"><span style="color:#8ec07c;">hurljq</span><span>() { </span><span style="color:#fabd2f;">command</span><span style="color:#fdf4c1;"> hurl </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">| </span><span style="color:#fdf4c1;">jq </span><span>}
+</span><span style="color:#8ec07c;">hurlcsv</span><span>() { </span><span style="color:#fabd2f;">command</span><span style="color:#fdf4c1;"> hurl </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">| </span><span style="color:#fdf4c1;">csvlook </span><span>}
+</span></code></pre>
+<p>And now:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">$ hurljq cat.hurl
+</span><span>{
+</span><span>  </span><span style="color:#b8bb26;">&quot;data&quot;</span><span style="color:#fdf4c1;">: [
+</span><span>    </span><span style="color:#b8bb26;">&quot;Some common houseplants poisonous to cats include: English Ivy, iris, mistletoe, philodendron, and yew.&quot;</span><span style="color:#fdf4c1;">,
+</span><span>    </span><span style="color:#b8bb26;">&quot;Cats must have fat in their diet because they cannot produce it on their own.&quot;</span><span style="color:#fdf4c1;">,
+</span><span>    </span><span style="color:#b8bb26;">&quot;Today there are about 100 distinct breeds of the domestic cat.&quot;
+</span><span>  </span><span style="color:#fdf4c1;">]
+</span><span>}
+</span></code></pre>
+<p>It supports colors too if your terminal does as well!</p>
+<p>Gets even better - Hurl itself is incredibly powerful which helps you with: <a href="https://github.com/Orange-OpenSource/hurl#testing-response">Testing responses</a>,  <a href="https://github.com/Orange-OpenSource/hurl#posting-a-json-body">Most data structures</a> and so much more!</p>
+<h2 id="colored-echo">Colored echo</h2>
+<p>Quick one, but I like colored output in my terminal. Makes it easier to visually parse. Couple of helpers for later commands:</p>
+<pre data-lang="zsh" style="background-color:#282828;color:#fdf4c1aa;" class="language-zsh "><code class="language-zsh" data-lang="zsh"><span style="color:#8ec07c;">echo_red</span><span>()    { </span><span style="color:#fabd2f;">echo </span><span style="color:#fdf4c1;">-e </span><span style="color:#b8bb26;">&quot;\033[31m$</span><span style="color:#fdf4c1;">*</span><span style="color:#b8bb26;">\033[0m&quot;</span><span style="color:#fe8019;">; </span><span>}
+</span><span style="color:#8ec07c;">echo_green</span><span>()  { </span><span style="color:#fabd2f;">echo </span><span style="color:#fdf4c1;">-e </span><span style="color:#b8bb26;">&quot;\033[32m$</span><span style="color:#fdf4c1;">*</span><span style="color:#b8bb26;">\033[0m&quot;</span><span style="color:#fe8019;">; </span><span>}
+</span><span style="color:#8ec07c;">echo_yellow</span><span>() { </span><span style="color:#fabd2f;">echo </span><span style="color:#fdf4c1;">-e </span><span style="color:#b8bb26;">&quot;\033[33m$</span><span style="color:#fdf4c1;">*</span><span style="color:#b8bb26;">\033[0m&quot;</span><span style="color:#fe8019;">; </span><span>}
+</span><span style="color:#8ec07c;">echo_blue</span><span>()   { </span><span style="color:#fabd2f;">echo </span><span style="color:#fdf4c1;">-e </span><span style="color:#b8bb26;">&quot;\033[34m$</span><span style="color:#fdf4c1;">*</span><span style="color:#b8bb26;">\033[0m&quot;</span><span style="color:#fe8019;">; </span><span>} 
+</span><span style="color:#8ec07c;">echo_cyan</span><span>()   { </span><span style="color:#fabd2f;">echo </span><span style="color:#fdf4c1;">-e </span><span style="color:#b8bb26;">&quot;\033[36m$</span><span style="color:#fdf4c1;">*</span><span style="color:#b8bb26;">\033[0m&quot;</span><span style="color:#fe8019;">; </span><span>}
+</span></code></pre>
+<h2 id="secrets">Secrets</h2>
+<p>A lot of the times, the tools that I use on my machine require some kind of 3rd party API key. In AI age, it's especially prevalent as
+all agents require at least one key to be given. It doesn't really sit well with me having them just lying around in some unencrypted file so I've figured I will do something about it. Sure you could use a secret vault, but I didn't really want to roll out one. I wanted something that is somewhat secure while at the same time has an ease of use and is entirely local. GPG to the rescue! First I defined function to create secret file:</p>
+<pre data-lang="zsh" style="background-color:#282828;color:#fdf4c1aa;" class="language-zsh "><code class="language-zsh" data-lang="zsh"><span style="color:#fa5c4b;">typeset </span><span style="color:#fdf4c1;">-g default_secret_file</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">HOME</span><span style="color:#b8bb26;">/secrets.sh&quot;
+</span><span style="color:#fa5c4b;">typeset </span><span style="color:#fdf4c1;">-g gpg_id</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;michal0kasprzyk@gmail.com&quot;
+</span><span>
+</span><span style="color:#8ec07c;">secrets_encrypt</span><span>() {
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">target_file</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;${</span><span style="color:#fdf4c1;">1</span><span style="color:#fe8019;">:-</span><span style="color:#b8bb26;">$</span><span style="color:#fdf4c1;">default_secret_file</span><span style="color:#b8bb26;">}&quot;
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[[ </span><span style="color:#fdf4c1;">-z </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">target_file</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">|| ! </span><span style="color:#fdf4c1;">-f </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">target_file</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fabd2f;">]]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fdf4c1;">echo_red </span><span style="color:#b8bb26;">&quot;Error: File &#39;$</span><span style="color:#fdf4c1;">target_file</span><span style="color:#b8bb26;">&#39; not found.&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">target_asc</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;${</span><span style="color:#fdf4c1;">target_file</span><span style="color:#b8bb26;">}.asc&quot;
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#928374;"># -e (encrypt), -a (ascii armor), -r (recipient), --yes (overwrite existing)
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1;">gpg -ea -r </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">gpg_id</span><span style="color:#b8bb26;">&quot;</span><span style="color:#fdf4c1;"> --yes --output </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">target_asc</span><span style="color:#b8bb26;">&quot; &quot;$</span><span style="color:#fdf4c1;">target_file</span><span style="color:#b8bb26;">&quot;</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then 
+</span><span>        </span><span style="color:#fdf4c1;">shred -u </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">target_file</span><span style="color:#b8bb26;">&quot; </span><span style="color:#d3869b;">2</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;">/dev/null
+</span><span>        </span><span style="color:#fdf4c1;">chmod 600 </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">target_asc</span><span style="color:#b8bb26;">&quot;
+</span><span>        </span><span style="color:#fdf4c1;">echo_green </span><span style="color:#b8bb26;">&quot;Locked: &#39;$</span><span style="color:#fdf4c1;">target_file</span><span style="color:#b8bb26;">&#39; encrypted to &#39;$</span><span style="color:#fdf4c1;">target_asc</span><span style="color:#b8bb26;">&#39; and safely removed.&quot;
+</span><span>    </span><span style="color:#fa5c4b;">else
+</span><span>        </span><span style="color:#fdf4c1;">echo_red </span><span style="color:#b8bb26;">&quot;Error: Encryption failed! Plaintext file was NOT removed.&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span>}
+</span></code></pre>
+<p>Now create the <code>secrets.sh</code> file itself. It's a script that we control and which we will later eval. Since we changed RW permissions to include our user only, we can be relatively safe that this is indeed the case. If someone has root on our machine, we are doomed anyway 🤷‍♂️.</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fa5c4b;">export </span><span style="color:#fdf4c1;">MY_SECRET_KEY</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;MySecretValue&quot;
+</span></code></pre>
+<section class="alert warning" role="note" aria-labelledby="RJMvyXVT">
+    <div class="alert-icon alert-icon-warning" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="RJMvyXVT" class="alert-title">Careful!</strong>
+        <div class="alert-body">
+            <p>This function will <a href="https://linux.die.net/man/1/shred"><em>shred</em></a> the <strong>original</strong> file after encrypting it! Otherwise what would be the point of encrypting it if we leave unencrypted file next to it..</p>
+
+        </div>
+    </div>
+</section>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">$ secrets_encrypt test.sh
+</span><span style="color:#fdf4c1;">Locked: </span><span style="color:#b8bb26;">&#39;my_secret.sh&#39;</span><span style="color:#fdf4c1;"> encrypted to </span><span style="color:#b8bb26;">&#39;my_secret.sh.asc&#39;</span><span style="color:#fdf4c1;"> and safely removed.
+</span><span style="color:#fdf4c1;">$ ls -al 
+</span><span style="color:#fdf4c1;">...
+</span><span style="color:#fdf4c1;">.rw-------   350 michał 1 second      my_secret.sh.asc
+</span></code></pre>
+<p>Great! Now when someone will peek into what's <code>my_secret.sh.asc</code> they wont see plain text of your secrets anymore, just PGP Message.
+How to work with the file now? Well, for that, there are 2 things we can do.</p>
+<h3 id="loading-secrets">Loading secrets</h3>
+<p>For my own purposes, I only use default secret file, stored at:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fa5c4b;">typeset </span><span style="color:#fdf4c1;">-g secret_asc</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">HOME</span><span style="color:#b8bb26;">/secrets.sh.asc&quot;
+</span></code></pre>
+<p>Which is why my loading secrets is not taking any file as an argument, but that shouldn't be an issue for you to tweak it. Let it be an exercise for the reader! Moving on...</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#8ec07c;">load_secrets</span><span>() {
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[[ </span><span style="color:#fe8019;">! </span><span style="color:#fdf4c1;">-f </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">secret_asc</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fabd2f;">]]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fdf4c1;">echo_red </span><span style="color:#b8bb26;">&quot;Error: Encrypted file not found at $</span><span style="color:#fdf4c1;">secret_asc</span><span style="color:#b8bb26;">&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span>
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">decrypted
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fe8019;">! </span><span style="color:#fdf4c1;">decrypted</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">$(</span><span style="color:#fdf4c1;">gpg --quiet --decrypt </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">secret_asc</span><span style="color:#b8bb26;">&quot; </span><span style="color:#d3869b;">2</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;">/dev/null</span><span style="color:#b8bb26;">)</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fdf4c1;">echo_red </span><span style="color:#b8bb26;">&quot;Error: Decryption failed (check your GPG agent/passphrase).&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#928374;"># Parse for display
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">-a loaded_keys
+</span><span>    </span><span style="color:#fa5c4b;">for</span><span> line </span><span style="color:#fa5c4b;">in </span><span>${</span><span style="color:#fdf4c1;">(f)decrypted</span><span>}</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">do
+</span><span>        </span><span style="color:#fabd2f;">[[ </span><span style="color:#fdf4c1;">$line </span><span style="color:#fe8019;">==</span><span style="color:#fdf4c1;"> export</span><span style="color:#b8bb26;">\ </span><span style="color:#fe8019;">* </span><span style="color:#fabd2f;">]] </span><span style="color:#fe8019;">&amp;&amp; </span><span style="color:#fdf4c1;">loaded_keys</span><span style="color:#fe8019;">+=</span><span>(${</span><span style="color:#fdf4c1;">${line</span><span style="color:#fe8019;">#</span><span style="color:#fdf4c1;">export }</span><span style="color:#fe8019;">%%</span><span>=</span><span style="color:#fe8019;">*</span><span>})
+</span><span>    </span><span style="color:#fa5c4b;">done
+</span><span>
+</span><span>    </span><span style="color:#fabd2f;">eval </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">decrypted</span><span style="color:#b8bb26;">&quot;
+</span><span>    </span><span style="color:#fabd2f;">unset</span><span style="color:#fdf4c1;"> decrypted  </span><span style="font-style:italic;color:#928374;"># get it off from memory.
+</span><span>
+</span><span>    </span><span style="color:#fdf4c1;">echo_green </span><span style="color:#b8bb26;">&quot;✅ Secrets loaded into environment:&quot;
+</span><span>    </span><span style="color:#fa5c4b;">for</span><span> key </span><span style="color:#fa5c4b;">in </span><span>$</span><span style="color:#fdf4c1;">loaded_keys</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">do
+</span><span>        </span><span style="color:#fdf4c1;">echo_blue </span><span style="color:#b8bb26;">&quot;- $</span><span style="color:#fdf4c1;">key</span><span style="color:#b8bb26;">&quot;
+</span><span>    </span><span style="color:#fa5c4b;">done
+</span><span>}
+</span></code></pre>
+<p>Stripping away printing output and error checking, the crucial line is <code>gpg --quiet --decrypt</code>. That's it! We <code>eval</code> what was given in the script
+For another measure, we unset the contents from memory just in case, though the variables will be visible in shell session and it's probably better to do it <em>per command</em> but it's still miles ahead of plain text, so for now - it's good enough for me. Now let's test it:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">$ load_secrets
+</span><span style="color:#fdf4c1;">✅ Secrets loaded into environment:
+</span><span style="color:#fdf4c1;">- MY_SECRET_KEY
+</span><span style="color:#fdf4c1;">$ echo $MY_SECRET_KEY
+</span><span style="color:#fdf4c1;">MySecretValue
+</span></code></pre>
+<p>Voila!</p>
+<h3 id="editing-secrets">Editing secrets</h3>
+<p>What if we wanna edit it? For that, we have another function:</p>
+<pre data-lang="zsh" style="background-color:#282828;color:#fdf4c1aa;" class="language-zsh "><code class="language-zsh" data-lang="zsh"><span style="color:#8ec07c;">secrets_edit</span><span>() {
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[[ </span><span style="color:#fe8019;">! </span><span style="color:#fdf4c1;">-f </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">secret_asc</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fabd2f;">]]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fdf4c1;">echo_red </span><span style="color:#b8bb26;">&quot;Error: $</span><span style="color:#fdf4c1;">secret_asc</span><span style="color:#b8bb26;"> not found.&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">editor</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;${</span><span style="color:#fdf4c1;">EDITOR</span><span style="color:#fe8019;">:-</span><span style="color:#b8bb26;">vi}&quot;
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">ram_file</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;/dev/shm/secrets_edit_${</span><span style="color:#fdf4c1;">UID</span><span style="color:#b8bb26;">}.sh&quot;
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#928374;"># Decrypt straight into RAM
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fe8019;">! </span><span style="color:#fdf4c1;">gpg --quiet --decrypt --output </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot; &quot;$</span><span style="color:#fdf4c1;">secret_asc</span><span style="color:#b8bb26;">&quot;</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fdf4c1;">echo_red </span><span style="color:#b8bb26;">&quot;Error: Decryption failed.&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span>    </span><span style="color:#fdf4c1;">chmod 600 </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot;
+</span><span>
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">before
+</span><span>    </span><span style="color:#fdf4c1;">before</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">$(</span><span style="color:#fdf4c1;">sha256sum </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">| </span><span style="color:#fdf4c1;">awk </span><span style="color:#b8bb26;">&#39;{print $1}&#39;)
+</span><span>
+</span><span>    </span><span style="color:#fdf4c1;">$editor </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot;
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#928374;"># Skip re-encryption if nothing changed
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">after
+</span><span>    </span><span style="color:#fdf4c1;">after</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">$(</span><span style="color:#fdf4c1;">sha256sum </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">| </span><span style="color:#fdf4c1;">awk </span><span style="color:#b8bb26;">&#39;{print $1}&#39;)
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[[ </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">before</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">== </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">after</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fabd2f;">]]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fdf4c1;">echo_cyan </span><span style="color:#b8bb26;">&quot;No changes — removing temporary file.&quot;
+</span><span>        </span><span style="color:#fdf4c1;">rm -f </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 0
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span>
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1;">gpg -ea -r </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">gpg_id</span><span style="color:#b8bb26;">&quot;</span><span style="color:#fdf4c1;"> --yes --output </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">secret_asc</span><span style="color:#b8bb26;">&quot; &quot;$</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot;</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fdf4c1;">rm -f </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot;
+</span><span>        </span><span style="color:#fdf4c1;">echo_green </span><span style="color:#b8bb26;">&quot;🔐 Secrets encrypted to $</span><span style="color:#fdf4c1;">secret_asc</span><span style="color:#b8bb26;">&quot;
+</span><span>    </span><span style="color:#fa5c4b;">else
+</span><span>        </span><span style="color:#fdf4c1;">echo_red </span><span style="color:#b8bb26;">&quot;Error: Encryption failed — plaintext left at $</span><span style="color:#fdf4c1;">ram_file</span><span style="color:#b8bb26;">&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span>}
+</span></code></pre>
+<p>This one is a little bit more involved so I will break it down step by step:</p>
+<ol>
+<li>We define a path where we will store unencrypted file at <code>/dev/shm/{file}</code> which is a special place that behaves like a file system, that is stored within RAM. Essentially this means that the file is never stored on disc!</li>
+<li>Decrypt into it.</li>
+<li>Change RW permissions to include only our user.</li>
+</ol>
+<section class="alert note" role="note" aria-labelledby="JkV0O+Rp">
+    <div class="alert-icon alert-icon-note" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="JkV0O+Rp" class="alert-title">Note</strong>
+        <div class="alert-body">
+            <p>Technically between these two steps (2 and 3) the attacker could swap out the file for something else but... we are editing the file right away, so we would see different code before encrypting it again. And we are not using <code>eval</code> in this function either, so we are safe <strong>if you catch that something is off by looking at the file before <code>load_secrets</code></strong>.</p>
+
+        </div>
+    </div>
+</section>
+<ol start="4">
+<li>Calculate <code>sha256</code> for both old and new files to compare if the contents changed.</li>
+<li>Encrypt only if it did in fact change.</li>
+<li>Delete temporary file from RAM.</li>
+</ol>
+<p>And that's it! Our file was edited, was never present unencrypted on disc, and is back to be encrypted. Pretty nifty!</p>
+<h2 id="git">Git</h2>
+<p>Andrej Karpathy had a fun idea of using <a href="https://llm.datasette.io/en/stable/">llm</a> to create small script that produces commit message for given changes. Since this idea is entirely copied from him, I won't provide full implementation here, but rather send you to his <a href="https://gist.github.com/karpathy/1dd0294ef9567971c1e4348a90d69285">Github Gists page</a>. My extension of it however tweaked the prompts to generate semantic commits and allowed editing commit message - in case the generated one is off only by few words or just one. Saves a little bit of tokens. I'm cheap y'all sorry! Here is how it looks:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fa5c4b;">typeset </span><span style="color:#fdf4c1;">-g llm_model</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;openrouter/deepseek/deepseek-v4-flash&quot;
+</span><span>
+</span><span style="color:#8ec07c;">gitcs</span><span>() {
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">prompt</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;
+</span><span style="color:#b8bb26;">    Below is a diff of all staged changes, coming from the command:
+</span><span style="color:#b8bb26;">    \`\`\`
+</span><span style="color:#b8bb26;">    git diff --cached
+</span><span style="color:#b8bb26;">    \`\`\`
+</span><span style="color:#b8bb26;">    Please generate a concise, one-line commit message for these changes.&#39;
+</span><span>    </span><span style="color:#fdf4c1;">_git_commit_with_prompt </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">prompt</span><span style="color:#b8bb26;">&quot;
+</span><span>}
+</span><span>
+</span><span style="color:#8ec07c;">gitcl</span><span>() {
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">prompt</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;
+</span><span style="color:#b8bb26;">    You are an automated, non-interactive Git commit message generation machine. You are part of a shell pipeline. Your ONLY purpose is to read a git diff and output raw text. 
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    UNDER NO CIRCUMSTANCES should you ask questions, make suggestions, or converse. If you see garbage, debugging code, or errors in the diff, ignore them and simply document what was added or removed.
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    Analyze the diff and generate a commit message following the Conventional Commits specification.
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    STRICT RULES:
+</span><span style="color:#b8bb26;">    1. Identify the PRIMARY change to determine the commit type (feat, fix, docs, style, refactor, perf, test, chore).
+</span><span style="color:#b8bb26;">    2. Write a subject line (max 50 chars): &lt;type&gt;(&lt;optional scope&gt;): &lt;short description&gt;.
+</span><span style="color:#b8bb26;">    3. Leave exactly one blank line after the subject.
+</span><span style="color:#b8bb26;">    4. Write a detailed body explaining the motivation for the main change and listing secondary changes.
+</span><span style="color:#b8bb26;">    5. NO MARKDOWN. Do not use backticks (```).
+</span><span style="color:#b8bb26;">    6. NO CONVERSATION. Do not output anything like &quot;Here is the commit&quot; or &quot;Would you like to change this?&quot;.
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    OUTPUT TEMPLATE:
+</span><span style="color:#b8bb26;">    &lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    &lt;body&gt;
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    DIFF TO ANALYZE:&#39;
+</span><span>    </span><span style="color:#fdf4c1;">_git_commit_with_prompt </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">prompt</span><span style="color:#b8bb26;">&quot;
+</span><span>}
+</span></code></pre>
+<p>Those are both for when I am working locally and want to commit locally, which will later be pushed. However, a lot of the time I find myself having PR open with bunch of commits and that PR requires proper description as well as proper commit message for when all the commits get squashed when merging. For that, I opted for much less saner approach, but one that still works, of using <a href="https://opencode.ai/">opencode</a> agent to do the work for me:</p>
+<pre data-lang="zsh" style="background-color:#282828;color:#fdf4c1aa;" class="language-zsh "><code class="language-zsh" data-lang="zsh"><span style="color:#8ec07c;">gitprdesc</span><span>() {
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">prompt</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;
+</span><span style="color:#b8bb26;">    You are an automated Pull Request description generator. 
+</span><span style="color:#b8bb26;">    Your ONLY purpose is to read a git diff of a feature branch and output a PR description in Markdown.
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    STRICT RULES:
+</span><span style="color:#b8bb26;">    1. Provide a high-level summary of the overall goal or feature added.
+</span><span style="color:#b8bb26;">    2. Provide a bulleted list of the specific changes made. Group them logically if there are many.
+</span><span style="color:#b8bb26;">    3. Keep it professional, concise, and structured.
+</span><span style="color:#b8bb26;">    4. If there are commit messages that are good enough, you can keep them in the list, but skip any useless messages such as &quot;test&quot; or &quot;bump&quot;.
+</span><span style="color:#b8bb26;">    5. NO CONVERSATION. Do not output anything like &quot;Here is your description&quot;. Just output the raw Markdown.
+</span><span style="color:#b8bb26;">    &#39;
+</span><span>    </span><span style="color:#fdf4c1;">opencode run --model </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">llm_model</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fdf4c1;">$prompt
+</span><span>}
+</span><span>
+</span><span style="color:#8ec07c;">gitprc</span><span>() {
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">prompt</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;
+</span><span style="color:#b8bb26;">    You are an expert Software Engineer specializing in Git archaeology and the Conventional Commits standard. Your goal is to analyze a branch history and generate a single, perfectly formatted semantic commit message for a squash-and-merge.
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    1. Analyze the current branch and compare it against the base branch (e.g., `main` or `master`).
+</span><span style="color:#b8bb26;">    2. Summarize all atomic changes into one cohesive, strictly formatted semantic commit message.
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    - **Structure:** &lt;type&gt;[optional scope]: &lt;description&gt;
+</span><span style="color:#b8bb26;">    - **Subject Line:** - Use imperative, present tense (&quot;add&quot;, not &quot;added&quot; or &quot;adds&quot;).
+</span><span style="color:#b8bb26;">        - No period at the end.
+</span><span style="color:#b8bb26;">        - Maximum 50 characters.
+</span><span style="color:#b8bb26;">    - **Body:** - Use a bulleted list for the specific changes.
+</span><span style="color:#b8bb26;">        - Explain the &quot;what&quot; and &quot;why,&quot; not just the &quot;how.&quot;
+</span><span style="color:#b8bb26;">        - Wrap lines at 72 characters.
+</span><span style="color:#b8bb26;">    - **Types:** You must use exactly one of these:
+</span><span style="color:#b8bb26;">        - `feat`: A new feature.
+</span><span style="color:#b8bb26;">        - `fix`: A bug fix.
+</span><span style="color:#b8bb26;">        - `docs`: Documentation only.
+</span><span style="color:#b8bb26;">        - `style`: Formatting, missing semi-colons, etc. (no logic change).
+</span><span style="color:#b8bb26;">        - `refactor`: Code change that neither fixes a bug nor adds a feature.
+</span><span style="color:#b8bb26;">        - `perf`: Code change that improves performance.
+</span><span style="color:#b8bb26;">        - `test`: Adding or correcting tests.
+</span><span style="color:#b8bb26;">        - `chore`: Build process, dependencies, or auxiliary tools.
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    If the changes contain breaking API or logic, append a `!` after the type/scope and include a `BREAKING CHANGE:` footer detailing the migration/impact.
+</span><span style="color:#b8bb26;">
+</span><span style="color:#b8bb26;">    Gather the diff and commit history for the current branch now. Generate the final squash commit message based on your findings.
+</span><span style="color:#b8bb26;">    &#39;
+</span><span>    </span><span style="color:#fdf4c1;">opencode run --model </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">llm_model</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fdf4c1;">$prompt
+</span><span>}
+</span></code></pre>
+
+
+
+
+<div class="character-note character-left">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/CoolPizza.png"
+             alt="CoolPizza"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>One should really question PR description shortcut. On one hand it speeds up writing it quite a bit, but on the other writing it slowly by hand
+makes you think about your changes much more and makes the intent of them more deliberate. There is a good argument to be made to write these by hand still.</p>
+
+        </div>
+    </div>
+</div>
+<p>Let's test it out by running against this, at that moment unfinished, article:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">$ load_secrets </span><span style="font-style:italic;color:#928374;"># Duh..
+</span><span style="color:#fdf4c1;">...
+</span><span style="color:#fdf4c1;">$ gitcs
+</span><span style="color:#fdf4c1;">🤖 Generating AI-powered commit message...
+</span><span>
+</span><span style="color:#fdf4c1;">Proposed commit message:
+</span><span>
+</span><span style="color:#fdf4c1;">Add </span><span style="color:#b8bb26;">&#39;Useful stuff for your terminal&#39;</span><span style="color:#fdf4c1;"> blog post
+</span><span>
+</span><span style="color:#fdf4c1;">Do you want to (a</span><span>)</span><span style="color:#fdf4c1;">ccept, (e</span><span>)</span><span style="color:#fdf4c1;">dit, (r</span><span>)</span><span style="color:#fdf4c1;">egenerate, or (c</span><span>)</span><span style="color:#fdf4c1;">ancel? c
+</span><span style="color:#fdf4c1;">Commit cancelled.
+</span><span>
+</span><span style="color:#fdf4c1;">$ gitcl
+</span><span style="color:#fdf4c1;">🤖 Generating AI-powered commit message...
+</span><span>
+</span><span style="color:#fdf4c1;">Proposed commit message:
+</span><span>
+</span><span style="color:#fdf4c1;">feat(blog</span><span>)</span><span style="color:#fabd2f;">:</span><span style="color:#fdf4c1;"> add blog post about useful terminal helpers and functions
+</span><span>
+</span><span style="color:#fdf4c1;">This new blog post documents a set of shell functions and tools that enhance the developer terminal experience. The article covers:
+</span><span style="color:#fdf4c1;">- Using Hurl with jq and csvlook for prettified HTTP request outputs
+</span><span style="color:#fdf4c1;">- Colored echo functions for improved terminal readability
+</span><span style="color:#fdf4c1;">- A GPG-based secret management system: encrypt, load, and edit secrets without leaving plaintext on disk
+</span><span style="color:#fdf4c1;">- Git helper functions that leverage LLMs for generating conventional commit messages and pull request descriptions
+</span><span>
+</span><span style="color:#fdf4c1;">Do you want to (a</span><span>)</span><span style="color:#fdf4c1;">ccept, (e</span><span>)</span><span style="color:#fdf4c1;">dit, (r</span><span>)</span><span style="color:#fdf4c1;">egenerate, or (c</span><span>)</span><span style="color:#fdf4c1;">ancel? c
+</span></code></pre>
+<p>Lovely!</p>
+<h2 id="pomodoro">Pomodoro</h2>
+<p>Last one is just a fun little productivity tool. I use <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique">Pomodoro Technique</a> to stay focused. I wrote myself some small helpers for the timer using <a href="https://crates.io/crates/timer-cli">timer-cli</a>:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fa5c4b;">typeset </span><span style="color:#fdf4c1;">-A pomo_options
+</span><span style="color:#fdf4c1;">pomo_options[work]</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;25&quot;
+</span><span style="color:#fdf4c1;">pomo_options[break]</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;5&quot;
+</span><span>
+</span><span style="color:#8ec07c;">pomodoro</span><span>() {
+</span><span style="color:#fdf4c1;">  </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">session_type</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">1</span><span style="color:#b8bb26;">&quot;
+</span><span>  
+</span><span>  </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[[ </span><span style="color:#fdf4c1;">-n </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">session_type</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">&amp;&amp; </span><span style="color:#fdf4c1;">-n </span><span style="color:#b8bb26;">&quot;${</span><span style="color:#fdf4c1;">pomo_options[$session_type]</span><span style="color:#b8bb26;">}&quot; </span><span style="color:#fabd2f;">]]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>    </span><span style="color:#fdf4c1;">timer </span><span style="color:#b8bb26;">&quot;${</span><span style="color:#fdf4c1;">pomo_options[$session_type]</span><span style="color:#b8bb26;">}m&quot;
+</span><span>  </span><span style="color:#fa5c4b;">else
+</span><span>    </span><span style="color:#fdf4c1;">echo_red </span><span style="color:#b8bb26;">&quot;Invalid pomodoro session type. Use &#39;work&#39; or &#39;break&#39;.&quot;
+</span><span>  </span><span style="color:#fa5c4b;">fi
+</span><span>}
+</span><span>
+</span><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">workdo</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;pomodoro work&#39;
+</span><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">workbreak</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;pomodoro break&#39;
+</span></code></pre>
+<p>Which gives this lovely ASCII art clock that counts down to 0:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span>
+</span><span> </span><span style="color:#fdf4c1;">ad888888b,          ,d8                                    ,d8     ad88888ba
+</span><span style="color:#fdf4c1;">d8</span><span style="color:#b8bb26;">&quot;     &quot;</span><span style="color:#fdf4c1;">88        ,d888                                  ,d888    d8</span><span style="color:#b8bb26;">&quot;     &quot;</span><span style="color:#fdf4c1;">88
+</span><span>        </span><span style="color:#fdf4c1;">a8P      ,d8</span><span style="color:#b8bb26;">&quot; 88                                ,d8&quot;</span><span style="color:#fdf4c1;"> 88    8P       88
+</span><span>     </span><span style="color:#fdf4c1;">,d8P</span><span style="color:#b8bb26;">&quot;     ,d8&quot;</span><span style="color:#fdf4c1;">   88    88,dPYba,,adPYba,         ,d8</span><span style="color:#b8bb26;">&quot;   88    Y8,    ,d88  ,adPPYba,
+</span><span style="color:#b8bb26;">   a8P&quot;</span><span style="color:#fdf4c1;">      ,d8</span><span style="color:#b8bb26;">&quot;     88    88P&#39;   &quot;</span><span style="color:#fdf4c1;">88</span><span style="color:#b8bb26;">&quot;    &quot;</span><span style="color:#fdf4c1;">8a      ,d8</span><span style="color:#b8bb26;">&quot;     88     &quot;</span><span style="color:#fdf4c1;">PPPPPP</span><span style="color:#b8bb26;">&quot;88  I8[    &quot;&quot;
+</span><span style="color:#b8bb26;"> a8P&#39;        8888888888888  88      88      88      8888888888888           8P   `&quot;Y8ba,
+</span><span style="color:#b8bb26;">d8&quot;</span><span style="color:#fdf4c1;">                   88    88      88      88               88    8b,    a8P   aa    ]8I
+</span><span style="color:#fdf4c1;">88888888888           88    88      88      88               88    </span><span style="color:#b8bb26;">`&quot;</span><span style="color:#fdf4c1;">Y8888P</span><span style="color:#b8bb26;">&#39;    `&quot;YbbdP&quot;&#39;
+</span></code></pre>
+<p>When it finishes, it plays a terminal bell sound but you could easily silence it and just have <code>notify-send</code> be used instead for small popup.</p>
+<h2 id="last-words">Last words</h2>
+<p>I admit, these are not perfect solutions to those problems, but that misses the point. The point is that these are <em>my</em> solutions, to <em>my</em> specific problems and so far, they have been working nicely. The reason for this entire article was that perhaps, you might find them useful. Or even better, perhaps you will find inspiration to write your own custom tools and share them with me. Either way it's a win.</p>
+<p>Lastly, you can see how it might be easy to get lost in the sea of not-exactly-best names of these functions. So for that, with the help of AI, I wrote custom parser of <code>.zshrc</code> to allow documenting it and printing out nicely formatted help.</p>
+<pre data-lang="zsh" style="background-color:#282828;color:#fdf4c1aa;" class="language-zsh "><code class="language-zsh" data-lang="zsh"><span style="color:#8ec07c;">helprev</span><span>() {
+</span><span>    </span><span style="color:#fdf4c1;">print -P </span><span style="color:#b8bb26;">&quot;\n%F{green}Helper functions: %f&quot;
+</span><span>    </span><span style="color:#fdf4c1;">awk </span><span style="color:#b8bb26;">&#39;/^# @desc / { 
+</span><span style="color:#b8bb26;">        desc = substr($0, 9); 
+</span><span style="color:#b8bb26;">        getline; 
+</span><span style="color:#b8bb26;">        gsub(/[(){]/, &quot;&quot;, $1); 
+</span><span style="color:#b8bb26;">        name = ($1 == &quot;function&quot;) ? $2 : $1; 
+</span><span style="color:#b8bb26;">        printf &quot;  \033[36m%-20s\033[0m %s\n&quot;, name, desc 
+</span><span style="color:#b8bb26;">    }&#39; </span><span style="color:#fdf4c1;">~/.zshrc
+</span><span>    </span><span style="color:#fabd2f;">echo </span><span style="color:#b8bb26;">&quot;&quot; 
+</span><span>}
+</span><span style="font-style:italic;color:#928374;"># @desc Hurl with pipe to jq
+</span><span style="color:#8ec07c;">hurljq</span><span>() { </span><span style="color:#fabd2f;">command</span><span style="color:#fdf4c1;"> hurl </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">| </span><span style="color:#fdf4c1;">jq </span><span>}
+</span></code></pre>
+<p>You can see already usage of it - just define <code># @desc My description</code> comment above the function you wish to document. If you ever forget one and its syntax, just run the <code>helprev</code>:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">$ helprev
+</span><span>
+</span><span style="color:#fdf4c1;">Helper functions:
+</span><span>  </span><span style="color:#fdf4c1;">helprev              Displays this list of custom registered functions
+</span><span>  </span><span style="color:#fdf4c1;">hurljq               Hurl with pipe to jq
+</span><span>  </span><span style="color:#fdf4c1;">hurlcsv              Hurl with pipe to csvlook
+</span><span>  </span><span style="color:#fdf4c1;">gitprdesc            Generate pull request </span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;">description</span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;"> using opencode agent.
+</span><span>  </span><span style="color:#fdf4c1;">gitprc               Generate pull request </span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;">commit</span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;"> using opencode agent.
+</span><span>  </span><span style="color:#fdf4c1;">gitcs                Generate short concise, one-line commit message using llm.
+</span><span>  </span><span style="color:#fdf4c1;">gitcl                Generate longer semantic commit message using llm.
+</span><span>  </span><span style="color:#fdf4c1;">pomodoro             Start pomodoro timer. Supports </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">pomodoro work</span><span style="color:#fa5c4b;">] </span><span style="color:#fe8019;">| </span><span style="color:#fdf4c1;">[pomodoro break]
+</span><span>  </span><span style="color:#fdf4c1;">secrets_edit         Allows to edit secrets.sh.asc file in RAM.
+</span><span>  </span><span style="color:#fdf4c1;">secrets_encrypt      Allows to encrypt given file. Original file is removed.
+</span><span>  </span><span style="color:#fdf4c1;">load_secrets         Loads the secrets to given shell session.
+</span><span>
+</span></code></pre>
+<p>Just one thing to remember - <code>helprev</code>.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinder.dev/blog/ai-rant/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Dicts, Slop and the Dead Internet</span>
+                        </a>
+                    </span>
+                
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2026
+ Revinder</span>
+                    <span class="copyright-theme">
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+    <script src="https://revinder.dev/js/copy-code-to-clipboard.js"></script>
+</body>
+</html>
