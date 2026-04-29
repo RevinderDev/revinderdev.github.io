@@ -12,6 +12,19 @@ My hope for this is that you walk away from this article with something meaningf
 <!-- more -->
 --- 
 
+{% alert(type="note", icon="robot", title="AI Notice") %}
+This article was **not** written by AI.
+
+AI was, however, used for spotting typos and to generate `helprev`, `secrets_edit` and `secrets_encrypt` functions.
+All scripts however were read, understood, checked and ran by human.
+
+
+---
+**Models**: DeepSeek V4 Flash
+
+**Tool**: Opencode v1.2.27
+{% end %}
+
 ## Hurl
 
 I work primarly in web development, that usually means creating some kind of Backend Service. I always disliked having to use GUI apps such as
