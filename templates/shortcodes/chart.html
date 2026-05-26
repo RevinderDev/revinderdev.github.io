@@ -1,0 +1,64 @@
+<div class="terminal-window">
+    {% if title or withDots %}
+    <div class="terminal-header">
+        {% if withDots %}
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        {% endif %}
+        
+        {% if title %}
+        <span class="terminal-title">{{ title }}</span>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div id="{{ id }}" style="padding: 10px;"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  fetch('{{ source | safe }}')
+    .then(res => res.json())
+    .then(payload => {
+      var options = {
+        series: payload.series,
+        chart: {
+          type: 'line',
+          height: 400,
+          background: 'transparent',
+          toolbar: { show: false },
+          fontFamily: '"JetBrains Mono", monospace'
+        },
+        colors: ['#fe8019', '#b8bb26', '#83a598', '#fabd2f'],
+        stroke: { curve: 'smooth', width: 3 },
+        markers: { size: 5 },
+        xaxis: {
+          categories: payload.labels,
+          title: { 
+            text: '{{ x_title | default(value="Items") }}', 
+            style: { color: '#928374' } 
+          },
+          labels: { style: { colors: '#ebdbb2' } }
+        },
+        yaxis: {
+          logarithmic: true,
+          title: { 
+            text: '{{ y_title | default(value="Usage") }}', 
+            style: { color: '#928374' } 
+          },
+          labels: { style: { colors: '#ebdbb2' } }
+        },
+        grid: { borderColor: '#3c3836', strokeDashArray: 4 },
+        
+        legend: { 
+          position: 'top',
+          horizontalAlign: 'right',
+          labels: { colors: '#ebdbb2' },
+          markers: { radius: 0 } 
+        },
+        
+        tooltip: {theme: 'dark'},
+      };
+
+      new ApexCharts(document.querySelector("#{{ id }}"), options).render();
+    });
+</script>
