@@ -1,7 +1,7 @@
 +++
 title = "Python slots - brief comparison"
 date = 2026-05-26
-description = "Comparing various methods of adding slots abilites to python objects."
+description = "Comparing various methods of adding slots abilities to python objects."
 
 [taxonomies]
 tags = ["Python", "Programming"]
@@ -43,7 +43,7 @@ dict_keys(['test'])
 dict_values([1])
 ```
 
-This is both extremely powerful and frightening. For example foreign functions can change the state of your object however they like and you probably wont notice, but at the same time, they might care a little less about what kind of an object you are sending as long as they can assign some fields. Flexible!
+This is both extremely powerful and frightening. For example foreign functions can change the state of your object however they like and you probably won't notice, but at the same time, they might care a little less about what kind of an object you are sending as long as they can assign some fields. Flexible!
 
 So how can you define slots and what do they actually do? When Python sees `__slots__` definition a few things happen:
 1. Python reserves a space in memory for all attributes defined
@@ -214,7 +214,7 @@ class PydanticDataclassSlotsHero:
 Hey! Those are Pydantic dataclasses and not their `BaseModel`!
 {% end %}
 
-Yeah, yeah... So unfortunately, Pydantic relies on `__dict__` for storing descriptors for validation. Adding `__slots__` conflicts with that design, therefore they are not supported at all! If you *really* need to use `__slots__` then the convention is to use their dataclasses or forbid extra fields likes so:
+Yeah, yeah... So unfortunately, Pydantic relies on `__dict__` for storing descriptors for validation. Adding `__slots__` conflicts with that design, therefore they are not supported at all! If you *really* need to use `__slots__` then the convention is to use their dataclasses or forbid extra fields like so:
 
 ```python
 class PydanticSlotsHero(BaseModel):
