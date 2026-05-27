@@ -19,14 +19,14 @@ Recently a friend of mine who has never heard of them, after my brief explanatio
 As mentioned, slots are one of the ways a programmer can customize accessing attributes of a class. In Python, if you *assign* a field to an instance of your class, you do not get an error - it's part of its dynamic nature (and probably a bit uncomfortable coming in from strictly typed languages). The error can happen only if you ask for a field that does not exist.
 
 ```python
->>> class M:
-...     pass
-...
->>> obj = M()
->>> obj.test = 1
->>> print(obj.test)
-1
->>> print(obj.doesnt_exist)
+class M:
+     pass
+
+obj = M()
+obj.test = 1
+print(obj.test)
+>>>1
+print(obj.doesnt_exist)
 Traceback (most recent call last):
   File "<python-input-4>", line 1, in <module>
     print(obj.doesnt_exist)
@@ -50,17 +50,17 @@ So how can you define slots and what do they actually do? When Python sees `__sl
 2. Python prevents creation of `__dict__` and `__weakref__`
 
 ```python
->>> class S:
-...     __slots__ = ("x", "y")
-...     def __init__(self):
-...         self.x = 1
-...         self.y = 2
-...
->>> s = S()
->>> s.x
-1
->>> s.y
-2
+class S:
+     __slots__ = ("x", "y")
+     def __init__(self):
+         self.x = 1
+         self.y = 2
+
+s = S()
+s.x
+>>>1
+s.y
+>>>2
 ```
 
 This has two main advantages:
