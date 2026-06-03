@@ -14,6 +14,17 @@ Recently a friend of mine who has never heard of them, after my brief explanatio
 <!-- more -->
 --- 
 
+{% alert(type="note", icon="robot", title="AI Notice") %}
+This article was **not** written by AI.
+
+AI was however used to spot typos, check grammar errors and generate some code for graphs (not the data!).
+
+---
+**Models**: DeepSeek V4 Pro
+
+**Tool**: Opencode v1.2.27
+{% end %}
+
 ## What slots are?
 
 As mentioned, slots are one of the ways a programmer can customize accessing attributes of a class. In Python, if you *assign* a field to an instance of your class, you do not get an error - it's part of its dynamic nature (and probably a bit uncomfortable coming in from strictly typed languages). The error can happen only if you ask for a field that does not exist.
