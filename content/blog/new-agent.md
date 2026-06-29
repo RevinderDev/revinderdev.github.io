@@ -1,13 +1,13 @@
 +++
 title = "New tools in my workflow"
 date = 2026-06-29
-description = "Briefly describing what my new tools are and why I started using them in month of july and my plans for the future."
+description = "Briefly describing what my new tools are and why I started using them in the month of June and my plans for the future."
 
 [taxonomies]
 tags = ["AI", "Linux", "CLI"]
 +++
 
-As always, I love sitting in terminal. I love trying new things. This gives as a logical conclusion - <b>I love trying new things in the terminal</b>.
+As always, I love sitting in terminal. I love trying new things. This gives us a logical conclusion - <b>I love trying new things in the terminal</b>.
 Sometimes, they turn out to be good enough to include in a daily workflow. In a month of July, I actually made some significant changes. In this post, I briefly describe them and my plans for the future.
 All the configurations are available on my [.dotfiles](https://github.com/RevinderDev/.dotfiles) repository for Linux and in [.windots](https://github.com/RevinderDev/.windots) for Windows, though I have yet to update screenshots on them.
 <!-- more -->
@@ -27,25 +27,25 @@ This article was **not** written by AI. AI was only used to spot typos. Nothing 
 It's a mighty [Ghostty](https://ghostty.org/).
 
 I had my eyes on Ghostty for some time already for a few reasons:
-1. I love to listen and read blogs from Mitchell Hashimoto who is by now an inspiration of mine and who is a creator of the Ghostty project.
+1. I love to listen to and read blogs from Mitchell Hashimoto who is by now an inspiration of mine and who is a creator of the Ghostty project.
 2. It's written in Zig! Some of my fun little side projects are in Zig and it turns out I dig Zig.
 3. It feels like the most complete project of them all.
 
 However, even though I knew of Ghostty - I haven't done a proper swap though for quite some time for a couple of reasons:
-- [WezTerm](https://wezterm.org/index.html) is incredibly well made. I loved it. I loved hacking on it in LUA. I loved peeking through it's source code (hooray for Rust!).
+- [WezTerm](https://wezterm.org/index.html) is incredibly well made. I loved it. I loved hacking on it in LUA. I loved peeking through its source code (hooray for Rust!).
 - Initially Ghostty was only available on MacOS.
-- I was **not** using a terminal multiplexer (like `tmux`) and instead was using built in multiplexer of Wezterm. Ghostty did not have one.
+- I was **not** using a terminal multiplexer (like `tmux`) and instead was using built-in multiplexer of WezTerm. Ghostty did not have one.
 - Ghostty scripting was less approachable than WezTerm.
 
 I prefer not to change something that is fundamental to my workflow without a very good reason to do so. 
 That changed recently that unfortunately due to the project not being funded enough and Wez himself having more work (or more time off) the project itself hasn't received a stable release since February 2024 (at the time of writing it).
-This coupled with the fact Ghostty is now available on Linux and AI being allowing easy rewrites, prompted me to try and swap now.
+This coupled with the fact Ghostty is now available on Linux and AI allowing easy rewrites, prompted me to try and swap now.
 
 {% alert(type="info") %}
 On Windows, getting Ghostty is still not officially supported. I opted for [Alacritty](https://alacritty.org/), something I have used successfully in the past and already had config for.
 {% end %}
 
-Turns out - a huge success. I was able to very quickly achieve the same feeling of WezTerm, with some minor improvements on font renderings in certain scenarios. Ghostty itself does feel snappier too, so that's another bonus.
+Turns out - a huge success. I was able to very quickly achieve the same feeling of WezTerm, with some minor improvements on font rendering in certain scenarios. Ghostty itself does feel snappier too, so that's another bonus.
 
 {{ image(src="/new-agent/GhosttyTerminal.png", alt="Ghostty", caption="Gruvbox Ghostty") }}
 
@@ -56,8 +56,8 @@ But we still don't have a terminal multiplexer... That's too big of a regression
 [Zellij!](https://zellij.dev/)
 
 
-Zellij is something I have used in the past but I opted against using it for 2 reasons:
-1. Wezterm had ability to do exactly the same, did not require additional dependency and worked on both Windows and Linux (I sometimes use my personal Windows machine for light coding).
+Zellij is something I have used in the past but I opted against using it for 3 reasons:
+1. WezTerm had ability to do exactly the same, did not require additional dependency and worked on both Windows and Linux (I sometimes use my personal Windows machine for light coding).
 2. Zellij did not work on Windows.
 3. Was generally less customisable.
 
@@ -76,8 +76,8 @@ Still - initial testing left me very happy:).
 I was never a fan of `opencode` too much. I like TUIs a little bit - such as Lazygit and Neovim (duh) but I prefer to open them, do my work in them and close them out. Opencode felt too heavy. 
 It worked sluggishly and I could not customize it as much as I wanted to. This prompted me to look at something a friend of my recommended - [Pi Coding Agent](https://pi.dev/).
 
-I don't like it's name - searching anything related to it, results in me having to rewrite a query because all my results are tied to Raspberry Pi 🤦 (its my own issue I know, but I really do believe name could have been better..).
-It's written in node - again something I do not particularly like, but that's been the case for majority of the CLIs I encounter nowadays. That or Go and I would much rather prefer Go.
+I don't like its name - searching anything related to it, results in me having to rewrite a query because all my results are tied to Raspberry Pi 🤦 (it's my own issue I know, but I really do believe name could have been better..).
+It's written in node - again something I do not particularly like, but that's been the case for the majority of the CLIs I encounter nowadays. That or Go and I would much rather prefer Go.
 
 
 Still, having thought about all of that, I concluded that it's barebones and good enough that I actually kinda love it.
@@ -85,11 +85,11 @@ While I do use AI in my daily work, I don't do anything fancy with it. I don't:
 - Have my own defined workflow
 - Have my own post/pre answer hooks 
 - Run LLM-as-reviewer or council of agents
-- Run plethora of sub agents each talking to each other
+- Run a plethora of sub-agents each talking to each other
 
 
 I feel like the more agents there are, the less I can control what they do and the less I understand what they came up with. 
-At most I have 2-3 agents and even that is incredibly rare for me, for the most part, I strongly prefer having just 1 coding agent that runs in the background. And Pi is perfect for it.
+At most I have 2-3 agents and even that is incredibly rare for me; for the most part, I strongly prefer having just 1 coding agent that runs in the background. And Pi is perfect for it.
 I did install some extensions to make it work mainly:
 - [Pi Caveman](https://pi.dev/packages/pi-caveman) - to help reduce token wastage.
 - [Pi Subagents](https://github.com/nicobailon/pi-subagents) - to sometimes run subagents.
@@ -100,17 +100,17 @@ Pasting and copying (even images, though for certain models only) already works.
 
 {{ image(src="/new-agent/GhosttyPi.png", alt="GhosttyPi", caption="Ghostty with Pi") }}
 
-I have successfully since vibecoded entire addon to World of Warcraft TBC Anniversary: [iMorph Outfitter](https://github.com/RevinderDev/imorph-outfitter) - I was incredibly happy with the results, and so were my friends!
+I have since successfully vibecoded an entire addon to World of Warcraft TBC Anniversary: [iMorph Outfitter](https://github.com/RevinderDev/imorph-outfitter) - I was incredibly happy with the results, and so were my friends!
 It really is like magic sometimes.
 
 ## Plans for the Future
 
-For now I focus on searching a new work place. I want to grow as a developer and with my current project coming to an end, it feels like a right time to do so.
+For now, I focus on searching for a new workplace. I want to grow as a developer and with my current project coming to an end, it feels like the right time to do so.
 For EU technological independence, at least to some degree, I will continue my efforts to try and leverage tools from EU first, and a big one on the list is migrating all my existing codebases to [Codeberg](https://codeberg.org/).
 
 
-And as for personal growth, I have focused on finishing some additional certifications that prove my knowledge. I don't know yet how useful they would be in a real world, but I was asked to do it by my company so I complied.
-That being said, I try to make a concious effort to NOT overuse AI. It really does feel like my own skills, way of thinking is being diminished by overuse of AI. I feel it when I try to code something up by myself, after
+And as for personal growth, I have focused on finishing some additional certifications that prove my knowledge. I don't know yet how useful they would be in the real world, but I was asked to do it by my company so I complied.
+That being said, I try to make a conscious effort to NOT overuse AI. It really does feel like my own skills and way of thinking are being diminished by overuse of AI. I feel it when I try to code something up by myself, after
 previously vibe coding something for a while. I do not enjoy that feeling of being powerless at all.
 
 
