@@ -42,7 +42,7 @@ On Windows, getting Ghostty is still not officially supported. I opted for [Alac
 
 Turns out - a huge success. I was able to very quickly achieve the same feeling of WezTerm, with some minor improvements on font rendering in certain scenarios. Ghostty itself does feel snappier too, so that's another bonus.
 
-{{ image(src="/new-agent/GhosttyTerminal.png", alt="Ghostty", caption="Gruvbox Ghostty") }}
+{{ image(src="/new-tools/GhosttyTerminal.png", alt="Ghostty", caption="Gruvbox Ghostty") }}
 
 But we still don't have a terminal multiplexer... That's too big of a regression for me so introducing 🥁...
 
@@ -63,7 +63,7 @@ I brought back my old configuration file, refactored it for new versions and add
 Still - initial testing left me very happy:).
 
 
-{{ image(src="/new-agent/GhosttyZellij.png", alt="GhosttyZellij", caption="Ghostty with Zellij") }}
+{{ image(src="/new-tools/GhosttyZellij.png", alt="GhosttyZellij", caption="Ghostty with Zellij") }}
 
 
 ## New AI Agent
@@ -93,7 +93,7 @@ I did install some extensions to make it work mainly:
 Pasting and copying (even images, though for certain models only) already works. For my current workflow, this really does seem complete now. Of course I added some custom prompts to it though.
 
 
-{{ image(src="/new-agent/GhosttyPi.png", alt="GhosttyPi", caption="Ghostty with Pi") }}
+{{ image(src="/new-tools/GhosttyPi.png", alt="GhosttyPi", caption="Ghostty with Pi") }}
 
 I have since successfully vibecoded an entire addon to World of Warcraft TBC Anniversary: [iMorph Outfitter](https://github.com/RevinderDev/imorph-outfitter) - I was incredibly happy with the results, and so were my friends!
 It really is like magic sometimes.
