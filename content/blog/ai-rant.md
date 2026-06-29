@@ -11,17 +11,12 @@ Because I'm relatively young and love learning, I try to live on the cutting edg
 <!-- more -->
 --- 
 
-{% alert(type="note", icon="robot", title="AI Notice") %}
+{% alert(type="ai_notice", model="MiniMax M2.5, Gemini 3.1 Pro", agent="Opencode v1.2.27") %}
 This article was **not** written by AI.
 
 AI was, however, used for spotting typos and to generate markdown table (not its content!).
 
 AI was also used as a case study in a Python code example, though it's clearly indicated there which one did what.
-
----
-**Models**: MiniMax M2.5, Gemini 3.1 Pro
-
-**Tool**: Opencode v1.2.27
 {% end %}
 
 ## To Dict or not to dict

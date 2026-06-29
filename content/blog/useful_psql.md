@@ -19,16 +19,11 @@ In this article, I'll show you the common useful things you can do with it.
 --- 
 
 
-{% alert(type="note", icon="robot", title="AI Notice") %}
+{% alert(type="ai_notice", model="Gemini 3 Flash and Claude Haiku 4.5", agent="Opencode v1.1.35") %}
 This article was **not** written by AI.
 
 AI was however used in generating a script for a mock database and for spotting typos.
 You can see the script on [GitHub](https://gist.github.com/RevinderDev/ed01a4b876dffd7c5854c0f8d8013d6c).
-
----
-**Models**: Gemini 3 Flash and Claude Haiku 4.5 
-
-**Tool**: Opencode v1.1.35
 {% end %}
 
 

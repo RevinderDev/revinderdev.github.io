@@ -1,11 +1,35 @@
-{%- set type = type | default(value="info") -%}
-{%- set title = title | default(value=type | upper) -%}
-{%- set icon = icon | default(value=type) -%}
+{%- if type == "ai_notice" -%}
+{%- set title = "AI Notice" -%}
+{%- set icon = "robot" -%}
+{# Render with the same styling as a "note" alert #}
+{%- set css_type = "note" -%}
+{%- set body_text = body | default(value="") -%}
+{%- set label_id = get_hash(literal=type ~ title ~ icon ~ body_text ~ model ~ agent, sha_type=256) | truncate(length=8, end="") -%}
+<section class="alert {{ css_type }}" role="note" aria-labelledby="{{ label_id }}">
+    <div class="alert-icon alert-icon-{{ icon }}" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="{{ label_id }}" class="alert-title">{{ title | safe }}</strong>
+        <div class="alert-body">
+            {{ body_text | markdown | safe }}
+            {%- if model or agent %}
+            <hr>
+            {%- if model %}
+            <p><strong>Models</strong>: {{ model }}</p>
+            {%- endif %}
+            {%- if agent %}
+            <p><strong>Agent</strong>: {{ agent }}</p>
+            {%- endif %}
+            {%- endif %}
+        </div>
+    </div>
+</section>
+{%- else -%}
+{%- set css_type = type | default(value="info") -%}
+{%- set title = title | default(value=css_type | upper) -%}
+{%- set icon = icon | default(value=css_type) -%}
 {%- set text = body | default(value="") -%}
-
 {%- set label_id = get_hash(literal=type ~ title ~ icon ~ text, sha_type=256) | truncate(length=8, end="") -%}
-
-<section class="alert {{ type }}" role="note" aria-labelledby="{{ label_id }}">
+<section class="alert {{ css_type }}" role="note" aria-labelledby="{{ label_id }}">
     <div class="alert-icon alert-icon-{{ icon }}" aria-hidden="true"></div>
     <div class="alert-content">
         <strong id="{{ label_id }}" class="alert-title">{{ title | safe }}</strong>
@@ -14,3 +38,4 @@
         </div>
     </div>
 </section>
+{%- endif -%}

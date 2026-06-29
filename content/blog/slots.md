@@ -14,15 +14,10 @@ Recently a friend of mine who has never heard of them, after my brief explanatio
 <!-- more -->
 --- 
 
-{% alert(type="note", icon="robot", title="AI Notice") %}
+{% alert(type="ai_notice", model="DeepSeek V4 Pro", agent="Opencode v1.2.27") %}
 This article was **not** written by AI.
 
 AI was however used to spot typos, check grammar errors and generate some code for graphs (not the data!).
-
----
-**Models**: DeepSeek V4 Pro
-
-**Tool**: Opencode v1.2.27
 {% end %}
 
 ## What slots are?
