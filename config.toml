@@ -13,13 +13,11 @@ taxonomies = [{ name = "tags" }]
 
 # Code highlighting
 [markdown]
-highlight_code = true
-highlight_theme = "gruvbox-dark"
 github_alerts = false
 
-[markdown.render_code]
-layout = "table"
-extra_attr = "data-lang"
+[markdown.highlighting]
+theme = "gruvbox-dark-medium"
+error_on_missing_language = true
 
 [extra]
 

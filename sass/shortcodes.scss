@@ -154,17 +154,19 @@ $alert-colors: (
     --text-muted: #928374;
 }
 
-pre[data-lang] {
+pre.giallo {
     display: block;
     position: relative;
     padding: 0;
     overflow-y: hidden;
-    background: #3c3836;
+    background: #282828;
     border: 1px solid var(--code-border);
     border-radius: 4px;
     margin: 2rem 0;
 
-    &::before {
+    // data-lang is mirrored from <code> onto <pre> by copy-code-to-clipboard.js
+    // (Giallo emits it on <code> only — see getzola/zola#3091)
+    &[data-lang]::before {
         content: attr(data-lang);
         display: block;
         padding: 6px 10px;
@@ -173,7 +175,7 @@ pre[data-lang] {
         font-size: 0.8rem;
         text-transform: uppercase;
         line-height: 21px;
-        background: #282828;
+        background: #1d2021;
     }
 
     &[data-name]::after {
@@ -212,42 +214,21 @@ pre[data-lang] {
         }
     }
 
-    table {
-        margin: 0;
+    // Giallo renders line numbers as spans (not the old syntect table layout)
+    .giallo-l {
+        display: inline-block;
+        min-height: 1lh;
         width: 100%;
-        border-collapse: collapse;
-        table-layout: auto !important;
+    }
 
-        td, th, tr {
-            border: none !important;
-            padding: 0;
-        }
-
-        tr {
-            &:has(mark) {
-                background: #3c3836 !important; // Match Gruvbox darker
-            }
-        }
-
-        tr td:first-child {
-            color: #665c54;
-            text-align: end;
-            user-select: none;
-            padding: 0 10px 0 10px;
-            border-right: 1px solid var(--code-border);
-            width: 3ch;
-            line-height: 1.5;
-        }
-        
-        tr td:last-child {
-            padding: 0;
-            width: 100%;
-
-            code {
-                padding: 10px;
-                display: block;
-            }
-        }
+    .giallo-ln {
+        display: inline-block;
+        user-select: none;
+        margin-right: 0.4em;
+        padding: 0 0.4em;
+        min-width: 3ch;
+        text-align: right;
+        // colour is set inline by Giallo (#665C54)
     }
 
     .copy-button {
