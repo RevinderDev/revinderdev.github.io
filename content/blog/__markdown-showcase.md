@@ -20,6 +20,13 @@ This page is a living reference for everything the `revinder-blog` theme can ren
 
 ---
 
+## Footnotes
+
+Zola supports standard Markdown footnotes[^1] and inline footnotes are not supported. [^2]
+
+[^1]: This is the first footnote, rendered at the bottom of the page.
+[^2]: Inline footnote should have been defined up top.
+
 ## Text Formatting
 
 **Bold**, *italic*, ***bold italic***, ~~strikethrough~~, `inline code`, and a [hyperlink](https://www.getzola.org). You can also use autolinks: <https://example.com> or `https://example.com`.
@@ -256,12 +263,6 @@ The `chart` shortcode fetches a JSON file from `static/` at render time and draw
     y_title="Memory (MiB)"
 ) }}
 
-## Footnotes
-
-Zola supports standard Markdown footnotes[^1] and inline footnotes[^2].
-
-[^1]: This is the first footnote, rendered at the bottom of the page.
-[^2]: Inline footnote — defined right where it is referenced.
 
 ## Escaping & Edge Cases
 

@@ -115,6 +115,90 @@
   }
 }
 
+// Footnotes — Zola emits <div class="footnote-definition"><sup class="footnote-definition-label">N</sup><p>text</p></div>
+// Flatten so the number sits inline with the text instead of on its own line.
+.footnote-definition {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  margin: 0.5em 0;
+  font-size: 0.9em;
+  color: var(--text-muted, #928374);
+
+  // The label is a <sup>; keep it inline-sized and aligned
+  .footnote-definition-label {
+    flex: 0 0 auto;
+    font-size: 0.75em;
+    line-height: 1;
+    color: var(--accent, #fe8019);
+  }
+
+  // The body is wrapped in a <p>; kill its margins so it flows inline with the label
+  p {
+    margin: 0;
+    display: inline;
+  }
+}
+
+// The in-text reference markers <sup class="footnote-reference"><a href="#N">N</a></sup>
+.footnote-reference {
+  font-size: 0.75em;
+  vertical-align: super;
+  line-height: 0;
+
+  a {
+    text-decoration: none;
+    color: var(--accent, #fe8019);
+  }
+}
+
+// bottom_footnotes = true variant — Zola emits:
+//   <section class="footnotes"><ol class="footnotes-list">
+//     <li id="fn-1"><p>text <a href="#fr-1-1">↩</a></p></li>...
+//   </ol></section>
+// Style it to match the .footnote-definition look above.
+.footnotes {
+  margin: 1.5em 0 0;
+  padding-top: 0.75em;
+  border-top: 1px solid var(--code-border, #504945);
+  font-size: 0.9em;
+  color: var(--text-muted, #928374);
+
+  // Hide the redundant <hr> Zola sometimes emits before the section
+  hr {
+    display: none;
+  }
+}
+
+.footnotes-list {
+  margin: 0;
+  padding-left: 1.5em;
+  list-style: decimal;
+
+  li {
+    margin: 0.4em 0;
+    line-height: 1.4;
+
+    // The marker number — colour it like the inline label
+    &::marker {
+      color: var(--accent, #fe8019);
+      font-size: 0.75em;
+    }
+
+    p {
+      margin: 0;
+      display: inline;   // keep text flush with the number, no line break
+    }
+
+    // Backref arrow ↩
+    a {
+      text-decoration: none;
+      color: var(--accent, #fe8019);
+      margin-left: 0.25em;
+    }
+  }
+}
+
 .post-list {
   .post-date {
     color: var(--accent-alpha-70);
