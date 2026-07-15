@@ -127,9 +127,11 @@ def fib(n: int) -> int:
 
 ### Line numbers starting at 20 + hidden lines
 
-```python,linenos,linenostart=20,hide_lines=21-22
-# these two lines are hidden from output
-# but the visible block starts counting at 20
+`hide_lines` uses **1-indexed source line numbers** (not the displayed `linenostart` value). Below, `hide_lines=1-2` removes the first two source lines — the comments — so only the function body shows, with numbering continuing from the `linenostart=20` base.
+
+```python,linenos,linenostart=20,hide_lines=1-2
+# this source line 1 is hidden from output
+# this source line 2 is also hidden
 def visible():
     return "shown"
 ```
