@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Revinder’s Save States</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="preload" href="https://revinder.dev/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://revinder.dev/style.css">
+    <link rel="stylesheet" href="https://revinder.dev/color/gruvbox.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://revinder.dev/blog/new-tools/">
+    <meta property="og:title" content="New tools in my workflow">
+    <meta property="og:description" content="Briefly describing what my new tools are and why I started using them in the month of June and my plans for the future.">
+    
+    
+    
+        <meta property="og:image" content="https://revinder.dev/images/characters/CoolPizza.png">
+    
+
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://revinder.dev/rss.xml">
+    
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinder.dev/">Home</a></li>
+            
+                <li><a href="https://revinder.dev//blog">Blog</a></li>
+            
+                <li><a href="https://revinder.dev//tags">Tags</a></li>
+            
+                <li><a href="https://revinder.dev//about-me">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            
+                <li><a href="https://revinder.dev//atom.xml" target="_blank" rel="noopener noreferrer">RSS</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+        <div class="header__inner">
+            <div class="header__logo">
+                <a href="#" style="text-decoration: none;" onclick="return false;">
+                    
+    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="https:&#x2F;&#x2F;revinder.dev" class="logo__breadcrumb logo__home">~/revinder</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog" class="logo__breadcrumb">blog</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog&#x2F;new-tools" class="logo__breadcrumb">new-tools</a><span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
+
+                </a>
+            </div>
+        </div>
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinder.dev/blog/new-tools/">New tools in my workflow</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2026-06-29
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/ai/">#AI</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/linux/">#Linux</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/cli/">#CLI</a></span>
+    
+
+        
+        <div class="post-content">
+            <p>As always, I love sitting in terminal. I love trying new things. This gives us a logical conclusion - <b>I love trying new things in the terminal</b>.
+Sometimes, they turn out to be good enough to include in a daily workflow. In a month of July, I actually made some significant changes. In this post, I briefly describe them and my plans for the future.
+All the configurations are available on my <a rel="external" href="https://github.com/RevinderDev/.dotfiles">.dotfiles</a> repository for Linux and in <a rel="external" href="https://github.com/RevinderDev/.windots">.windots</a> for Windows, though I have yet to update screenshots on them.</p>
+<span id="continue-reading"></span><section class="alert note" role="note" aria-labelledby="svUnN73p">
+    <div class="alert-icon alert-icon-robot" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="svUnN73p" class="alert-title">AI Notice</strong>
+        <div class="alert-body">
+            <p>This article was <strong>not</strong> written by AI. AI was only used to spot typos. Nothing else was generated by AI.</p>
+
+            <hr>
+            <p><strong>Models</strong>: GLM 5.2</p>
+            <p><strong>Agent</strong>: Pi v0.80.2</p>
+        </div>
+    </div>
+</section><h2 id="new-terminal-on-linux">New terminal on Linux</h2>
+<p>It's a mighty <a rel="external" href="https://ghostty.org/">Ghostty</a>.</p>
+<p>I had my eyes on Ghostty for some time already for a few reasons:</p>
+<ol>
+<li>I love to listen to and read blogs from Mitchell Hashimoto who is by now an inspiration of mine and who is a creator of the Ghostty project.</li>
+<li>It's written in Zig! Some of my fun little side projects are in Zig and it turns out I dig Zig.</li>
+<li>It feels like the most complete project of them all.</li>
+</ol>
+<p>However, even though I knew of Ghostty - I haven't done a proper swap though for quite some time for a couple of reasons:</p>
+<ul>
+<li><a rel="external" href="https://wezterm.org/index.html">WezTerm</a> is incredibly well made. I loved it. I loved hacking on it in LUA. I loved peeking through its source code (hooray for Rust!).</li>
+<li>Initially Ghostty was only available on MacOS.</li>
+<li>I was <strong>not</strong> using a terminal multiplexer (like <code>tmux</code>) and instead was using built-in multiplexer of WezTerm. Ghostty did not have one.</li>
+<li>Ghostty scripting was less approachable than WezTerm.</li>
+</ul>
+<p>I prefer not to change something that is fundamental to my workflow without a very good reason to do so.
+That changed recently that unfortunately due to the project not being funded enough and Wez himself having more work (or more time off) the project itself hasn't received a stable release since February 2024 (at the time of writing it).
+This coupled with the fact Ghostty is now available on Linux and AI allowing easy rewrites, prompted me to try and swap now.</p>
+<section class="alert info" role="note" aria-labelledby="qjMKzD2y">
+    <div class="alert-icon alert-icon-info" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="qjMKzD2y" class="alert-title">INFO</strong>
+        <div class="alert-body">
+            <p>On Windows, getting Ghostty is still not officially supported. I opted for <a rel="external" href="https://alacritty.org/">Alacritty</a>, something I have used successfully in the past and already had config for.</p>
+
+        </div>
+    </div>
+</section>
+<p>Turns out - a huge success. I was able to very quickly achieve the same feeling of WezTerm, with some minor improvements on font rendering in certain scenarios. Ghostty itself does feel snappier too, so that's another bonus.</p>
+
+  <img src="/new-tools/GhosttyTerminal.png" alt="Ghostty" class="center" />
+  
+  
+    <small style="display: block; text-align: center; margin-top: 0.5rem; color: #666;">
+      Gruvbox Ghostty
+    </small>
+  
+
+<p>But we still don't have a terminal multiplexer... That's too big of a regression for me so introducing 🥁...</p>
+<h2 id="new-old-terminal-multiplexer">New (old) terminal multiplexer</h2>
+<p><a rel="external" href="https://zellij.dev/">Zellij!</a></p>
+<p>Zellij is something I have used in the past but I opted against using it for 3 reasons:</p>
+<ol>
+<li>WezTerm had ability to do exactly the same, did not require additional dependency and worked on both Windows and Linux (I sometimes use my personal Windows machine for light coding).</li>
+<li>Zellij did not work on Windows.</li>
+<li>Was generally less customisable.</li>
+</ol>
+<p>This changed - Zellij now works under Windows. There are still minor bugs with it, such as Lazygit being broken when run inside Zellij itself which is only the case on Windows. That's good enough for me, though more testing on that platform is probably required by me to have a full conclusion.</p>
+<p>On Linux however, no issues.
+I brought back my old configuration file, refactored it for new versions and added some small changes. It's minimal by design, though I have visible keybindings hints because I am still not used to them fully.
+Still - initial testing left me very happy:).</p>
+
+  <img src="/new-tools/GhosttyZellij.png" alt="GhosttyZellij" class="center" />
+  
+  
+    <small style="display: block; text-align: center; margin-top: 0.5rem; color: #666;">
+      Ghostty with Zellij
+    </small>
+  
+
+<h2 id="new-ai-agent">New AI Agent</h2>
+<p>I was never a fan of <code>opencode</code> too much. I like TUIs a little bit - such as Lazygit and Neovim (duh) but I prefer to open them, do my work in them and close them out. Opencode felt too heavy.
+It worked sluggishly and I could not customize it as much as I wanted to. This prompted me to look at something a friend of my recommended - <a rel="external" href="https://pi.dev/">Pi Coding Agent</a>.</p>
+<p>I don't like its name - searching anything related to it, results in me having to rewrite a query because all my results are tied to Raspberry Pi 🤦 (it's my own issue I know, but I really do believe name could have been better..).
+It's written in node - again something I do not particularly like, but that's been the case for the majority of the CLIs I encounter nowadays. That or Go and I would much rather prefer Go.</p>
+<p>Still, having thought about all of that, I concluded that it's barebones and good enough that I actually kinda love it.
+While I do use AI in my daily work, I don't do anything fancy with it. I don't:</p>
+<ul>
+<li>Have my own defined workflow</li>
+<li>Have my own post/pre answer hooks</li>
+<li>Run LLM-as-reviewer or council of agents</li>
+<li>Run a plethora of sub-agents each talking to each other</li>
+</ul>
+<p>I feel like the more agents there are, the less I can control what they do and the less I understand what they came up with.
+At most I have 2-3 agents and even that is incredibly rare for me; for the most part, I strongly prefer having just 1 coding agent that runs in the background. And Pi is perfect for it.
+I did install some extensions to make it work mainly:</p>
+<ul>
+<li><a rel="external" href="https://pi.dev/packages/pi-caveman">Pi Caveman</a> - to help reduce token wastage.</li>
+<li><a rel="external" href="https://github.com/nicobailon/pi-subagents">Pi Subagents</a> - to sometimes run subagents.</li>
+<li><a rel="external" href="https://pi.dev/packages/pi-web-access">Pi WebAccess</a> - to allow Pi to access web sometimes.</li>
+</ul>
+<p>Pasting and copying (even images, though for certain models only) already works. For my current workflow, this really does seem complete now. Of course I added some custom prompts to it though.</p>
+
+  <img src="/new-tools/GhosttyPi.png" alt="GhosttyPi" class="center" />
+  
+  
+    <small style="display: block; text-align: center; margin-top: 0.5rem; color: #666;">
+      Ghostty with Pi
+    </small>
+  
+
+<p>I have since successfully vibecoded an entire addon to World of Warcraft TBC Anniversary: <a rel="external" href="https://github.com/RevinderDev/imorph-outfitter">iMorph Outfitter</a> - I was incredibly happy with the results, and so were my friends!
+It really is like magic sometimes.</p>
+<h2 id="plans-for-the-future">Plans for the Future</h2>
+<p>For now, I focus on searching for a new workplace. I want to grow as a developer and with my current project coming to an end, it feels like the right time to do so.
+For EU technological independence, at least to some degree, I will continue my efforts to try and leverage tools from EU first, and a big one on the list is migrating all my existing codebases to <a rel="external" href="https://codeberg.org/">Codeberg</a>.</p>
+<p>And as for personal growth, I have focused on finishing some additional certifications that prove my knowledge. I don't know yet how useful they would be in the real world, but I was asked to do it by my company so I complied.
+That being said, I try to make a conscious effort to NOT overuse AI. It really does feel like my own skills and way of thinking are being diminished by overuse of AI. I feel it when I try to code something up by myself, after
+previously vibe coding something for a while. I do not enjoy that feeling of being powerless at all.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinder.dev/blog/slots/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Python slots - brief comparison</span>
+                        </a>
+                    </span>
+                
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2026
+ Revinder</span>
+                    <span class="copyright-theme">
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+    <script src="https://revinder.dev/js/copy-code-to-clipboard.js"></script>
+</body>
+</html>
