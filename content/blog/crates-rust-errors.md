@@ -20,8 +20,8 @@ I searched for some established projects that use Axum (framework of my choice) 
 {% alert(type="ai_notice", model="Claude Opus 5", agent="pi v0.82.1") %}
 This article was **not** written by AI.
 
-AI was, however, used for spotting typos and to help answer some of my
-questions about Rust itself.
+AI was, however, used for spotting typos, help answer some of my
+questions about Rust itself and to proof read the article.
 {% end %}
 
 It's worth mentioning at the start - I am no Rust expert! 
