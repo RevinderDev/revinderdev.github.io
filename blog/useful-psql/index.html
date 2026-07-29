@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Revinder’s Save States</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="preload" href="https://revinder.dev/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://revinder.dev/style.css">
+    <link rel="stylesheet" href="https://revinder.dev/color/gruvbox.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://revinder.dev/blog/useful-psql/">
+    <meta property="og:title" content="Become poweruser with psql">
+    <meta property="og:description" content="Short introduction into meta commands of psql.">
+    
+    
+    
+        <meta property="og:image" content="https://revinder.dev/images/characters/CoolPizza.png">
+    
+
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://revinder.dev/rss.xml">
+    
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinder.dev/">Home</a></li>
+            
+                <li><a href="https://revinder.dev//blog">Blog</a></li>
+            
+                <li><a href="https://revinder.dev//tags">Tags</a></li>
+            
+                <li><a href="https://revinder.dev//about-me">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            
+                <li><a href="https://revinder.dev//atom.xml" target="_blank" rel="noopener noreferrer">RSS</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+        <div class="header__inner">
+            <div class="header__logo">
+                <a href="#" style="text-decoration: none;" onclick="return false;">
+                    
+    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="https:&#x2F;&#x2F;revinder.dev" class="logo__breadcrumb logo__home">~/revinder</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog" class="logo__breadcrumb">blog</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog&#x2F;useful-psql" class="logo__breadcrumb">useful-psql</a><span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
+
+                </a>
+            </div>
+        </div>
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinder.dev/blog/useful-psql/">Become poweruser with psql</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2026-02-12
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/databases/">#Databases</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/programming/">#Programming</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/postgresql/">#Postgresql</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/sql/">#SQL</a></span>
+    
+
+        
+        <div class="post-content">
+            <p>I think we all love Postgres. It's fast, efficient, and free to use. Nowadays, when I'm thinking of creating a SQL database, I choose Postgres as my primary target.
+For local development, I pretty much always deploy it in a Docker container, but the question is—how do you access it? Some people use database management interfaces built into IDEs, some use dedicated tools (such as pgAdmin or DBeaver), but for my basic development needs, I stick with <code>psql</code> (and it's in the terminal!).
+In this article, I'll show you the common useful things you can do with it.</p>
+<p><strong>Prerequisites</strong>:</p>
+<ul>
+<li>Basic <strong>SQL</strong> understanding</li>
+<li>Terminal</li>
+</ul>
+<span id="continue-reading"></span>
+<hr />
+<section class="alert note" role="note" aria-labelledby="WY66yH2X">
+    <div class="alert-icon alert-icon-robot" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="WY66yH2X" class="alert-title">AI Notice</strong>
+        <div class="alert-body">
+            <p>This article was <strong>not</strong> written by AI.</p>
+<p>AI was however used in generating a script for a mock database and for spotting typos.
+You can see the script on <a rel="external" href="https://gist.github.com/RevinderDev/ed01a4b876dffd7c5854c0f8d8013d6c">GitHub</a>.</p>
+
+            <hr>
+            <p><strong>Models</strong>: Gemini 3 Flash and Claude Haiku 4.5</p>
+            <p><strong>Agent</strong>: Opencode v1.1.35</p>
+        </div>
+    </div>
+</section><h2 id="setup">Setup</h2>
+<p>Imagine we deploy our Postgres in Docker using Docker Compose, perhaps you'll do it roughly like this:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="yaml"><span class="giallo-l"><span style="color: #8EC07C;">  my-db</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">    image</span><span style="color: #A89984;">:</span><span style="color: #B8BB26;"> postgres:17.5</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">    container_name</span><span style="color: #A89984;">:</span><span style="color: #B8BB26;"> my-db</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">    environment</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #A89984;">      -</span><span style="color: #B8BB26;"> POSTGRES_USER=${POSTGRES__DB_USER}</span></span>
+<span class="giallo-l"><span style="color: #A89984;">      -</span><span style="color: #B8BB26;"> POSTGRES_PASSWORD=${POSTGRES__DB_PASSWORD}</span></span>
+<span class="giallo-l"><span style="color: #A89984;">      -</span><span style="color: #B8BB26;"> POSTGRES_DB=${POSTGRES__DB}</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">    ports</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #A89984;">      - &quot;</span><span style="color: #B8BB26;">5435:5432</span><span style="color: #A89984;">&quot;</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">    volumes</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #A89984;">      -</span><span style="color: #B8BB26;"> pgdata:/var/lib/postgresql/data</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">    healthcheck</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">      test</span><span style="color: #A89984;">: [ &quot;</span><span style="color: #B8BB26;">CMD-SHELL</span><span style="color: #A89984;">&quot;, &quot;</span><span style="color: #B8BB26;">pg_isready -d ${POSTGRES__DB} -U ${POSTGRES__DB_USER}</span><span style="color: #A89984;">&quot; ]</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">      interval</span><span style="color: #A89984;">:</span><span style="color: #B8BB26;"> 1s</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">      timeout</span><span style="color: #A89984;">:</span><span style="color: #B8BB26;"> 5s</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">      retries</span><span style="color: #A89984;">:</span><span style="color: #D3869B;"> 10</span></span></code></pre>
+<p>I like to include the <code>healthcheck</code> key because it can be leveraged in the <code>depends_on</code> clause for my web service.
+Naturally, I'm going to be particularly original about naming and name my variables like so:</p>
+<section class="alert warning" role="note" aria-labelledby="p5&#x2F;EWp0b">
+    <div class="alert-icon alert-icon-warning" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="p5&#x2F;EWp0b" class="alert-title">Warning!</strong>
+        <div class="alert-body">
+            <p>This <code>healthcheck</code> checks if the database server accepts connections <strong>only</strong>. It does not check if the database exists. For purposes of a web server, this is fine, but perhaps you might want to avoid it and make it see if the database exists in the first place!</p>
+
+        </div>
+    </div>
+</section><pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="shellscript"><span class="giallo-l"><span style="color: #83A598;">POSTGRES__DB_USER</span><span style="color: #8EC07C;">=</span><span style="color: #B8BB26;">postgres</span></span>
+<span class="giallo-l"><span style="color: #83A598;">POSTGRES__DB_PASSWORD</span><span style="color: #8EC07C;">=</span><span style="color: #B8BB26;">postgres</span></span>
+<span class="giallo-l"><span style="color: #83A598;">POSTGRES__DB</span><span style="color: #8EC07C;">=</span><span style="color: #B8BB26;">mydb</span></span></code></pre>
+<p>We bring it up with <code>$ docker compose up</code> and voilà! Our database is alive:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="shellscript"><span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> docker ps</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">CONTAINER</span><span style="color: #B8BB26;"> ID   IMAGE           COMMAND                  CREATED          STATUS                    PORTS                                         NAMES</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">10b2f0530af0</span><span style="color: #B8BB26;">   postgres:17.5</span><span style="color: #A89984;">   &quot;</span><span style="color: #B8BB26;">docker-entrypoint.s…</span><span style="color: #A89984;">&quot;</span><span style="color: #D3869B;">   20</span><span style="color: #B8BB26;"> seconds ago   Up</span><span style="color: #D3869B;"> 19</span><span style="color: #B8BB26;"> seconds</span><span> (healthy)   0.0.0.0:5435-</span><span style="color: #8EC07C;">&gt;</span><span>5432/tcp, </span><span style="color: #FE8019;">[</span><span>::</span><span style="color: #FE8019;">]</span><span>:5434-</span><span style="color: #8EC07C;">&gt;</span><span>5432/tcp   my-db</span></span></code></pre><section class="alert danger" role="note" aria-labelledby="0PoOMAQk">
+    <div class="alert-icon alert-icon-danger" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="0PoOMAQk" class="alert-title">Careful!</strong>
+        <div class="alert-body">
+            <p>The database <code>mydb</code> will only be created if the directory for data (that is <code>pgdata:/var/lib/postgresql/data</code>) is <strong>empty</strong>. In other words, during the first run and not afterwards!</p>
+
+        </div>
+    </div>
+</section>
+<p>Now, to get our psql running, we can connect to the Docker container like this:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="shellscript"><span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> docker exec</span><span style="color: #D3869B;"> -it</span><span style="color: #B8BB26;"> my-db psql</span><span style="color: #D3869B;"> -U</span><span style="color: #B8BB26;"> postgres</span><span style="color: #D3869B;"> -d</span><span style="color: #B8BB26;"> mydb</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">psql</span><span> (17.5 (Debian</span><span style="color: #B8BB26;"> 17.5-1.pgdg130+1</span><span>))</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">Type</span><span style="color: #A89984;"> &quot;</span><span style="color: #B8BB26;">help</span><span style="color: #A89984;">&quot;</span><span style="color: #B8BB26;"> for help.</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #83A598;">mydb</span><span style="color: #8EC07C;">=</span><span>#</span></span></code></pre>
+<p>And we are in!</p>
+<h2 id="psql-and-what-can-we-do-with-it">psql and what can we do with it</h2>
+<p>So what is <a rel="external" href="https://www.postgresql.org/docs/current/app-psql.html">psql</a>? As the docs define it, it is a frontend terminal-based application for Postgres. It enables you to query the database and also has shell-like behavior you would expect from a normal shell. It has some meta commands on top of it, some of which I'll showcase today!</p>
+<p>Let's list available databases for us by running:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \l+</span></span>
+<span class="giallo-l"><span>                                                                                      List of databa</span></span>
+<span class="giallo-l"><span>ses</span></span>
+<span class="giallo-l"><span>   Name    |  Owner   | Encoding | Locale Provider |  Collate   |   Ctype    | Locale | ICU Rules |</span></span>
+<span class="giallo-l"><span>  Access privileges   |  Size   | Tablespace |                Description</span></span>
+<span class="giallo-l"><span>-----------+----------+----------+-----------------+------------+------------+--------+-----------+-</span></span>
+<span class="giallo-l"><span>----------------------+---------+------------+--------------------------------------------</span></span>
+<span class="giallo-l"><span> postgres  | postgres | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |</span></span>
+<span class="giallo-l"><span>                      | 7507 kB | pg_default | default administrative connection database</span></span>
+<span class="giallo-l"><span> template0 | postgres | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |</span></span>
+<span class="giallo-l"><span>=c/postgres          +| 7353 kB | pg_default | unmodifiable empty database</span></span>
+<span class="giallo-l"><span>           |          |          |                 |            |            |        |           |</span></span>
+<span class="giallo-l"><span>postgres=CTc/postgres |         |            |</span></span>
+<span class="giallo-l"><span> template1 | postgres | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |</span></span>
+<span class="giallo-l"><span>=c/postgres          +| 7579 kB | pg_default | default template for new databases</span></span>
+<span class="giallo-l"><span>           |          |          |                 |            |            |        |           |</span></span>
+<span class="giallo-l"><span>postgres=CTc/postgres |         |            |</span></span>
+<span class="giallo-l"><span> mydb   | postgres | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |</span></span>
+<span class="giallo-l"><span>                      | 7795 kB | pg_default |</span></span>
+<span class="giallo-l"><span>(4 rows)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>(END)</span></span></code></pre>
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>Hey!! That looks terrible! The characters are everywhere and lines don't match. It's unreadable!!</p>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="character-note character-left">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/CoolPizza.png"
+             alt="CoolPizza"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>That's because your terminal is too small to show the entire table! You can use <code>\x auto</code> for <em>Expanded auto mode</em> which switches intelligently between horizontal and vertical showing of table, such that it fits in a given terminal.</p>
+
+        </div>
+    </div>
+</div>
+<p>Let's do just that!</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \x auto</span></span>
+<span class="giallo-l"><span>Expanded display is used automatically.</span></span>
+<span class="giallo-l"><span>mydb=# \l+</span></span>
+<span class="giallo-l"><span>List of databases</span></span>
+<span class="giallo-l"><span>-[ RECORD 1 ]-----+-------------------------------------------</span></span>
+<span class="giallo-l"><span>Name              | postgres</span></span>
+<span class="giallo-l"><span>Owner             | postgres</span></span>
+<span class="giallo-l"><span>Encoding          | UTF8</span></span>
+<span class="giallo-l"><span>Locale Provider   | libc</span></span>
+<span class="giallo-l"><span>Collate           | en_US.utf8</span></span>
+<span class="giallo-l"><span>Ctype             | en_US.utf8</span></span>
+<span class="giallo-l"><span>Locale            |</span></span>
+<span class="giallo-l"><span>ICU Rules         |</span></span>
+<span class="giallo-l"><span>Access privileges |</span></span>
+<span class="giallo-l"><span>Size              | 7507 kB</span></span>
+<span class="giallo-l"><span>Tablespace        | pg_default</span></span>
+<span class="giallo-l"><span>Description       | default administrative connection database</span></span>
+<span class="giallo-l"><span>-[ RECORD 2 ]-----+-------------------------------------------</span></span>
+<span class="giallo-l"><span>Name              | template0</span></span>
+<span class="giallo-l"><span>Owner             | postgres</span></span>
+<span class="giallo-l"><span>Encoding          | UTF8</span></span>
+<span class="giallo-l"><span>Locale Provider   | libc</span></span>
+<span class="giallo-l"><span>Collate           | en_US.utf8</span></span>
+<span class="giallo-l"><span>Ctype             | en_US.utf8</span></span>
+<span class="giallo-l"><span>Locale            |</span></span>
+<span class="giallo-l"><span>ICU Rules         |</span></span>
+<span class="giallo-l"><span>Access privileges | =c/postgres                               +</span></span>
+<span class="giallo-l"><span>                  | postgres=CTc/postgres</span></span>
+<span class="giallo-l"><span>Size              | 7353 kB</span></span>
+<span class="giallo-l"><span>Tablespace        | pg_default</span></span>
+<span class="giallo-l"><span>Description       | unmodifiable empty database</span></span>
+<span class="giallo-l"><span>-[ RECORD 3 ]-----+-------------------------------------------</span></span>
+<span class="giallo-l"><span>Name              | template1</span></span>
+<span class="giallo-l"><span>Owner             | postgres</span></span>
+<span class="giallo-l"><span>Encoding          | UTF8</span></span>
+<span class="giallo-l"><span>Locale Provider   | libc</span></span>
+<span class="giallo-l"><span>Collate           | en_US.utf8</span></span>
+<span class="giallo-l"><span>Ctype             | en_US.utf8</span></span>
+<span class="giallo-l"><span>Locale            |</span></span>
+<span class="giallo-l"><span>ICU Rules         |</span></span>
+<span class="giallo-l"><span>Access privileges | =c/postgres                               +</span></span>
+<span class="giallo-l"><span>                  | postgres=CTc/postgres</span></span>
+<span class="giallo-l"><span>Size              | 7579 kB</span></span>
+<span class="giallo-l"><span>Tablespace        | pg_default</span></span>
+<span class="giallo-l"><span>Description       | default template for new databases</span></span>
+<span class="giallo-l"><span>-[ RECORD 4 ]-----+-------------------------------------------</span></span>
+<span class="giallo-l"><span>Name              | mydb</span></span>
+<span class="giallo-l"><span>Owner             | postgres</span></span>
+<span class="giallo-l"><span>Encoding          | UTF8</span></span>
+<span class="giallo-l"><span>Locale Provider   | libc</span></span>
+<span class="giallo-l"><span>Collate           | en_US.utf8</span></span>
+<span class="giallo-l"><span>Ctype             | en_US.utf8</span></span>
+<span class="giallo-l"><span>Locale            |</span></span>
+<span class="giallo-l"><span>ICU Rules         |</span></span>
+<span class="giallo-l"><span>Access privileges |</span></span>
+<span class="giallo-l"><span>Size              | 7795 kB</span></span>
+<span class="giallo-l"><span>Tablespace        | pg_default</span></span>
+<span class="giallo-l"><span>Description       |</span></span></code></pre>
+<p>Nice! It fits! And we've learned here two meta commands:</p>
+<ul>
+<li><code>\x [ on | off | auto ]</code> - (or <code>\pset expanded</code>) which outputs stuff in expanded mode. You can also have it be supplied automatically when invoking <code>psql</code> itself by adding <code>-x</code> to it.</li>
+<li><code>\l</code> or <code>\list</code> <code>[ pattern ]</code> - lists your databases or a specific database that matches <code>[ pattern ]</code>. e.g. <code>\l postgres</code></li>
+</ul>
+<p>But what is that <code>+</code> I added to <code>\l</code>? It displays extra information about database objects. You can think of it as a verbose flag. For <code>\l</code>, it adds <code>Size</code>, <code>Tablespace</code>, and <code>Description</code> columns. More often than not, I'm surprised how little space my databases are taking thanks to the <code>Size</code> column ;).</p>
+<p>With that, let's keep going!</p>
+<ul>
+<li><code>\c</code> or <code>\connect [ -reuse-previous=on|off ] [ dbname [ username ] [ host ] [ port ] | conninfo ]</code> - allows you to connect to a different database. As you can see from the arguments, you can specify a different username and host as well, though I've never used it this way. I only use it to swap to another database listed from <code>\l</code> by doing <code>\c postgres</code>.</li>
+</ul>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>postgres=# \c mydb</span></span>
+<span class="giallo-l"><span>You are now connected to database &quot;mydb&quot; as user &quot;postgres&quot;.</span></span>
+<span class="giallo-l"><span>mydb=# \c postgres</span></span>
+<span class="giallo-l"><span>You are now connected to database &quot;postgres&quot; as user &quot;postgres&quot;.</span></span></code></pre><h2 id="describe">Describe</h2>
+<p>Describe or display is a meta command <code>\d</code> which helps you display database objects.
+It's quite comprehensive—it allows you to display <em>everything</em>: sequences, indexes, tables, views, and more.
+The docs themselves are <a rel="external" href="https://www.postgresql.org/docs/current/app-psql.html#APP-PSQL-META-COMMAND-D">pretty readable</a>, though they lack clear examples. That's where this article will help you.</p>
+<p>On our mock database, let's see what's in here:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \d</span></span>
+<span class="giallo-l"><span>                      List of relations</span></span>
+<span class="giallo-l"><span> Schema |             Name             |   Type   |  Owner</span></span>
+<span class="giallo-l"><span>--------+------------------------------+----------+----------</span></span>
+<span class="giallo-l"><span> public | posts                        | table    | postgres</span></span>
+<span class="giallo-l"><span> public | posts_post_id_seq            | sequence | postgres</span></span>
+<span class="giallo-l"><span> public | user_profiles                | table    | postgres</span></span>
+<span class="giallo-l"><span> public | user_profiles_profile_id_seq | sequence | postgres</span></span>
+<span class="giallo-l"><span> public | users                        | table    | postgres</span></span>
+<span class="giallo-l"><span> public | users_user_id_seq            | sequence | postgres</span></span></code></pre>
+<p>What about list of just tables?</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \dt+</span></span>
+<span class="giallo-l"><span>List of relations</span></span>
+<span class="giallo-l"><span>-[ RECORD 1 ]-+--------------</span></span>
+<span class="giallo-l"><span>Schema        | public</span></span>
+<span class="giallo-l"><span>Name          | posts</span></span>
+<span class="giallo-l"><span>Type          | table</span></span>
+<span class="giallo-l"><span>Owner         | postgres</span></span>
+<span class="giallo-l"><span>Persistence   | permanent</span></span>
+<span class="giallo-l"><span>Access method | heap</span></span>
+<span class="giallo-l"><span>Size          | 16 kB</span></span>
+<span class="giallo-l"><span>Description   |</span></span>
+<span class="giallo-l"><span>-[ RECORD 2 ]-+--------------</span></span>
+<span class="giallo-l"><span>Schema        | public</span></span>
+<span class="giallo-l"><span>Name          | user_profiles</span></span>
+<span class="giallo-l"><span>Type          | table</span></span>
+<span class="giallo-l"><span>Owner         | postgres</span></span>
+<span class="giallo-l"><span>Persistence   | permanent</span></span>
+<span class="giallo-l"><span>Access method | heap</span></span>
+<span class="giallo-l"><span>Size          | 16 kB</span></span>
+<span class="giallo-l"><span>Description   |</span></span>
+<span class="giallo-l"><span>-[ RECORD 3 ]-+--------------</span></span>
+<span class="giallo-l"><span>Schema        | public</span></span>
+<span class="giallo-l"><span>Name          | users</span></span>
+<span class="giallo-l"><span>Type          | table</span></span>
+<span class="giallo-l"><span>Owner         | postgres</span></span>
+<span class="giallo-l"><span>Persistence   | permanent</span></span>
+<span class="giallo-l"><span>Access method | heap</span></span>
+<span class="giallo-l"><span>Size          | 16 kB</span></span>
+<span class="giallo-l"><span>Description   |</span></span></code></pre>
+<p>So we have 3 tables, each of which has <code>16 kB</code> and is stored on heap. Do we have any custom data types?</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \dT</span></span>
+<span class="giallo-l"><span>           List of data types</span></span>
+<span class="giallo-l"><span> Schema |      Name       | Description</span></span>
+<span class="giallo-l"><span>--------+-----------------+-------------</span></span>
+<span class="giallo-l"><span> public | membership_tier |</span></span>
+<span class="giallo-l"><span>(1 row)</span></span></code></pre>
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>That... is not that useful.. Just the name of the data type?</p>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="character-note character-left">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/CoolPizza.png"
+             alt="CoolPizza"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>You forgot the <code>+</code> for detailed information!</p>
+
+        </div>
+    </div>
+</div>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \dT+</span></span>
+<span class="giallo-l"><span>List of data types</span></span>
+<span class="giallo-l"><span>-[ RECORD 1 ]-----+----------------</span></span>
+<span class="giallo-l"><span>Schema            | public</span></span>
+<span class="giallo-l"><span>Name              | membership_tier</span></span>
+<span class="giallo-l"><span>Internal name     | membership_tier</span></span>
+<span class="giallo-l"><span>Size              | 4</span></span>
+<span class="giallo-l"><span>Elements          | Basic          +</span></span>
+<span class="giallo-l"><span>                  | Premium        +</span></span>
+<span class="giallo-l"><span>                  | Elite</span></span>
+<span class="giallo-l"><span>Owner             | postgres</span></span>
+<span class="giallo-l"><span>Access privileges |</span></span>
+<span class="giallo-l"><span>Description       |</span></span></code></pre>
+<p>So we have an Enum with 3 elements. But what about the tables themselves? What's on them?
+Let's examine <code>users</code> table.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \d users</span></span>
+<span class="giallo-l"><span>                                         Table &quot;public.users&quot;</span></span>
+<span class="giallo-l"><span>   Column   |           Type           | Collation | Nullable |                Default</span></span>
+<span class="giallo-l"><span>------------+--------------------------+-----------+----------+----------------------------------------</span></span>
+<span class="giallo-l"><span> user_id    | integer                  |           | not null | nextval(&#39;users_user_id_seq&#39;::regclass)</span></span>
+<span class="giallo-l"><span> username   | text                     |           | not null |</span></span>
+<span class="giallo-l"><span> email      | text                     |           | not null |</span></span>
+<span class="giallo-l"><span> tier       | membership_tier          |           |          | &#39;Basic&#39;::membership_tier</span></span>
+<span class="giallo-l"><span> created_at | timestamp with time zone |           |          | CURRENT_TIMESTAMP</span></span>
+<span class="giallo-l"><span>Indexes:</span></span>
+<span class="giallo-l"><span>    &quot;users_pkey&quot; PRIMARY KEY, btree (user_id)</span></span>
+<span class="giallo-l"><span>    &quot;users_username_key&quot; UNIQUE CONSTRAINT, btree (username)</span></span>
+<span class="giallo-l"><span>Referenced by:</span></span>
+<span class="giallo-l"><span>    TABLE &quot;posts&quot; CONSTRAINT &quot;posts_author_id_fkey&quot; FOREIGN KEY (author_id) REFERENCES users(user_id)</span></span>
+<span class="giallo-l"><span>    TABLE &quot;user_profiles&quot; CONSTRAINT &quot;user_profiles_user_id_fkey&quot; FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE</span></span></code></pre>
+<p>Oh, nice! We actually learned quite a bit. Our table has 5 columns. It uses 2 indexes, one of which must be unique. It's referenced by two tables: <code>posts</code> and <code>user_profiles</code>. Feel free to experiment with <code>+</code> yourself ;).</p>
+<p>Let's summarise what we've used:</p>
+<ul>
+<li><code>\d</code> lets us see all entities within the database—sequences, views, tables, materialized views, and so on.</li>
+<li><code>\dt</code> lists all the <em>tables</em> only.</li>
+<li><code>\dT</code> lists all the <em>data types</em>. For me, this has been extremely handy for ENUMs.</li>
+<li><code>\d [table_name]</code> allows me to get a detailed description of a specified entity. For tables, this includes columns, indexes, and references. Try it yourself for sequences and views!</li>
+<li><code>\df</code> lists all the functions. (And a corresponding <code>\sf [function_name]</code> for the code of a function)</li>
+<li><code>\ds</code> lists all the sequences.</li>
+<li><code>\dv</code> lists all the views. (And a corresponding <code>\sv [view]</code> for the code of a view)</li>
+</ul>
+<section class="alert info" role="note" aria-labelledby="XzCv9e1Y">
+    <div class="alert-icon alert-icon-info" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="XzCv9e1Y" class="alert-title">Entity Relationship Diagram</strong>
+        <div class="alert-body">
+            <p>With multiple references and multiple tables, reading the output will be much harder than seeing an Entity Relationship diagram. Unfortunately, this is a limit of the <code>psql</code> utility, as I was unable to find a way to create one. For that, your best bet is to use something like <code>pgAdmin</code> or <code>DBeaver</code> to see the entire diagram. Fortunately, this is rarely needed for my workflow.</p>
+
+        </div>
+    </div>
+</section><h2 id="but-what-exactly-is-meta-command">But what exactly is meta command?</h2>
+<p>Okay, we've seen some pretty cool examples. But what are those? Programs? Scripts? And why bother using them myself if I can always query it directly using postgres native functions such as <code>pg_database_size(oid)</code>?</p>
+<p>Those are good questions and show curiosity—a valuable trait for an engineer!
+You can run <code>psql</code> with the <code>-E</code> flag, which lets you do <em>internal query peeking</em>. From that point on, if you run a meta command, you'll see the corresponding SQL query executed to fetch the data—thus answering all your questions from above:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \dt</span></span>
+<span class="giallo-l"><span>/******** QUERY *********/</span></span>
+<span class="giallo-l"><span>SELECT n.nspname as &quot;Schema&quot;,</span></span>
+<span class="giallo-l"><span>  c.relname as &quot;Name&quot;,</span></span>
+<span class="giallo-l"><span>  CASE c.relkind WHEN &#39;r&#39; THEN &#39;table&#39; WHEN &#39;v&#39; THEN &#39;view&#39; WHEN &#39;m&#39; THEN &#39;materialized view&#39; WHEN &#39;i&#39; THEN &#39;index&#39; WHEN &#39;S&#39; THEN &#39;sequence&#39; WHEN &#39;t&#39; THEN &#39;TOAST table&#39; WHEN &#39;f&#39; THEN &#39;foreign table&#39; WHEN &#39;p&#39; THEN &#39;partitioned table&#39; WHEN &#39;I&#39; THEN &#39;partitioned index&#39; END as &quot;Type&quot;,</span></span>
+<span class="giallo-l"><span>  pg_catalog.pg_get_userbyid(c.relowner) as &quot;Owner&quot;</span></span>
+<span class="giallo-l"><span>FROM pg_catalog.pg_class c</span></span>
+<span class="giallo-l"><span>     LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace</span></span>
+<span class="giallo-l"><span>     LEFT JOIN pg_catalog.pg_am am ON am.oid = c.relam</span></span>
+<span class="giallo-l"><span>WHERE c.relkind IN (&#39;r&#39;,&#39;p&#39;,&#39;&#39;)</span></span>
+<span class="giallo-l"><span>      AND n.nspname &lt;&gt; &#39;pg_catalog&#39;</span></span>
+<span class="giallo-l"><span>      AND n.nspname !~ &#39;^pg_toast&#39;</span></span>
+<span class="giallo-l"><span>      AND n.nspname &lt;&gt; &#39;information_schema&#39;</span></span>
+<span class="giallo-l"><span>  AND pg_catalog.pg_table_is_visible(c.oid)</span></span>
+<span class="giallo-l"><span>ORDER BY 1,2;</span></span>
+<span class="giallo-l"><span>/************************/</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>             List of relations</span></span>
+<span class="giallo-l"><span> Schema |     Name      | Type  |  Owner</span></span>
+<span class="giallo-l"><span>--------+---------------+-------+----------</span></span>
+<span class="giallo-l"><span> public | posts         | table | postgres</span></span>
+<span class="giallo-l"><span> public | user_profiles | table | postgres</span></span>
+<span class="giallo-l"><span> public | users         | table | postgres</span></span>
+<span class="giallo-l"><span>(3 rows)</span></span></code></pre>
+<p>It's quite verbose though, so you might want to skip it. Nevertheless, it's extremely valuable for learning how the internals work.</p>
+<h2 id="becoming-a-psql-power-user">Becoming a psql power user</h2>
+<p>By now, you're hopefully hooked on psql. But let me showcase more cool stuff:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# SELECT * FROM users;</span></span>
+<span class="giallo-l"><span>mydb=# \watch 2</span></span>
+<span class="giallo-l"><span>                     Thu 12 Feb 2026 01:29:25 PM UTC (every 2s)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span> user_id |  username  |       email       |  tier   |          created_at</span></span>
+<span class="giallo-l"><span>---------+------------+-------------------+---------+-------------------------------</span></span>
+<span class="giallo-l"><span>       1 | tech_guru  | guru@example.com  | Elite   | 2026-02-12 12:50:53.850788+00</span></span>
+<span class="giallo-l"><span>       2 | sql_newbie | start@example.com | Basic   | 2026-02-12 12:50:53.850788+00</span></span>
+<span class="giallo-l"><span>       3 | data_viz   | chart@example.com | Premium | 2026-02-12 12:50:53.850788+00</span></span>
+<span class="giallo-l"><span>(4 rows)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>                     Thu 12 Feb 2026 01:29:27 PM UTC (every 2s)</span></span>
+<span class="giallo-l"><span>...</span></span></code></pre>
+<p><code>\watch</code> lets you rerun your previous query every specified interval—in this case, 2 seconds.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \timing</span></span>
+<span class="giallo-l"><span>Timing is on.</span></span>
+<span class="giallo-l"><span>mydb=# select * from users;</span></span>
+<span class="giallo-l"><span>...</span></span>
+<span class="giallo-l"><span>(3 rows)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>Time: 0.296 ms</span></span></code></pre>
+<p><code>\timing</code> lets you quickly see the execution time of a query. Please don't substitute it for proper query plan analysis; just add it as another tool. See <a rel="external" href="https://www.postgresql.org/docs/current/sql-explain.html">EXPLAIN</a></p>
+<p><code>\! [command]</code> lets you run shell commands without leaving psql.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \! ls</span></span>
+<span class="giallo-l"><span>bin   dev                         etc   lib    media  opt   root  sbin  sys  usr</span></span>
+<span class="giallo-l"><span>boot  docker-entrypoint-initdb.d  home  lib64  mnt    proc  run   srv   tmp  var</span></span></code></pre>
+<p><code>\p</code> prints the current query buffer. Essentially "where am i?". If it's empty though, this will show last executed query.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# is this my buffer?</span></span>
+<span class="giallo-l"><span>mydb-# hello?</span></span>
+<span class="giallo-l"><span>mydb-# ah i haven&#39;t finished with &#39;;&#39; yet</span></span>
+<span class="giallo-l"><span>mydb-# \p</span></span>
+<span class="giallo-l"><span>is this my buffer?</span></span>
+<span class="giallo-l"><span>hello?</span></span>
+<span class="giallo-l"><span>ah i haven&#39;t finished with &#39;;&#39; yet</span></span>
+<span class="giallo-l"><span>mydb-# ;</span></span>
+<span class="giallo-l"><span>ERROR:  syntax error at or near &quot;is&quot;</span></span>
+<span class="giallo-l"><span>LINE 1: is this my buffer?</span></span>
+<span class="giallo-l"><span>        ^</span></span>
+<span class="giallo-l"><span>Time: 0.261 ms</span></span>
+<span class="giallo-l"><span>mydb=#</span></span></code></pre>
+<p>Arguably, when in doubt, consult the docs — or stay in the terminal and consult them another way!</p>
+<ul>
+<li><code>\help</code> gives you a rough summary of the docs for given SQL syntax. Try it with <code>\help EXPLAIN</code>!</li>
+<li><code>\?</code> gives you information about psql itself and all the meta commands it supports.</li>
+</ul>
+<p>Now for the hidden gem of psql. The cherry on top. The Pièce de résistance of meta commands.
+Behold <code>\gdesc</code>! What does it do? Imagine a long and complex query (my example won't be like that, but just use your imagination!):</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="sql"><span class="giallo-l"><span style="color: #FB4934;">SELECT</span></span>
+<span class="giallo-l"><span style="color: #D3869B;">    u</span><span>.</span><span style="color: #D3869B;">username</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #D3869B;">    u</span><span>.</span><span style="color: #D3869B;">tier</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #D3869B;">    p</span><span>.</span><span style="color: #D3869B;">title</span><span>,</span></span>
+<span class="giallo-l"><span>    (</span><span style="color: #D3869B;">u</span><span>.</span><span style="color: #D3869B;">created_at</span><span>::</span><span style="color: #FE8019;">date</span><span>) </span><span style="color: #FB4934;">AS</span><span> member_since,</span></span>
+<span class="giallo-l"><span>    (</span><span style="color: #D3869B;">p</span><span>.</span><span style="color: #D3869B;">view_count</span><span style="color: #8EC07C;"> &gt;</span><span style="color: #D3869B;"> 1000</span><span>) </span><span style="color: #FB4934;">AS</span><span> is_popular</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">FROM</span><span> users u</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">LEFT JOIN</span><span> posts p </span><span style="color: #FB4934;">ON</span><span style="color: #D3869B;"> u</span><span>.</span><span style="color: #D3869B;">user_id</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> p</span><span>.</span><span style="color: #D3869B;">author_id</span><span>;</span></span></code></pre>
+<p>What will the result be? What data type is in each column? What if your query is thousands of lines long, does regex filtering, switch case filtering, and is partially building HTML through multiple window functions, joins, and a unholy table structure — and all you need is a simple god damn foreign key ID? What then?</p>
+
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>This is unfortunately a real story...</p>
+
+        </div>
+    </div>
+</div>
+<p><code>\gdesc</code> to the rescue! It tells you the data types of the query output <em>without</em> executing it—including aliases!</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \gdesc</span></span>
+<span class="giallo-l"><span>    Column    |      Type</span></span>
+<span class="giallo-l"><span>--------------+-----------------</span></span>
+<span class="giallo-l"><span> username     | text</span></span>
+<span class="giallo-l"><span> tier         | membership_tier</span></span>
+<span class="giallo-l"><span> title        | text</span></span>
+<span class="giallo-l"><span> member_since | date</span></span>
+<span class="giallo-l"><span> is_popular   | boolean</span></span></code></pre>
+
+
+
+<div class="character-note character-left">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/CoolPizza.png"
+             alt="CoolPizza"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>You are now a psql power user! Spread the word!</p>
+
+        </div>
+    </div>
+</div>
+<h3 id="styling">Styling</h3>
+<p>And since I like my terminal to look nice, you can also style your psql. As with everything, there are many options. Here are just a few:</p>
+<p><code>\pset border [x]</code> - changes the style of a border around tables:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \pset border 2</span></span>
+<span class="giallo-l"><span>Border style is 2.</span></span>
+<span class="giallo-l"><span>mydb=# select * from users;</span></span>
+<span class="giallo-l"><span>+---------+------------+-------------------+---------+-------------------------------+</span></span>
+<span class="giallo-l"><span>| user_id |  username  |       email       |  tier   |          created_at           |</span></span>
+<span class="giallo-l"><span>+---------+------------+-------------------+---------+-------------------------------+</span></span>
+<span class="giallo-l"><span>|       1 | tech_guru  | guru@example.com  | Elite   | 2026-02-12 12:50:53.850788+00 |</span></span>
+<span class="giallo-l"><span>|       2 | sql_newbie | start@example.com | Basic   | 2026-02-12 12:50:53.850788+00 |</span></span>
+<span class="giallo-l"><span>|       3 | data_viz   | chart@example.com | Premium | 2026-02-12 12:50:53.850788+00 |</span></span>
+<span class="giallo-l"><span>|       4 | tech_guru1 | guru1@example.com | Elite   | 2026-02-12 13:28:51.802194+00 |</span></span>
+<span class="giallo-l"><span>+---------+------------+-------------------+---------+-------------------------------+</span></span></code></pre>
+<p>By default, psql uses ASCII characters in its output, but you can also instruct it to use Unicode characters:</p>
+<p><code>\pset linestyle unicode</code></p>
+<p>And now:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \pset linestyle unicode</span></span>
+<span class="giallo-l"><span>Line style is unicode.</span></span>
+<span class="giallo-l"><span>mydb=# select * from users;</span></span>
+<span class="giallo-l"><span>┌─────────┬────────────┬───────────────────┬─────────┬───────────────────────────────┐</span></span>
+<span class="giallo-l"><span>│ user_id │  username  │       email       │  tier   │          created_at           │</span></span>
+<span class="giallo-l"><span>├─────────┼────────────┼───────────────────┼─────────┼───────────────────────────────┤</span></span>
+<span class="giallo-l"><span>│       1 │ tech_guru  │ guru@example.com  │ Elite   │ 2026-02-12 12:50:53.850788+00 │</span></span>
+<span class="giallo-l"><span>│       2 │ sql_newbie │ start@example.com │ Basic   │ 2026-02-12 12:50:53.850788+00 │</span></span>
+<span class="giallo-l"><span>│       3 │ data_viz   │ chart@example.com │ Premium │ 2026-02-12 12:50:53.850788+00 │</span></span>
+<span class="giallo-l"><span>│       4 │ tech_guru1 │ guru1@example.com │ Elite   │ 2026-02-12 13:28:51.802194+00 │</span></span>
+<span class="giallo-l"><span>└─────────┴────────────┴───────────────────┴─────────┴───────────────────────────────┘</span></span>
+<span class="giallo-l"><span>(4 rows)</span></span></code></pre>
+<p>You can even change the prompt itself using <code>\set PROMPT1</code>. In this case, let's set it to:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>mydb=# \set PROMPT1 &#39;(%n@%M:%&gt;) %`date +%H:%M:%S` [%/] \n%x%# &#39;</span></span>
+<span class="giallo-l"><span>-- That&#39;s my new prompt underneath..</span></span>
+<span class="giallo-l"><span>(postgres@[local]:5432) 13:57:28 [mydb]</span></span>
+<span class="giallo-l"><span>#</span></span></code></pre>
+<p>This prompt shows time, user, database, and host information. Pretty neat.
+At this point, you're thinking to yourself, "Okay, that's a bit much for a terminal-based utility."
+Oh, my sweet summer child, I've barely begun to scratch the surface.
+Here's code that makes your shell colored: <a rel="external" href="https://github.com/rin-nas/postgresql-patterns-library/blob/master/psqlrc/psqlrc">rin-nas/postgresql-patterns-library</a> enjoy!</p>
+<h3 id="psqlrc"><code>.psqlrc</code></h3>
+<p>By now, I've shown you a lot of commands. Some of these are sane defaults for every psql invocation (such as <code>\x</code> or <code>\timing</code>). But writing them every time you open psql will be tedious at best and unproductive at worst. So what can you do about it?</p>
+<p>Introducing the <code>.psqlrc</code> file. Just like <code>.zshrc</code> and <code>.bashrc</code>, it lets you specify your configuration beforehand to be loaded. There are several ways to create and store it, so I won't go over all of them, but you can create one at <code>$HOME/.psqlrc</code>. Alternatively, you can specify the <code>PSQLRC</code> environment variable with a path to a config file.</p>
+<p>So far however, we've been running our psql inside the docker, and for that you have two options. Both of these require you to have your <code>.psqlrc</code> reachable from within your project folder.</p>
+<ol>
+<li>You can extend baseline Dockerfile for postgres and copy the file there. Personally I hate that.</li>
+<li>You can mount the file through docker compose: <code>volumes: ./.psqlrc:/var/lib/postgresql/.psqlrc</code>.</li>
+</ol>
+<p>In either case, this is what sample <code>.psqlrc</code> file could look like:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="plain"><span class="giallo-l"><span>\pset border 2</span></span>
+<span class="giallo-l"><span>\pset linestyle unicode</span></span>
+<span class="giallo-l"><span>\timing on</span></span>
+<span class="giallo-l"><span>\x auto</span></span>
+<span class="giallo-l"><span>\set PROMPT1 &#39;%n@%m %~%# &#39;</span></span></code></pre><h3 id="storing-queries">Storing Queries</h3>
+<p>Some of you may notice that writing queries in a shell isn't exactly ideal. And that's true. That's why I usually have a <code>database/</code> directory (added to <code>.git/info/exclude</code>) which stores all the queries I write for a given project. It acts as a scratch pad for me—if I need to run a query that's more complex than just fetching all the columns, I add it there with a small note on what it does. That way, if I need it again, I can always come back to it.
+It's quite handy and allows me to use my own editor for writing queries, thus sidestepping the limitations of a shell for query storage and writing.</p>
+<h3 id="restoring-db-from-dump">Restoring DB from dump</h3>
+<p>This isn't Postgres or psql specific, but I like to always have a quick way to restore my database from a given <code>*.sql</code> database dump. I have a separate script for that, and it looks roughly like this:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="shellscript"><span class="giallo-l"><span style="color: #928374;font-style: italic;">#!/usr/bin/sh</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #83A598;">DUMP_FILE</span><span style="color: #8EC07C;">=</span><span style="color: #83A598;">$1</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">docker</span><span style="color: #B8BB26;"> exec</span><span style="color: #D3869B;"> -i</span><span style="color: #B8BB26;"> my-db psql</span><span style="color: #D3869B;"> -U</span><span style="color: #A89984;"> ${</span><span style="color: #83A598;">POSTGRES__DB_USER</span><span style="color: #A89984;">}</span><span style="color: #D3869B;"> -c</span><span style="color: #A89984;"> &quot;</span><span style="color: #B8BB26;">CREATE DATABASE </span><span style="color: #A89984;">${</span><span style="color: #83A598;">POSTGRES__DB</span><span style="color: #A89984;">}</span><span style="color: #B8BB26;">;</span><span style="color: #A89984;">&quot;</span></span>
+<span class="giallo-l"><span style="color: #928374;font-style: italic;"># NOTE: This is where you would create additional roles if they were needed.</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">cat</span><span style="color: #A89984;"> &quot;</span><span style="color: #83A598;">$DUMP_FILE</span><span style="color: #A89984;">&quot;</span><span style="color: #8EC07C;"> |</span><span style="color: #FABD2F;"> docker</span><span style="color: #B8BB26;"> exec</span><span style="color: #D3869B;"> -i</span><span style="color: #B8BB26;"> my-db psql</span><span style="color: #D3869B;"> -U</span><span style="color: #A89984;"> ${</span><span style="color: #83A598;">POSTGRES__DB_USER</span><span style="color: #A89984;">}</span><span style="color: #D3869B;"> -d</span><span style="color: #A89984;"> ${</span><span style="color: #83A598;">POSTGRES__DB</span><span style="color: #A89984;">}</span></span></code></pre>
+<p>This runs when all the given <code>.env</code> variables are already exported, so all I need to do is:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="shellscript"><span class="giallo-l"><span style="color: #928374;font-style: italic;"># Just make sure it&#39;s executable first</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> chmod +x restore.sh</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> ./restore.sh ./01-12-1887db.sql</span></span></code></pre><h2 id="conclusion">Conclusion</h2>
+<p>It goes without saying that this is just a fraction of what's available for psql. For more details (and fun!), look no further than the <a rel="external" href="https://postgresql.org/docs">PostgreSQL docs</a>. It's a fantastic resource and a crown jewel in the beauty that is Postgres itself.
+In my experience, psql isn't favored by developers in favor of built-in database tools inside their IDEs or heavier dedicated tools like DBeaver. They're good. They do the job. But they're also heavier.
+Are they always needed? I've found that I rarely need to bring out the big guns and I'm more than capable of writing a few simple commands by hand. Especially when meta commands are shortcuts to most of what I need.
+Hopefully, I've convinced you to at least try them at some point.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinder.dev/blog/book-summary-digital-minimalism/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Book review #1: Cal Newport - Digital Minimalism</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://revinder.dev/blog/ai-rant/">
+                            <span class="button__text">Dicts, Slop and the Dead Internet</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2026
+ Revinder</span>
+                    <span class="copyright-theme">
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+    <script src="https://revinder.dev/js/copy-code-to-clipboard.js"></script>
+</body>
+</html>

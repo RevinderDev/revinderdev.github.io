@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Revinder’s Save States</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="preload" href="https://revinder.dev/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://revinder.dev/style.css">
+    <link rel="stylesheet" href="https://revinder.dev/color/gruvbox.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://revinder.dev/blog/slots/">
+    <meta property="og:title" content="Python slots - brief comparison">
+    <meta property="og:description" content="Comparing various methods of adding slots abilities to python objects.">
+    
+    
+    
+        <meta property="og:image" content="https://revinder.dev/images/characters/CoolPizza.png">
+    
+
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://revinder.dev/rss.xml">
+    
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinder.dev/">Home</a></li>
+            
+                <li><a href="https://revinder.dev//blog">Blog</a></li>
+            
+                <li><a href="https://revinder.dev//tags">Tags</a></li>
+            
+                <li><a href="https://revinder.dev//about-me">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            
+                <li><a href="https://revinder.dev//atom.xml" target="_blank" rel="noopener noreferrer">RSS</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+        <div class="header__inner">
+            <div class="header__logo">
+                <a href="#" style="text-decoration: none;" onclick="return false;">
+                    
+    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="https:&#x2F;&#x2F;revinder.dev" class="logo__breadcrumb logo__home">~/revinder</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog" class="logo__breadcrumb">blog</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog&#x2F;slots" class="logo__breadcrumb">slots</a><span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
+
+                </a>
+            </div>
+        </div>
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinder.dev/blog/slots/">Python slots - brief comparison</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2026-05-26
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/python/">#Python</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/programming/">#Programming</a></span>
+    
+
+        
+        <div class="post-content">
+            <p>Slots is a way in Python to customize attribute access. Some people love them, some people don't. In my work experience - I didn't really see them too often. If a code was critical enough that this kind of memory savings mattered then it was written in something else and then leveraged by Python, be it as an extension or an entirely separate component.</p>
+<p>Recently a friend of mine who has never heard of them, after my brief explanation, asked: "Okay, but how much do they actually save?" and... I couldn't really answer. In this article, I will try to do exactly that!</p>
+<span id="continue-reading"></span>
+<hr />
+<section class="alert note" role="note" aria-labelledby="9wDCOE8g">
+    <div class="alert-icon alert-icon-robot" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="9wDCOE8g" class="alert-title">AI Notice</strong>
+        <div class="alert-body">
+            <p>This article was <strong>not</strong> written by AI.</p>
+<p>AI was however used to spot typos, check grammar errors and generate some code for graphs (not the data!).</p>
+
+            <hr>
+            <p><strong>Models</strong>: DeepSeek V4 Pro</p>
+            <p><strong>Agent</strong>: Opencode v1.2.27</p>
+        </div>
+    </div>
+</section><h2 id="what-slots-are">What slots are?</h2>
+<p>As mentioned, slots are one of the ways a programmer can customize accessing attributes of a class. In Python, if you <em>assign</em> a field to an instance of your class, you do not get an error - it's part of its dynamic nature (and probably a bit uncomfortable coming in from strictly typed languages). The error can happen only if you ask for a field that does not exist.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> M</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">     pass</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>obj</span><span style="color: #8EC07C;"> =</span><span style="color: #83A598;"> M</span><span style="color: #A89984;">()</span></span>
+<span class="giallo-l"><span>obj</span><span style="color: #A89984;">.</span><span>test</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 1</span></span>
+<span class="giallo-l"><span style="color: #FE8019;">print</span><span style="color: #A89984;">(</span><span style="color: #D5C4A1;">obj</span><span style="color: #A89984;">.</span><span style="color: #D5C4A1;">test</span><span style="color: #A89984;">)</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">&gt;&gt;&gt;</span><span style="color: #D3869B;">1</span></span>
+<span class="giallo-l"><span style="color: #FE8019;">print</span><span style="color: #A89984;">(</span><span style="color: #D5C4A1;">obj</span><span style="color: #A89984;">.</span><span style="color: #D5C4A1;">doesnt_exist</span><span style="color: #A89984;">)</span></span>
+<span class="giallo-l"><span style="color: #83A598;">Traceback</span><span style="color: #A89984;"> (</span><span style="color: #D5C4A1;">most recent call last</span><span style="color: #A89984;">):</span></span>
+<span class="giallo-l"><span>  File</span><span style="color: #A89984;"> &quot;</span><span style="color: #B8BB26;">&lt;python-input-4&gt;</span><span style="color: #A89984;">&quot;,</span><span> line</span><span style="color: #D3869B;"> 1</span><span style="color: #A89984;">,</span><span style="color: #FB4934;"> in</span><span style="color: #8EC07C;"> &lt;</span><span>module</span><span style="color: #8EC07C;">&gt;</span></span>
+<span class="giallo-l"><span style="color: #FE8019;">    print</span><span style="color: #A89984;">(</span><span style="color: #D5C4A1;">obj</span><span style="color: #A89984;">.</span><span style="color: #D5C4A1;">doesnt_exist</span><span style="color: #A89984;">)</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">          ^^^^^^^^^^^^^^^^</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">AttributeError</span><span style="color: #A89984;">: &#39;</span><span style="color: #B8BB26;">M</span><span style="color: #A89984;">&#39;</span><span style="color: #FABD2F;"> object</span><span> has no attribute</span><span style="color: #A89984;"> &#39;</span><span style="color: #B8BB26;">doesnt_exist</span><span style="color: #A89984;">&#39;</span></span></code></pre>
+<p>This works because of how Python stores variables on your object. They live in a dictionary field <code>__dict__</code>. That field is populated whenever you assign a field to Python object.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #8EC07C;">&gt;&gt;&gt;</span><span> obj</span><span style="color: #A89984;">.</span><span style="color: #D3869B;">__dict__</span><span style="color: #A89984;">.</span><span style="color: #83A598;">keys</span><span style="color: #A89984;">()</span></span>
+<span class="giallo-l"><span style="color: #83A598;">dict_keys</span><span style="color: #A89984;">([&#39;</span><span style="color: #B8BB26;">test</span><span style="color: #A89984;">&#39;])</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">&gt;&gt;&gt;</span><span> obj</span><span style="color: #A89984;">.</span><span style="color: #D3869B;">__dict__</span><span style="color: #A89984;">.</span><span style="color: #83A598;">values</span><span style="color: #A89984;">()</span></span>
+<span class="giallo-l"><span style="color: #83A598;">dict_values</span><span style="color: #A89984;">([</span><span style="color: #D3869B;">1</span><span style="color: #A89984;">])</span></span></code></pre>
+<p>This is both extremely powerful and frightening. For example foreign functions can change the state of your object however they like and you probably won't notice, but at the same time, they might care a little less about what kind of an object you are sending as long as they can assign some fields. Flexible!</p>
+<p>So how can you define slots and what do they actually do? When Python sees <code>__slots__</code> definition a few things happen:</p>
+<ol>
+<li>Python reserves a space in memory for all attributes defined</li>
+<li>Python prevents creation of <code>__dict__</code> and <code>__weakref__</code></li>
+</ol>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> S</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #D3869B;">     __slots__</span><span style="color: #8EC07C;"> =</span><span style="color: #A89984;"> (&quot;</span><span style="color: #B8BB26;">x</span><span style="color: #A89984;">&quot;, &quot;</span><span style="color: #B8BB26;">y</span><span style="color: #A89984;">&quot;)</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">     def</span><span style="color: #8EC07C;"> __init__</span><span style="color: #A89984;">(</span><span style="color: #83A598;">self</span><span style="color: #A89984;">):</span></span>
+<span class="giallo-l"><span style="color: #83A598;">         self</span><span style="color: #A89984;">.</span><span>x</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 1</span></span>
+<span class="giallo-l"><span style="color: #83A598;">         self</span><span style="color: #A89984;">.</span><span>y</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 2</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>s</span><span style="color: #8EC07C;"> =</span><span style="color: #83A598;"> S</span><span style="color: #A89984;">()</span></span>
+<span class="giallo-l"><span>s</span><span style="color: #A89984;">.</span><span>x</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">&gt;&gt;&gt;</span><span style="color: #D3869B;">1</span></span>
+<span class="giallo-l"><span>s</span><span style="color: #A89984;">.</span><span>y</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">&gt;&gt;&gt;</span><span style="color: #D3869B;">2</span></span></code></pre>
+<p>This has two main advantages:</p>
+<ol>
+<li>It's <em>memory</em> efficient - there is no need to store additional dictionary with your class</li>
+<li>It's faster - direct memory access is faster than dictionary lookups.</li>
+</ol>
+<p>But...</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #8EC07C;">&gt;&gt;&gt;</span><span> s</span><span style="color: #A89984;">.</span><span>z</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 1</span></span>
+<span class="giallo-l"><span style="color: #83A598;">Traceback</span><span style="color: #A89984;"> (</span><span style="color: #D5C4A1;">most recent call last</span><span style="color: #A89984;">):</span></span>
+<span class="giallo-l"><span>  File</span><span style="color: #A89984;"> &quot;</span><span style="color: #B8BB26;">&lt;python-input-12&gt;</span><span style="color: #A89984;">&quot;,</span><span> line</span><span style="color: #D3869B;"> 1</span><span style="color: #A89984;">,</span><span style="color: #FB4934;"> in</span><span style="color: #8EC07C;"> &lt;</span><span>module</span><span style="color: #8EC07C;">&gt;</span></span>
+<span class="giallo-l"><span>    s</span><span style="color: #A89984;">.</span><span>z</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 1</span></span>
+<span class="giallo-l"><span style="color: #8EC07C;">    ^^^</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">AttributeError</span><span style="color: #A89984;">: &#39;</span><span style="color: #B8BB26;">S</span><span style="color: #A89984;">&#39;</span><span style="color: #FABD2F;"> object</span><span> has no attribute</span><span style="color: #A89984;"> &#39;</span><span style="color: #B8BB26;">z</span><span style="color: #A89984;">&#39;</span><span style="color: #FB4934;"> and</span><span> no</span><span style="color: #D3869B;"> __dict__</span><span style="color: #FB4934;"> for</span><span> setting new attributes</span></span></code></pre>
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>Hey! That worked before!</p>
+
+        </div>
+    </div>
+</div>
+<p>That's true! Because we are not allowing <code>__dict__</code>, we are unable to have dynamic attributes on our Python objects. It's a curse and a blessing.</p>
+<section class="alert info" role="note" aria-labelledby="AgdYpAbE">
+    <div class="alert-icon alert-icon-info" aria-hidden="true"></div>
+    <div class="alert-content">
+        <strong id="AgdYpAbE" class="alert-title">Note!</strong>
+        <div class="alert-body">
+            <p>It's best you stick with using <em>immutable</em> types (such as tuples) for <code>__slots__</code> declaration as <a rel="external" href="https://wiki.python.org/moin/UsingSlots">noted by the documentation</a>.</p>
+
+        </div>
+    </div>
+</section><h2 id="benchmarking">Benchmarking</h2>
+<p>Now that we know what slots are and what do they do, we can ask a followup question that is the root of this article: <em>How much do they actually save</em>?</p>
+<p>We are using python 3.14 on  Ubuntu 24.04.4 LTS (Noble Numbat) x86_64. I will be creating an object within a loop and comparing the memory differences by using two snapshots from <a rel="external" href="https://docs.python.org/3/library/tracemalloc.html">tracealloc</a>. It's a fantastic debug tool to trace memory blocks. For our purposes, it's much better than a normal <code>sys.getsizeof</code> function.</p>
+<p>Essentially, the benchmark will look like this:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #FB4934;">def</span><span style="color: #8EC07C;"> check_memory</span><span style="color: #A89984;">(</span><span style="color: #83A598;">hero_class</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> count</span><span style="color: #A89984;">):</span></span>
+<span class="giallo-l"><span>    tracemalloc</span><span style="color: #A89984;">.</span><span style="color: #83A598;">start</span><span style="color: #A89984;">()</span></span>
+<span class="giallo-l"><span>    snapshot1</span><span style="color: #8EC07C;"> =</span><span> tracemalloc</span><span style="color: #A89984;">.</span><span style="color: #83A598;">take_snapshot</span><span style="color: #A89984;">()</span></span>
+<span class="giallo-l"><span>    heroes</span><span style="color: #8EC07C;"> =</span><span style="color: #A89984;"> [</span><span style="color: #83A598;">hero_class</span><span style="color: #A89984;">(</span><span style="color: #83A598;">name</span><span style="color: #8EC07C;">=</span><span style="color: #A89984;">&quot;</span><span style="color: #B8BB26;">Geralt</span><span style="color: #A89984;">&quot;,</span><span style="color: #83A598;"> level</span><span style="color: #8EC07C;">=</span><span style="color: #D3869B;">99</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> spells</span><span style="color: #8EC07C;">=</span><span style="color: #A89984;">[])</span><span style="color: #FB4934;"> for</span><span> _</span><span style="color: #FB4934;"> in</span><span style="color: #FE8019;"> range</span><span style="color: #A89984;">(</span><span style="color: #D5C4A1;">count</span><span style="color: #A89984;">)]</span></span>
+<span class="giallo-l"><span>    snapshot2</span><span style="color: #8EC07C;"> =</span><span> tracemalloc</span><span style="color: #A89984;">.</span><span style="color: #83A598;">take_snapshot</span><span style="color: #A89984;">()</span></span>
+<span class="giallo-l"><span>    stats</span><span style="color: #8EC07C;"> =</span><span> snapshot2</span><span style="color: #A89984;">.</span><span style="color: #83A598;">compare_to</span><span style="color: #A89984;">(</span><span style="color: #D5C4A1;">snapshot1</span><span style="color: #A89984;">, &quot;</span><span style="color: #B8BB26;">lineno</span><span style="color: #A89984;">&quot;)</span></span>
+<span class="giallo-l"><span>    tracemalloc</span><span style="color: #A89984;">.</span><span style="color: #83A598;">stop</span><span style="color: #A89984;">()</span></span>
+<span class="giallo-l"><span>    total_mem</span><span style="color: #8EC07C;"> =</span><span style="color: #FE8019;"> sum</span><span style="color: #A89984;">(</span><span style="color: #D5C4A1;">stat</span><span style="color: #A89984;">.</span><span style="color: #D5C4A1;">size_diff</span><span style="color: #FB4934;"> for</span><span style="color: #D5C4A1;"> stat</span><span style="color: #FB4934;"> in</span><span style="color: #D5C4A1;"> stats</span><span style="color: #A89984;">)</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">    return</span><span> total_mem</span><span style="color: #8EC07C;"> /</span><span style="color: #D3869B;"> 1024</span><span style="color: #8EC07C;"> /</span><span style="color: #D3869B;"> 1024</span><span style="color: #928374;font-style: italic;">  # bytes -&gt; KiB -&gt; MiB</span></span></code></pre>
+<p>The output will always be in MiB(s). Let's compare firstly 4 different classes:</p>
+<ul>
+<li>A standard plain python class</li>
+<li>Same plain python class, but now with <code>__slots__</code> defined</li>
+<li>Python data class of same structure</li>
+<li>Same python class with slots defined <code>slots=True</code> (which for data classes is equivalent to defining <code>__slots__</code>)</li>
+</ul>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> StandardHero</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">    def</span><span style="color: #8EC07C;"> __init__</span><span style="color: #A89984;">(</span><span style="color: #83A598;">self</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> name</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> level</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> abilities</span><span style="color: #A89984;">):</span></span>
+<span class="giallo-l"><span style="color: #83A598;">        self</span><span style="color: #A89984;">.</span><span>name</span><span style="color: #8EC07C;"> =</span><span> name</span></span>
+<span class="giallo-l"><span style="color: #83A598;">        self</span><span style="color: #A89984;">.</span><span>level</span><span style="color: #8EC07C;"> =</span><span> level</span></span>
+<span class="giallo-l"><span style="color: #83A598;">        self</span><span style="color: #A89984;">.</span><span>abilities</span><span style="color: #8EC07C;"> =</span><span> abilities</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> SlottedHero</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span style="color: #D3869B;">    __slots__</span><span style="color: #8EC07C;"> =</span><span style="color: #A89984;"> (&quot;</span><span style="color: #B8BB26;">name</span><span style="color: #A89984;">&quot;, &quot;</span><span style="color: #B8BB26;">level</span><span style="color: #A89984;">&quot;, &quot;</span><span style="color: #B8BB26;">abilities</span><span style="color: #A89984;">&quot;)</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">    def</span><span style="color: #8EC07C;"> __init__</span><span style="color: #A89984;">(</span><span style="color: #83A598;">self</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> name</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> level</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> abilities</span><span style="color: #A89984;">):</span></span>
+<span class="giallo-l"><span style="color: #83A598;">        self</span><span style="color: #A89984;">.</span><span>name</span><span style="color: #8EC07C;"> =</span><span> name</span></span>
+<span class="giallo-l"><span style="color: #83A598;">        self</span><span style="color: #A89984;">.</span><span>level</span><span style="color: #8EC07C;"> =</span><span> level</span></span>
+<span class="giallo-l"><span style="color: #83A598;">        self</span><span style="color: #A89984;">.</span><span>abilities</span><span style="color: #8EC07C;"> =</span><span> abilities</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #A89984;font-weight: bold;">@</span><span style="color: #FABD2F;font-weight: bold;">dataclass</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> DataclassHero</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span>    name</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> str</span></span>
+<span class="giallo-l"><span>    level</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> int</span></span>
+<span class="giallo-l"><span>    spells</span><span style="color: #A89984;">:</span><span> list</span><span style="color: #A89984;">[</span><span style="color: #FABD2F;">int</span><span style="color: #A89984;">]</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #A89984;font-weight: bold;">@</span><span style="color: #FABD2F;font-weight: bold;">dataclass</span><span style="color: #A89984;">(</span><span style="color: #83A598;">slots</span><span style="color: #8EC07C;">=</span><span style="color: #D3869B;">True</span><span style="color: #A89984;">)</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> DataclassSlotsHero</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span>    name</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> str</span></span>
+<span class="giallo-l"><span>    level</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> int</span></span>
+<span class="giallo-l"><span>    spells</span><span style="color: #A89984;">:</span><span> list</span><span style="color: #A89984;">[</span><span style="color: #FABD2F;">int</span><span style="color: #A89984;">]</span></span></code></pre>
+<p>And here are the results:</p>
+<div class="terminal-window">
+    
+    <div class="terminal-header">
+        
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        
+        
+        
+        <span class="terminal-title">plain_and_dataclass.json</span>
+        
+    </div>
+    
+
+    <div id="mem_plot1" style="padding: 10px;"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  fetch('/slots/plain_and_dataclass.json')
+    .then(res => res.json())
+    .then(payload => {
+      var options = {
+        series: payload.series,
+        chart: {
+          type: 'line',
+          height: 400,
+          background: 'transparent',
+          toolbar: { show: false },
+          fontFamily: '"JetBrains Mono", monospace'
+        },
+        colors: ['#fe8019', '#b8bb26', '#83a598', '#fabd2f'],
+        stroke: { curve: 'smooth', width: 3 },
+        markers: { size: 5 },
+        xaxis: {
+          categories: payload.labels,
+          title: { 
+            text: 'Object Count', 
+            style: { color: '#928374' } 
+          },
+          labels: { style: { colors: '#ebdbb2' } }
+        },
+        yaxis: {
+          title: { 
+            text: 'Memory (MiB)', 
+            style: { color: '#928374' } 
+          },
+          labels: { style: { colors: '#ebdbb2' } }
+        },
+        grid: { borderColor: '#3c3836', strokeDashArray: 4 },
+        
+        legend: { 
+          position: 'top',
+          horizontalAlign: 'right',
+          labels: { colors: '#ebdbb2' },
+          markers: { radius: 0 } 
+        },
+        
+        tooltip: {theme: 'dark'},
+      };
+
+      new ApexCharts(document.querySelector("#mem_plot1"), options).render();
+    });
+</script>
+
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>But <code>@dataclass</code> only generates code, it does not modify memory footprint or layout. Why even bother comparing plain python objects to them? They are essentially the same..</p>
+
+        </div>
+    </div>
+</div>
+<p>Correct! We know that. But it's also nice to run experiment to <em>confirm</em> what you already know intuitively. It's a valuable insight - and here, it does show exactly that! The memory efficiency is exactly the same, for both non-slotted, we have a:</p>
+<ol>
+<li>Same <code>__dict__</code> 3 slots in the values array.</li>
+<li>Fixed size of instance itself in form of <code>PyObject</code> header + pointer to <code>__dict__</code></li>
+</ol>
+<p>And what have we learned?</p>
+<ul>
+<li>For 10k objects, we are saving 0.40 MiB</li>
+<li>For 100k objects, we are saving 3.82 MiB</li>
+<li>For 1kk objects, we are saving 38.14 MiB</li>
+</ul>
+<p><em>And I didn't show it on chart, but for 10kk, we would be saving around 380 MiB</em>.</p>
+<p><strong>Which means we are saving roughly 40 bytes per instance</strong> and scaling here is "linear".</p>
+<p>Now let's go one step further and add a popular libraries to our benchmark: <a rel="external" href="https://www.attrs.org/en/stable/">attrs</a> and <a rel="external" href="https://pydantic.dev/docs/validation/latest/get-started/">pydantic</a>. Since both plain and dataclasses memory footprints are equal, we are going to compare them only to one of them.</p>
+<p>We can define <code>attrs</code> classes like so:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #A89984;font-weight: bold;">@</span><span style="color: #FABD2F;font-weight: bold;">define</span><span style="color: #A89984;">(</span><span style="color: #83A598;">slots</span><span style="color: #8EC07C;">=</span><span style="color: #D3869B;">False</span><span style="color: #A89984;">)</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> AttrsHero</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span>    name</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> str</span></span>
+<span class="giallo-l"><span>    level</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> int</span></span>
+<span class="giallo-l"><span>    spells</span><span style="color: #A89984;">:</span><span> list</span><span style="color: #A89984;">[</span><span style="color: #FABD2F;">int</span><span style="color: #A89984;">]</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #A89984;font-weight: bold;">@</span><span style="color: #FABD2F;font-weight: bold;">define</span><span style="color: #A89984;">(</span><span style="color: #83A598;">slots</span><span style="color: #8EC07C;">=</span><span style="color: #D3869B;">True</span><span style="color: #A89984;">)</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> AttrsSlotHero</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span>    name</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> str</span></span>
+<span class="giallo-l"><span>    level</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> int</span></span>
+<span class="giallo-l"><span>    spells</span><span style="color: #A89984;">:</span><span> list</span><span style="color: #A89984;">[</span><span style="color: #FABD2F;">int</span><span style="color: #A89984;">]</span></span></code></pre>
+<p>And our <code>pydantic</code> classes like so:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> PydanticHero</span><span style="color: #A89984;">(</span><span>BaseModel</span><span style="color: #A89984;">):</span></span>
+<span class="giallo-l"><span>    name</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> str</span></span>
+<span class="giallo-l"><span>    level</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> int</span></span>
+<span class="giallo-l"><span>    spells</span><span style="color: #A89984;">:</span><span> list</span><span style="color: #A89984;">[</span><span style="color: #FABD2F;">int</span><span style="color: #A89984;">]</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #A89984;font-weight: bold;">@</span><span style="color: #FABD2F;font-weight: bold;">pydantic_dataclasses</span><span style="color: #A89984;font-weight: bold;">.</span><span style="color: #FABD2F;font-weight: bold;">dataclass</span><span style="color: #A89984;">(</span><span style="color: #83A598;">slots</span><span style="color: #8EC07C;">=</span><span style="color: #D3869B;">True</span><span style="color: #A89984;">)</span></span>
+<span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> PydanticDataclassSlotsHero</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span>    name</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> str</span></span>
+<span class="giallo-l"><span>    level</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> int</span></span>
+<span class="giallo-l"><span>    spells</span><span style="color: #A89984;">:</span><span> list</span><span style="color: #A89984;">[</span><span style="color: #FABD2F;">int</span><span style="color: #A89984;">]</span></span></code></pre>
+
+
+
+<div class="character-note character-right">
+    <div class="character-avatar">
+        <img src="https://revinder.dev/images/characters/Monk.png"
+             alt="Monk"
+             width="80"
+             height="80" />
+    </div>
+    <div class="character-content">
+        <div class="character-bubble">
+            <p>Hey! Those are Pydantic dataclasses and not their <code>BaseModel</code>!</p>
+
+        </div>
+    </div>
+</div>
+<p>Yeah, yeah... So unfortunately, Pydantic relies on <code>__dict__</code> for storing descriptors for validation. Adding <code>__slots__</code> conflicts with that design, therefore they are not supported at all! If you <em>really</em> need to use <code>__slots__</code> then the convention is to use their dataclasses or forbid extra fields like so:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="python"><span class="giallo-l"><span style="color: #FB4934;">class</span><span style="color: #FABD2F;"> PydanticSlotsHero</span><span style="color: #A89984;">(</span><span>BaseModel</span><span style="color: #A89984;">):</span></span>
+<span class="giallo-l"><span>    name</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> str</span></span>
+<span class="giallo-l"><span>    level</span><span style="color: #A89984;">:</span><span style="color: #FABD2F;"> int</span></span>
+<span class="giallo-l"><span>    spells</span><span style="color: #A89984;">:</span><span> list</span><span style="color: #A89984;">[</span><span style="color: #FABD2F;">int</span><span style="color: #A89984;">]</span></span>
+<span class="giallo-l"><span style="color: #83A598;">    ConfigDict</span><span style="color: #A89984;">(</span><span style="color: #83A598;">extra</span><span style="color: #8EC07C;">=</span><span style="color: #A89984;">&quot;</span><span style="color: #B8BB26;">forbid</span><span style="color: #A89984;">&quot;,</span><span style="color: #83A598;"> frozen</span><span style="color: #8EC07C;">=</span><span style="color: #D3869B;">True</span><span style="color: #A89984;">)</span></span></code></pre>
+<p>It is by no means equivalent to what <code>__slots__</code> do, but for a simple benchmark like this one - it's good enough.
+Let's see the results:</p>
+<div class="terminal-window">
+    
+    <div class="terminal-header">
+        
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        
+        
+        
+        <span class="terminal-title">all.json</span>
+        
+    </div>
+    
+
+    <div id="mem_plot2" style="padding: 10px;"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  fetch('/slots/all_comparison.json')
+    .then(res => res.json())
+    .then(payload => {
+      var options = {
+        series: payload.series,
+        chart: {
+          type: 'line',
+          height: 400,
+          background: 'transparent',
+          toolbar: { show: false },
+          fontFamily: '"JetBrains Mono", monospace'
+        },
+        colors: ['#fe8019', '#b8bb26', '#83a598', '#fabd2f'],
+        stroke: { curve: 'smooth', width: 3 },
+        markers: { size: 5 },
+        xaxis: {
+          categories: payload.labels,
+          title: { 
+            text: 'Object Count', 
+            style: { color: '#928374' } 
+          },
+          labels: { style: { colors: '#ebdbb2' } }
+        },
+        yaxis: {
+          title: { 
+            text: 'Memory (MiB)', 
+            style: { color: '#928374' } 
+          },
+          labels: { style: { colors: '#ebdbb2' } }
+        },
+        grid: { borderColor: '#3c3836', strokeDashArray: 4 },
+        
+        legend: { 
+          position: 'top',
+          horizontalAlign: 'right',
+          labels: { colors: '#ebdbb2' },
+          markers: { radius: 0 } 
+        },
+        
+        tooltip: {theme: 'dark'},
+      };
+
+      new ApexCharts(document.querySelector("#mem_plot2"), options).render();
+    });
+</script>
+<p>So what did we learn from this graph?</p>
+<ol>
+<li>Pydantic... is heavy... 😱 400 MiB more on that small of an object comparing to dataclasses or <code>attrs</code>..</li>
+<li><code>extra=Forbid, frozen=True</code> has no effect on size whatsoever. And why would it? It is only about enforcing immutability of an object, and not about having dedicated mechanism like <code>__slots__</code>.</li>
+<li>Dataclasses and <code>attrs</code> are equal in size but only their non slotted versions. For 1kk objects, <code>attrs</code> slotted version is 16 MiB larger than a slotted dataclass from std and from Pydantic.</li>
+<li>Pydantic dataclass is truly equal in size to that of an actual dataclass.</li>
+<li>Size of Pydantic objects matters even for low count of objects.</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>Slots are relatively simple mechanism to both use and understand. The actual benefit is there and it's easily seen (a so called, low hanging fruit) but it's important to understand the caveats that come with it. Are they worth it - probably not. I haven't had an issue with memory, unless there was a memory leak or another bug. In cases that I did have it, I opted for more powerful mechanisms. Extensions, caching, architectural choices. I think if at one point you are dynamically creating a million objects and storing them in memory for a long time, then there is probably something fundamentally wrong with the idea and one should probably just ask himself <em>"Why?"</em>.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinder.dev/blog/zshrc-helpers/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Useful stuff for your terminal</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://revinder.dev/blog/new-tools/">
+                            <span class="button__text">New tools in my workflow</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2026
+ Revinder</span>
+                    <span class="copyright-theme">
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+    <script src="https://revinder.dev/js/copy-code-to-clipboard.js"></script>
+</body>
+</html>
