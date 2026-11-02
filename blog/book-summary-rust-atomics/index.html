@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Revinder’s Save States</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="preload" href="https://revinder.dev/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://revinder.dev/style.css">
+    <link rel="stylesheet" href="https://revinder.dev/color/gruvbox.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://revinder.dev/blog/book-summary-rust-atomics/">
+    <meta property="og:title" content="Book review #0: Mara Bos - Rust Atomics and Locks">
+    <meta property="og:description" content="Book summary and review of a fantastic low level book on concurrency by Mara Bos.">
+    
+    
+    
+        <meta property="og:image" content="https://revinder.dev/images/characters/CoolPizza.png">
+    
+
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://revinder.dev/rss.xml">
+    
+        <link rel="shortcut icon" type="image&#x2F;x-icon" href="/fav-icon.png">
+    
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://revinder.dev/">Home</a></li>
+            
+                <li><a href="https://revinder.dev//blog">Blog</a></li>
+            
+                <li><a href="https://revinder.dev//tags">Tags</a></li>
+            
+                <li><a href="https://revinder.dev//about-me">About me</a></li>
+            
+                <li><a href="https://github.com/RevinderDev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            
+                <li><a href="https://revinder.dev//atom.xml" target="_blank" rel="noopener noreferrer">RSS</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+        <div class="header__inner">
+            <div class="header__logo">
+                <a href="#" style="text-decoration: none;" onclick="return false;">
+                    
+    <div class="logo"><span class="logo__bracket">[</span><span class="logo__branch">master</span><span class="logo__bracket">]</span><span class="logo__bracket">[</span><a href="https:&#x2F;&#x2F;revinder.dev" class="logo__breadcrumb logo__home">~/revinder</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog" class="logo__breadcrumb">blog</a><span class="logo__separator">/</span><a href="https:&#x2F;&#x2F;revinder.dev/blog&#x2F;book-summary-rust-atomics" class="logo__breadcrumb">book-summary-rust-atomics</a><span class="logo__bracket">]</span><span class="logo__symbol">$</span></div>
+
+                </a>
+            </div>
+        </div>
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://revinder.dev/blog/book-summary-rust-atomics/">Book review #0: Mara Bos - Rust Atomics and Locks</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2025-06-20
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/rust/">#Rust</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/book/">#Book</a>&nbsp;
+                <a class="post-tag" href="https://revinder.dev/tags/programming/">#Programming</a></span>
+    
+
+        
+        <div class="post-content">
+            <p>My TL over at <a rel="external" href="https://www.stxnext.com/">STX</a> has given me a good self-improvement idea - for every book I've read, I should write something about it.
+It can be some kind of side project that uses the ideas from the book or a blog post summarising it. In this series, I am going to do a little bit of both.
+Going over the most interesting points to me that I've got to known thanks to said book, as well as try (more or less) use it practically.</p>
+<p>The book we put on the spot as a first one is (one that I've read most recently since hearing mentioned advice) - <strong>Rust Atomics and Locks</strong> by Mara Bos.
+Mara is an excellent engineer, current Rust library team dev and a fantastic writer. You can get to know her more on one of following websites:</p>
+<ul>
+<li><a rel="external" href="https://blog.m-ou.se/">Blog</a> - can not recommend that one enough!</li>
+<li><a rel="external" href="https://bsky.app/profile/mara.bsky.social">Bluesky</a></li>
+<li><a rel="external" href="https://x.com/m_ou_se">Twitter</a></li>
+<li><a rel="external" href="https://marabos.nl/atomics/">Link to a book</a></li>
+</ul>
+<p>Since I am not a book reviewer, I don't exactly know how to conduct one, so I am going to approach it how I see it make most sense - going chapter by chapter.
+This article is for those who are not yet sure if this book is worth a read (spoiler - it is) and is mainly targeted for someone interested in a little bit lower level of concurrency, with a sprinkle of Rust, than what's usually used. We rarely, if ever, write these structures ourselves.</p>
+<span id="continue-reading"></span>
+<hr />
+<h2 id="chapter-1-basics-of-rust-concurrency">Chapter 1 - Basics of Rust Concurrency</h2>
+<p>This chapter introduces us to the concepts of concurrency, what it actually is in theory and how it looks like in practise - that is - how it looks like in Rusts code.
+The core that you get to know are: Threads and their scopes, data ownerships between them and reference counting, data races, interior mutability, <code>Send</code> and <code>Sync</code> traits that allow for sharing data between the Threads safely, Locks and finally Thread parking and Condition Variables.</p>
+<p><strong>Thread</strong> are a unit of execution within your process. In user space, threads only exist within process, they cannot exist on their own. Kernel has it's own privileges and has some running threads but that's beyond the scope for now so we will skip that idea. Multiple threads can be run within your process concurrently and they can execute sequence of instructions. They can share some resources with the process, such as memory, though they can have their own local memory too. Apart from multiprocessing, they are the key to unlocking full concurrent power of your processor, but they need to be synchronized. Otherwise you can have lots of troubles.
+These book will show you ways you can achieve this synchronization, such as <strong>Locks</strong>, which are a way to prevent something to be modified or read by multiple threads at once.</p>
+<p><strong>Leaking</strong> is particularly interesting construct to me, as I've always associated it with a bad code, however, author suggests that you can leverage that
+to <em>share</em> data between the threads. In other words, you deliberately leak the memory thread owns, promising it will never be cleaned up (in Rust they say "dropped") and thus make it live forever and allowing it to be borrowed by any thread as long as the program runs. You do that by using <code>Box::leak</code>
+In other words, you say, <strong>this is gonna live in the memory forever, so it's safe to read from it</strong>. Fantastic! There is a clear downside to it, as you increase the memory of said program. You can leverage this in other programming languages to your advantage.</p>
+<p><strong>Lock poisoning</strong> this one is something that has been drilled into me by my professor (jokingly referred to as King of Concurrency by it's students), but its significance and obviousness is worth repeating as it goes beyond Rust.</p>
+<blockquote>
+<p>If a thread holding a lock (or mutex) is terminated abruptly, so never actually unlocking said lock, you have a problem.</p>
+</blockquote>
+<p>Different languages handle it differently, for example if that happens to you in [1] C++ while using <code>std::mutex</code> you are now in <strong>Undefined Behaviour</strong> land and all bets are off. Not good. In Rust, thanks to its guarantees, it's better - Mutex is marked as <em>poisoned</em> and thus will never be lockable again. Subsequent attempts of doing so will return you an <code>Err</code> from <code>lock</code> method, which gives you an opportunity to handle the situation. Much better!</p>
+<p><strong>Thread parking</strong> is a way to put a thread into a sleep, such that it waits for another thread to give it notification. This makes it so it doesn't consume CPU cycles while employing busy waiting, but it does require another thread to <em>unpark</em> it.</p>
+<p>Overall, this is fantastic introduction to the topics of concurrency as it covers whole ground from the get-go.</p>
+<p>[1] https://en.cppreference.com/w/cpp/thread/mutex.html</p>
+<hr />
+<h2 id="chapter-2-atomics">Chapter 2 -  Atomics</h2>
+<p>Chapter 2 is where the pacing of the book goes up as this were the first paragraphs that I had to read more than once to fully grasp what they actually meant (and frankly speaking, I am unsure if I do get them yet..). This chapter contains a deep dive into the atomics, where they come from, what's their purpose and what are their guarantees.</p>
+<p>The book couldn't be more clear as to what makes an atomic. To quote:</p>
+<blockquote>
+<p>Atomic comes from Greek and it means <em>indivisible</em>. Atomics and atomic operations in Computer Science are indivisible; they have either fully completed, or they haven't happened yet.</p>
+</blockquote>
+<p>As we've learned in Chapter 1, multiple threads accessing same variables concurrently reading and writing would cause a data race which would result in undefined behaviour land. We do not want undefined behaviour land. Atomics are a way of tackling this issue as one of the synchronization mechanisms.
+The bit that I've got surprised by is that <strong>not all platforms support all atomics</strong>! Almost all however, provide at least all atomic types up to the size of a pointer.</p>
+<p>Another cool bit is that we go over some of the more popular atomic operations such as <code>fetch_add/sub/or/and/nand</code> in Rust, however, they are not <em>limited</em> to Rust. Zig and C++ also have them and more or less, they work the same here. Even though this chapter is heavy on Rust code, it again, goes beyond it which is a big plus in my opinion.</p>
+<p>Then there is stuff that I didn't know exist - <code>compare_exchange</code> (and <code>_weak</code>). This checks if atomic value is equal to the given value and then only if it is equal, it <em>exchanges</em> it for new (completely different!) value. So we have 3 possible values and 2 memory orders! Using that and load operations, author is showcasing a known problem called ABA [2] which occurs when a location is read twice, has same value for both reads, and then that value is understood as 'nothing has changed' but in reality, in between those checks, some other thread could have changed the value once, then changed it back, reverting to original 'state', thus the 'monitoring' thread would never be able to tell that.</p>
+<p>[2] https://en.wikipedia.org/wiki/ABA_problem</p>
+<hr />
+<h2 id="chapter-3-memory-ordering">Chapter 3 - Memory Ordering</h2>
+<p>In my mind, this chapter is the core of the entire book. If you don't understand this chapter, you will struggle to find deeper understanding in all subsequent chapters because they are all built upon ideas from this one.
+This isn't precisely about <em>memory</em> itself but about instructions that are stored within that memory. These instructions can be executed out of order for variety of optimisation reasons.
+Two important sources of these reordering that we care about are: processors and compilers. A processor might determine that two consecutive instructions in your program will not affect each other, therefore it is allowed to execute them out of order. Similarly, a compiler will do the same when it has a reason to believe it might execute faster. The idea is that neither of the two things will change the behaviour of your program - else you there is a bug and it's a very deep one.</p>
+<p>Again, with a Rust spin, we learn that there are these memory orderings available to use:</p>
+<ul>
+<li><code>Relaxed</code> - relaxed ordering.</li>
+<li><code>Release</code>, <code>Acquire</code> and <code>AcqRel</code> - release and acquire (duh!)</li>
+<li><code>SeqCast</code> - sequentially consistent.</li>
+</ul>
+<p>In order to fully grasp them however, we are presented with a concept known as <code>happens-before</code> relationship. It describes how something is guaranteed to have happened before another thing, and order of everything else is undefined. For example, everything within the same thread happens in order; that is, if thread is executing <code>f()</code> then <code>g()</code>, then <code>f()</code> <code>happens-before</code> <code>g()</code>. It sounds obvious but it needs to be said, because that concept does not exist in between threads. The only way it can is through synchronization mechanisms or when spawning other threads.</p>
+<p>Each ordering then can be understood in terms of that <code>happens-before</code> relationship.
+<code>Relaxed</code> is therefore an order that does not provide any <code>happens-before</code>, they do guarantee a <em>total modification order</em> of each individual atomic variable. That is, <strong>all modifications of the same atomic variable happen in an order that is the same from the perspective of every single thread.</strong>
+<code>Release</code> and <code>Acquire</code> are used in pair to form a <code>happens-before</code> relationship between threads. <code>Release</code> applies to store operations, while <code>Acquire</code> applies to load operations. Compound operation such as <code>fetch-and-modify</code> will then therefore have <code>Release</code> be applied only to it's modify part and then <code>Acquire</code> for it's load part.</p>
+<blockquote>
+<p>A happens-before relationship is formed when an acquire-load operation observes the result of a release-store operation.</p>
+</blockquote>
+<p><code>SeqCast</code> is the strongest memory ordering. It includes all guarantees of acquire ordering (for loads) and release ordering (for stores), and also guarantees a globally consistent order of operations. That is, every single operation with <code>SeqCst</code> ordering within a program is part of a single total order all threads green on. An acquire-load can not only form a happens-before relationship with a release-store, but also with a sequentially consistent store, and similarly the other way around.</p>
+<p>Last thing mentioned in this chapter is something called <code>Fences</code>. Fence can have its own ordering applies, but in essence it allows you to separate the memory ordering from the atomic operation. It prevents the CPU and compiler from reordering certain memory operations across the fence boundary.</p>
+<p>I initially thought I could reason about this chapter rather nicely, until author gathered common myths, that while super interesting, did put a dent in my understanding as I directly came up with one of the myths. I will leave explanations why they are myths to the author:)</p>
+<blockquote>
+<ul>
+<li>Myth I: I need strong memory ordering to make sure changes are "immediately" visible.</li>
+<li>Myth II: Sequentially consistent memory ordering is a great default and is always correct.</li>
+<li>Myth III: Disabling optimization means I don’t need to care about memory ordering.</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="chapter-4-5-and-6-building-our-own-x">Chapter 4, 5 and 6 -  Building our own X</h2>
+<p>In these chapters, author gives us a chance to do something practical, which will hopefully deepen our understanding of previously mentioned concepts. We build our base using chapter 1, 2 and 3, to now use actually leverage it and code up something useful. It's a nice mix of practicality and theory, though I was mostly interested in concepts that go beyond Rust and these chapters felt Rust heavy.</p>
+<p>We build our own:</p>
+<ul>
+<li><code>SpinLock</code> - is a lock that is designed such that a thread waiting for it to be unlocked, is repeatedly trying to unlock it, instead of going to sleep, as is in the case of regular Mutex. This can make sense in a scenario where a lock is only held for a brief moment, thus waking a thread and putting it to sleep would waste more resources than 'busy' waiting like so.</li>
+<li><code>Channels</code> - are used to send data between threads and they can come in many variants. One sender/one receiver or many receivers/one sender and so on. Some are blocking, some are optimised for throughput and so on. The important bit is towards the end, that is - <strong>Every design and implementation decision involves a trade-off and can best be made with a specific use case in mind.</strong></li>
+<li><code>Arc</code> - is an Atomic Reference Counting that allows us in Rust to have shared ownership through reference counting. Cloning Arc will share the original allocation, without creating new one. It's only when all references are dropped, when the actual allocation will be dropped as well.</li>
+</ul>
+<p>All in all in each of the implementations, we are always given reasons as to why we do a certain thing and what's the outcome of it. More over, the author points out all the subtle mistakes that the implementation has and ways it can be improved. Each chapter starts of with simple naive implementation, and throughout it we are constantly improving it bit by bit.
+Particularly, like a true rustacean that we are, we are trying to create a safe interface such that the user <em>cannot</em> possibly use in a wrong way. Achieving that can be tricky, as under the hood, we have to deal with unsafe code.
+All the examples and short codes are distributed by the author on her own github page [3].</p>
+<p>[3] https://github.com/m-ou-se/rust-atomics-and-locks?tab=readme-ov-file</p>
+<hr />
+<h2 id="chapter-7-understanding-the-processor">Chapter 7 - Understanding the processor</h2>
+<p>Chapter 7 is the chapter that I was looking forward the most. In fact, this is the reason why I've picked this book up in the first place. At my university we did in fact have classes that dealt with assembler itself, but we never really dived deep into it. I was hoping to fill in the gaps that were created, by me
+rushing through topics to hopefully make everything on time.</p>
+<p>It starts off with explaining in a very high level approach two main different processor architectures: x86-64 and ARM64. From this books perspective, the most important difference is that they handle atomics differently. We then have some brief assembler lessons and the way to see generated assembly from rust compiler.
+So far so good. The entire chapter compares compile codes for x86-64 and ARM64 from the same code. Let's take a look at first and already surprising bit:</p>
+<table>
+  <tr>
+    <th>Rust source</th>
+    <th>Compiled x86-64</th>
+    <th>Compiled ARM64</th>
+  </tr>
+  <tr>
+    <td>
+<pre><code class="language-rust" style='font-size: 10px'>pub fn a(x: &mut i32) {
+    *x = 0;
+}
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-x86asm" style='font-size: 10px'>a:
+    mov dword ptr [rdi], 0
+    ret
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-armasm" style='font-size: 10px'>a:
+    str wzr, [x0]
+    ret
+</code></pre>
+    </td>
+  </tr>
+  <tr>
+    <td>
+<pre><code class="language-rust" style='font-size: 10px'>pub fn a(x: &AtomicI32) {
+    x.store(0, Relaxed);
+}
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-x86asm" style='font-size: 10px'>a:
+    mov dword ptr [rdi], 0
+    ret
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-armasm" style='font-size: 10px'>a:
+    str wzr, [x0]
+    ret
+</code></pre>
+    </td>
+  </tr>
+</table>
+<p>As you can see, if using atomic or not is irrelevant in this function - it compiles to the same thing! That is because both <code>mov</code> and <code>str</code> are already atomic!</p>
+<p>Mild interest levels, I know, but let's go one step further into <code>read-and-modify</code> types of function:</p>
+<table>
+  <tr>
+    <th>Rust source</th>
+    <th>Compiled x86-64</th>
+    <th>Compiled ARM64</th>
+  </tr>
+  <tr>
+    <td>
+<pre><code class="language-rust" style='font-size: 10px'>pub fn a(x: &mut i32) {
+    *x += 10;
+}</code></pre>
+    </td>
+    <td>
+<pre><code class="language-x86asm" style='font-size: 10px'>a:
+    add dword ptr [rdi], 10
+    ret
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-armasm" style='font-size: 10px'>a:
+    ldr w8, [x0]
+    add w8, w8, #10
+    str w8, [x0]
+    ret
+</code></pre>
+    </td>
+  </tr>
+  <tr>
+    <td>
+<pre><code class="language-rust" style='font-size: 10px'>pub fn a(x: &AtomicI32) {
+    x.fetch_add(10, Relaxed);
+}</code></pre>
+    </td>
+    <td>
+<pre><code class="language-x86asm" style='font-size: 10px'>a:
+    lock add dword ptr [rdi], 10
+    ret
+</code></pre>
+    </td>
+    <td>
+<pre><code class="language-armasm" style='font-size: 10px'>a:
+.L1:
+    ldxr w8, [x0]    
+    add w9, w8, #10  
+    stxr w10, w9, [x0] 
+    cbnz w10, .L1    
+    ret
+</code></pre>
+    </td>
+  </tr>
+</table>
+<p>Finally! We see some difference. For x86-64 it's the <code>lock</code> prefix that was introduced by Intel to support multi core systems. It causes processors LOCK# signal to be asserted during execution of the accompanying instruction (which turns the instruction into atomic instruction). It ensures that processor has exclusive use of any shared memory while that signal is asserted. [4]</p>
+<p>But what's going on with ARM64? Our previous 3 instructions changed into 4 and there is additional label added somehow. What for? Let's go over each step.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="asm"><span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">1</span><span style="color: #FABD2F;">a</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">2</span><span style="color: #FE8019;">.</span><span style="color: #FABD2F;">L1</span><span style="color: #A89984;">:</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">3</span><span>    ldxr w8, [x0]      </span><span style="color: #928374;font-style: italic;">; Load the value at address x0 into w8 (LL).</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">4</span><span style="color: #8EC07C;">    add</span><span> w9, w8, #</span><span style="color: #D3869B;">10</span><span style="color: #928374;font-style: italic;">    ; Add 10 to w8 and store the result in w9.</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">5</span><span>    stxr w10, w9, [x0] </span><span style="color: #928374;font-style: italic;">; Attempt to store w9 back to x0 (SC). Result in w10. 0 = success, 1 = fail.</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">6</span><span>    cbnz w10, .L1      </span><span style="color: #928374;font-style: italic;">; If w10 != 0, retry.</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">7</span><span style="color: #8EC07C;">    ret</span></span></code></pre>
+<p>Keen reader will observe that we've swapped <code>ldr</code> (load register) and <code>str</code> (store register) for <code>ldrx</code> and <code>strx</code>. What's the difference? Those are atomic versions of the same functions. <code>ldrx</code> is load exclusive register while <code>strx</code> is store exclusive register. Both instructions guarantee that memory access is atomic. [5] [6]
+<code>strx</code> can fail, and if that happens, we need to retry. Interestingly though, <code>ldrx</code> doesn't seem to be possible to fail.</p>
+<p>[4] <a rel="external" href="https://www.felixcloutier.com/x86/lock">Lock prefix</a></p>
+<p>[5] <a rel="external" href="https://developer.arm.com/documentation/100069/0606/Data-Transfer-Instructions/LDXR">LDXR documentation</a></p>
+<p>[6] <a rel="external" href="https://developer.arm.com/documentation/100069/0606/Data-Transfer-Instructions/STXR">STXR Documentation</a></p>
+<hr />
+<p>Book goes on into the topic of different instructions (such as those that do not have equivalent instructions to compile down to), cache and cache lines, memory reordering done by the processors and cost of certain atomic operations on each architecture. All of these are extremely detailed and I want to encourage you that if you do not wish to read this entire book, this chapter and chapter 1 were fantastic and are worth your time regardless if you program in Rust or not.
+I do not envy people that have to debug multithreaded issues that come from memory ordering bugs on different architectures!</p>
+<hr />
+<h2 id="chapter-8-operating-system-primitives">Chapter 8 - Operating System Primitives</h2>
+<p>We've been talking instructions on a CPU level. We've been talking instructions in your code. Now it's time to talk about what we haven't yet - stuff your operating system does to them! More specifically, how scheduler of a kernel, <em>schedules</em> your instructions to run on given processor core.
+Your entire communication with system kernel is through <em>syscall</em>. Depending on your system, you can/should them in a different way. On Linux, you use <code>libc</code> as it provides you with standard interface for it. MacOS also has it's own <code>libc</code> implementation, however, as opposed to Linux, it's syscalls are not stable and thus you should not be using them as they are likely to be broken.</p>
+<p>Apart from <code>libc</code>, unix systems have another thing in common - POSIX standard. It is a set on functions that you should implement in order to be POSIX compliant
+and thus having libraries that leverage POSIX work from the get go. Windows does not follow POSIX (nor libc for that matter) and instead gives us its own <code>kernel32.dll</code> that we are supposed to use instead. Again, no syscalls should be made here.</p>
+<p><strong>PThreads</strong> are extensions to POSIX standard that give us access to common data types and functions for concurrency. Stuff like mutexes, locks, threads, condition variables are all possible to use from pthreads. Lot's of examples given by author of functions and how they can be leveraged.</p>
+<blockquote>
+<p>There is a problem though. PThreads were designed for C, not Rust, thus, they are not exactly compatible with Rust memory model. Threads from PThreads are not moveable which in Rust is problematic.</p>
+</blockquote>
+<p>There was another cool thing mentioned by the author, which I had never heard of before - <code>futex</code>! [7]
+On Linux all synchronization primitives are implemented using the <code>futex</code> system call. It is what's called "fast user-space mutex". Here is it's <code>libc</code> signature:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="c"><span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 1</span><span style="color: #FE8019;">long</span><span style="color: #FABD2F;"> syscall</span><span style="color: #A89984;">(</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 2</span><span>        SYS_futex</span><span style="color: #A89984;">,</span><span> </span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 3</span><span style="color: #FE8019;">        uint32_t</span><span style="color: #8EC07C;"> *</span><span style="color: #83A598;">uaddr</span><span style="color: #A89984;">,</span><span> </span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 4</span><span style="color: #FE8019;">        int</span><span style="color: #83A598;"> futex_op</span><span style="color: #A89984;">,</span><span> </span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 5</span><span style="color: #FE8019;">        uint32_t</span><span style="color: #83A598;"> val</span><span style="color: #A89984;">,</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 6</span><span style="color: #FE8019;">        const struct</span><span> timespec </span><span style="color: #8EC07C;">*</span><span style="color: #83A598;">timeout</span><span style="color: #A89984;">,</span><span style="color: #928374;font-style: italic;">   /* or: uint32_t val2 */</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 7</span><span style="color: #FE8019;">        uint32_t</span><span style="color: #8EC07C;"> *</span><span style="color: #83A598;">uaddr2</span><span style="color: #A89984;">,</span><span> </span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 8</span><span style="color: #FE8019;">        uint32_t</span><span> val3</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 9</span><span style="color: #A89984;">);</span></span></code></pre>
+<p>It provides a method to wait until certain condition is true. Kernel will put a thread specified by us to sleep, and then another thread can wake that other thread up by using the same atomic variable to notify it.</p>
+<p>There are operating system primitives explained from Windows and MacOS too, but... <a rel="external" href="https://xkcd.com/272/">Linux FTW</a>!</p>
+<p>[7] <a rel="external" href="https://man7.org/linux/man-pages/man2/futex.2.html">Futex manpage</a></p>
+<hr />
+<h2 id="my-own-ziglock">My own ZigLock</h2>
+<p>There are still 2 more chapters - building our own lock and ideas and inspiration. I thought it would be fun instead of summarising these, is to use <code>zig</code> to recreate one of the easiest lock implementations from chapter 9. I don't know anything about <code>zig</code>. I don't know much about concurrency. I am not as qualified as the author is. It is gonna be the easiest thing to do and it's gonna be awful. You've been warned! Let's go then!</p>
+<p>Firstly, let's create a simple race condition.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="zig"><span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 1</span><span style="color: #FB4934;">const</span><span style="color: #83A598;"> std</span><span style="color: #8EC07C;"> =</span><span style="color: #FE8019;"> @import</span><span>(</span><span style="color: #B8BB26;">&quot;std&quot;</span><span>)</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 2</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 3</span><span style="color: #FB4934;">var</span><span style="color: #83A598;"> global_counter</span><span style="color: #A89984;">:</span><span style="color: #FB4934;"> i32</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 0</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 4</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 5</span><span style="color: #FE8019;">fn</span><span style="color: #FABD2F;"> incrementer</span><span>() </span><span style="color: #8EC07C;">!</span><span style="color: #FB4934;">void</span><span> {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 6</span><span style="color: #FB4934;">    var</span><span style="color: #83A598;"> i</span><span style="color: #A89984;">:</span><span style="color: #FB4934;"> usize</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 0</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 7</span><span style="color: #FB4934;">    while</span><span> (</span><span style="color: #83A598;">i</span><span style="color: #8EC07C;"> &lt;</span><span style="color: #D3869B;"> 100_000</span><span>) </span><span style="color: #A89984;">:</span><span> (</span><span style="color: #83A598;">i</span><span style="color: #8EC07C;"> +=</span><span style="color: #D3869B;"> 1</span><span>) {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 8</span><span style="color: #83A598;">        global_counter</span><span style="color: #8EC07C;"> +=</span><span style="color: #D3869B;"> 1</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 9</span><span>    }</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">10</span><span>}</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">11</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">12</span><span style="color: #FB4934;">pub</span><span style="color: #FE8019;"> fn</span><span style="color: #FABD2F;"> main</span><span>() </span><span style="color: #8EC07C;">!</span><span style="color: #FB4934;">void</span><span> {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">13</span><span style="color: #FB4934;">    const</span><span style="color: #83A598;"> thread1</span><span style="color: #8EC07C;"> =</span><span style="color: #FB4934;"> try</span><span style="color: #83A598;"> std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">Thread</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">spawn</span><span>(</span><span style="color: #A89984;">.</span><span>{}</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> incrementer</span><span style="color: #A89984;">, .</span><span>{})</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">14</span><span style="color: #FB4934;">    const</span><span style="color: #83A598;"> thread2</span><span style="color: #8EC07C;"> =</span><span style="color: #FB4934;"> try</span><span style="color: #83A598;"> std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">Thread</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">spawn</span><span>(</span><span style="color: #A89984;">.</span><span>{}</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> incrementer</span><span style="color: #A89984;">, .</span><span>{})</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">15</span><span style="color: #83A598;">    thread1</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">join</span><span>()</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">16</span><span style="color: #83A598;">    thread2</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">join</span><span>()</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">17</span><span style="color: #83A598;">    std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">debug</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">print</span><span>(</span><span style="color: #B8BB26;">&quot;</span><span style="color: #D3869B;">\t</span><span style="color: #B8BB26;">Final counter value: {d}</span><span style="color: #D3869B;">\n</span><span style="color: #B8BB26;">&quot;</span><span style="color: #A89984;">, .</span><span>{</span><span style="color: #83A598;">global_counter</span><span>})</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">18</span><span>}</span></span></code></pre>
+<p>Running this a couple of times we can see that, we did in fact succeeded in creating a bad code.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="shellscript"><span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> zig build run</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">    Final</span><span style="color: #B8BB26;"> counter value:</span><span style="color: #D3869B;"> 150368</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> zig build run</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">    Final</span><span style="color: #B8BB26;"> counter value:</span><span style="color: #D3869B;"> 133840</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> zig build run</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">    Final</span><span style="color: #B8BB26;"> counter value:</span><span style="color: #D3869B;"> 157181</span></span></code></pre>
+<p>We can obviously fix our function by using atomic like so:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="zig"><span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">1</span><span style="color: #FE8019;">fn</span><span style="color: #FABD2F;"> incrementer</span><span>() </span><span style="color: #8EC07C;">!</span><span style="color: #FB4934;">void</span><span> {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">2</span><span style="color: #FB4934;">    var</span><span style="color: #83A598;"> i</span><span style="color: #A89984;">:</span><span style="color: #FB4934;"> usize</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 0</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">3</span><span style="color: #FB4934;">    while</span><span> (</span><span style="color: #83A598;">i</span><span style="color: #8EC07C;"> &lt;</span><span style="color: #D3869B;"> 100_000</span><span>) </span><span style="color: #A89984;">:</span><span> (</span><span style="color: #83A598;">i</span><span style="color: #8EC07C;"> +=</span><span style="color: #D3869B;"> 1</span><span>) {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">4</span><span style="color: #83A598;">        _</span><span style="color: #8EC07C;"> =</span><span style="color: #FE8019;"> @atomicRmw</span><span>(</span><span style="color: #FB4934;">i32</span><span style="color: #A89984;">,</span><span style="color: #8EC07C;"> &amp;</span><span style="color: #83A598;">global_counter</span><span style="color: #A89984;">, .</span><span style="color: #83A598;">Add</span><span style="color: #A89984;">,</span><span style="color: #D3869B;"> 1</span><span style="color: #A89984;">, .</span><span style="color: #83A598;">release</span><span>)</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">5</span><span>    }</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">6</span><span>}</span></span></code></pre>
+<p>But where is the fun in that! We wanted our own lock to be used for it! I am gonna go for SpinLock. Which is a lock that continuously 'spins' trying to unlock to get in. Sort of a busy waiting. Let's define <code>lock</code> and <code>unlock</code> methods on our struct:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="zig"><span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 1</span><span style="color: #FB4934;">const</span><span style="color: #83A598;"> std</span><span style="color: #8EC07C;"> =</span><span style="color: #FE8019;"> @import</span><span>(</span><span style="color: #B8BB26;">&quot;std&quot;</span><span>)</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 2</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 3</span><span style="color: #FB4934;">const</span><span style="color: #83A598;"> SpinLock</span><span style="color: #8EC07C;"> =</span><span style="color: #FB4934;"> struct</span><span> {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 4</span><span style="color: #83A598;">    flag</span><span style="color: #A89984;">:</span><span style="color: #83A598;"> std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">atomic</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">Value</span><span>(</span><span style="color: #FB4934;">bool</span><span>) </span><span style="color: #8EC07C;">=</span><span style="color: #83A598;"> std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">atomic</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">Value</span><span>(</span><span style="color: #FB4934;">bool</span><span>)</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">init</span><span>(</span><span style="color: #FB4934;">false</span><span>)</span><span style="color: #A89984;">,</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 5</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 6</span><span style="color: #FB4934;">    pub</span><span style="color: #FE8019;"> fn</span><span style="color: #FABD2F;"> lock</span><span>(</span><span style="color: #83A598;">self</span><span style="color: #A89984;">:</span><span style="color: #8EC07C;"> *</span><span style="color: #83A598;">SpinLock</span><span>) </span><span style="color: #8EC07C;">!</span><span style="color: #FB4934;">void</span><span> {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 7</span><span style="color: #FB4934;">        while</span><span> (</span><span style="color: #83A598;">self</span><span style="color: #A89984;">.</span><span style="color: #83A598;">flag</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">swap</span><span>(</span><span style="color: #FB4934;">true</span><span style="color: #A89984;">, .</span><span style="color: #83A598;">acquire</span><span>)) {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 8</span><span style="color: #FB4934;">            try</span><span style="color: #83A598;"> std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">Thread</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">yield</span><span>()</span><span style="color: #A89984;">;</span><span style="color: #928374;font-style: italic;"> // Give up CPU if lock busy</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 9</span><span>        }</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">10</span><span>    }</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">11</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">12</span><span style="color: #FB4934;">    pub</span><span style="color: #FE8019;"> fn</span><span style="color: #FABD2F;"> unlock</span><span>(</span><span style="color: #83A598;">self</span><span style="color: #A89984;">:</span><span style="color: #8EC07C;"> *</span><span style="color: #83A598;">SpinLock</span><span>) </span><span style="color: #FB4934;">void</span><span> {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">13</span><span style="color: #83A598;">        self</span><span style="color: #A89984;">.</span><span style="color: #83A598;">flag</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">store</span><span>(</span><span style="color: #FB4934;">false</span><span style="color: #A89984;">, .</span><span style="color: #83A598;">release</span><span>)</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">14</span><span>    }</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">15</span><span>}</span><span style="color: #A89984;">;</span></span></code></pre>
+<p>And that's it! We can now use it to lock around our variable and have no race conditions.</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="zig"><span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 1</span><span style="color: #FB4934;">var</span><span style="color: #83A598;"> my_lock</span><span style="color: #8EC07C;"> =</span><span style="color: #83A598;"> SpinLock</span><span>{}</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 2</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 3</span><span style="color: #FB4934;">var</span><span style="color: #83A598;"> shared_counter</span><span style="color: #A89984;">:</span><span style="color: #FB4934;"> i32</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 0</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 4</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 5</span><span style="color: #FE8019;">fn</span><span style="color: #FABD2F;"> thread_fn</span><span>() </span><span style="color: #8EC07C;">!</span><span style="color: #FB4934;">void</span><span> {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 6</span><span style="color: #FB4934;">    var</span><span style="color: #83A598;"> i</span><span style="color: #A89984;">:</span><span style="color: #FB4934;"> usize</span><span style="color: #8EC07C;"> =</span><span style="color: #D3869B;"> 0</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 7</span><span style="color: #FB4934;">    while</span><span> (</span><span style="color: #83A598;">i</span><span style="color: #8EC07C;"> &lt;</span><span style="color: #D3869B;"> 100_000</span><span>) </span><span style="color: #A89984;">:</span><span> (</span><span style="color: #83A598;">i</span><span style="color: #8EC07C;"> +=</span><span style="color: #D3869B;"> 1</span><span>) {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 8</span><span style="color: #FB4934;">        try</span><span style="color: #83A598;"> my_lock</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">lock</span><span>()</span><span style="color: #A89984;">;</span><span style="color: #928374;font-style: italic;"> // What a great variable name.</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;"> 9</span><span style="color: #83A598;">        shared_counter</span><span style="color: #8EC07C;"> +=</span><span style="color: #D3869B;"> 1</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">10</span><span style="color: #83A598;">        my_lock</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">unlock</span><span>()</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">11</span><span>    }</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">12</span><span>}</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">13</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">14</span><span style="color: #FB4934;">pub</span><span style="color: #FE8019;"> fn</span><span style="color: #FABD2F;"> main</span><span>() </span><span style="color: #8EC07C;">!</span><span style="color: #FB4934;">void</span><span> {</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">15</span><span style="color: #FB4934;">    const</span><span style="color: #83A598;"> t1</span><span style="color: #8EC07C;"> =</span><span style="color: #FB4934;"> try</span><span style="color: #83A598;"> std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">Thread</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">spawn</span><span>(</span><span style="color: #A89984;">.</span><span>{}</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> thread_fn</span><span style="color: #A89984;">, .</span><span>{})</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">16</span><span style="color: #FB4934;">    const</span><span style="color: #83A598;"> t2</span><span style="color: #8EC07C;"> =</span><span style="color: #FB4934;"> try</span><span style="color: #83A598;"> std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">Thread</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">spawn</span><span>(</span><span style="color: #A89984;">.</span><span>{}</span><span style="color: #A89984;">,</span><span style="color: #83A598;"> thread_fn</span><span style="color: #A89984;">, .</span><span>{})</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">17</span><span style="color: #83A598;">    t1</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">join</span><span>()</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">18</span><span style="color: #83A598;">    t2</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">join</span><span>()</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">19</span><span style="color: #83A598;">    std</span><span style="color: #A89984;">.</span><span style="color: #83A598;">debug</span><span style="color: #A89984;">.</span><span style="color: #FABD2F;">print</span><span>(</span><span style="color: #B8BB26;">&quot;Counter: {}</span><span style="color: #D3869B;">\n</span><span style="color: #B8BB26;">&quot;</span><span style="color: #A89984;">, .</span><span>{</span><span style="color: #83A598;">shared_counter</span><span>})</span><span style="color: #A89984;">;</span></span>
+<span class="giallo-l"><span aria-hidden="true" class="giallo-ln" style="color: #665C54;">20</span><span>}</span></span></code></pre>
+<p>Results:</p>
+<pre class="giallo" style="color: #EBDBB2; background-color: #282828;"><code data-lang="shellscript"><span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> zig build run</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">Counter:</span><span style="color: #D3869B;"> 200000</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> zig build run</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">Counter:</span><span style="color: #D3869B;"> 200000</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">$</span><span style="color: #B8BB26;"> zig build run</span></span>
+<span class="giallo-l"><span style="color: #FABD2F;">Counter:</span><span style="color: #D3869B;"> 200000</span></span></code></pre>
+<p>Ahh! Lovely! There are probably issues with that - it is a naive implementation by someone who doesn't even program in <code>zig</code> at all. I will once again refer you to a book for deeper explanations as to what could go wrong with it. You can also see how close the implementation is to that of a Rust.
+I didn't really have to wrestle to get it working. That's because all these primitives, memory orderings and functions are mostly present in all systems languages.</p>
+<h2 id="summary">Summary</h2>
+<p>Overall, this book has been a joy to read. It's packed with knowledge that I've never heard of. It's dense. It has practical examples. It has theory. It explains concepts that are not language specific. It's <em>almost</em> what I hoped would be in it.
+The only mild thing that I would prefer to be less of is.. Rust itself. I know, this sounds silly being shocked of abundance of Rust in a book titled <code>Rust - Atomics and Locks</code> but both chapter 1 and chapter 8 are precisely my favourites because they go beyond just Rust. Even though the concepts were language agnostic,
+it felt to me like a lot of hoops you had to jump through, were there so that you can make safe code in Rust. Translating these concepts to <code>zig</code> took me 10 minutes and I didn't have to deal with complexity, something which Rust with it's <code>UnsafeCell</code> and interfaces clearly has more of than <code>zig</code>. Is the Rust code safer then? Probably. Is it harder to follow and more verbose than <code>zig</code> in this case? Yes. Ultimately this is a price you have to pay for being sure your code is indeed secure with Rust. If it compiles, I am safe... (right?).</p>
+<blockquote>
+<p>If you hadn't added any <code>unsafe</code> blocks, then you are safe from data races and segfaults, but you are still vulnerable to panics.</p>
+</blockquote>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://revinder.dev/blog/tech-interview/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Tech interview process improvements</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://revinder.dev/blog/forgetful-dict/">
+                            <span class="button__text">The &quot;Forgetful&quot; pattern: A method for Deep Copying with unique instances</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2026
+ Revinder</span>
+                    <span class="copyright-theme">
+                    </span>
+                </div>
+            </div>
+        <div class="footer__credit">
+<style>
+  a.sa-credit, a.sa-credit:visited, a.sa-credit:hover, a.sa-credit:active {
+    all: unset !important; display: block !important; cursor: pointer !important;
+    line-height: 1.6 !important;
+  }
+  a.sa-credit:focus-visible {
+    outline: 2px solid currentColor !important; outline-offset: 4px !important;
+  }
+  a.sa-credit > span { all: unset !important; }
+  a.sa-credit > .sa-credit__byline { white-space: nowrap !important; }
+  a.sa-credit svg {
+    all: unset !important; display: inline-block !important;
+    height: 0.914em !important; vertical-align: -0.2em !important;
+    fill: currentColor !important;
+  }
+  @supports (height: 1cap) {
+    a.sa-credit svg { height: 1.305714cap !important; vertical-align: -0.285714cap !important; }
+  }
+</style>
+<a class="sa-credit" href="https://www.simpleanalytics.com?utm_source=example.com&utm_content=badge" referrerpolicy="origin" target="_blank">
+  <span class="sa-credit__caption">100% privacy-first analytics</span>
+  <span class="sa-credit__byline">by <svg viewBox="0 -714 8871 914" xmlns="http://www.w3.org/2000/svg" role="img"><title>Simple Analytics</title><g transform="translate(0 -700) scale(.7)"><path d="M54 538h154v462H54zm369-276h154v738H423zM792 0h154v1000H792z"/></g><path transform="translate(900 0)" d="M311 14Q232 14 171.0 -14.0Q110 -42 75.5 -96.5Q41 -151 41 -229V-254H148V-229Q148 -154 192.5 -117.5Q237 -81 311 -81Q385 -81 423.5 -112.5Q462 -144 462 -194Q462 -244 422.5 -266.5Q383 -289 314 -305L277 -314Q209 -329 160.0 -353.0Q111 -377 84.0 -416.0Q57 -455 57 -516Q57 -609 123.5 -661.5Q190 -714 299 -714Q372 -714 429.5 -689.0Q487 -664 520.0 -615.0Q553 -566 553 -492V-456H446V-492Q446 -560 405.5 -589.5Q365 -619 299 -619Q234 -619 199.0 -592.5Q164 -566 164 -519Q164 -471 198.5 -448.0Q233 -425 300 -410L337 -401Q404 -386 456.5 -362.5Q509 -339 539.0 -299.0Q569 -259 569 -196Q569 -133 537.5 -86.0Q506 -39 448.0 -12.5Q390 14 311 14ZM686 0V-493H789V0ZM738 -560Q708 -560 687.5 -579.5Q667 -599 667 -630Q667 -661 687.5 -680.5Q708 -700 738 -700Q768 -700 788.5 -680.5Q809 -661 809 -630Q809 -599 788.5 -579.5Q768 -560 738 -560ZM942 0V-493H1043V-435H1059Q1073 -461 1103.5 -481.0Q1134 -501 1188 -501Q1243 -501 1276.5 -478.0Q1310 -455 1327 -421H1343Q1359 -455 1392.0 -478.0Q1425 -501 1485 -501Q1556 -501 1603.5 -456.5Q1651 -412 1651 -328V0H1548V-321Q1548 -365 1523.5 -389.5Q1499 -414 1454 -414Q1406 -414 1377.0 -383.0Q1348 -352 1348 -294V0H1245V-321Q1245 -365 1220.5 -389.5Q1196 -414 1151 -414Q1103 -414 1074.0 -383.0Q1045 -352 1045 -294V0ZM1799 200V-493H1900V-422H1916Q1935 -455 1973.5 -481.0Q2012 -507 2084 -507Q2145 -507 2197.0 -477.0Q2249 -447 2280.5 -390.0Q2312 -333 2312 -254V-239Q2312 -159 2280.5 -102.5Q2249 -46 2197.5 -16.0Q2146 14 2084 14Q2012 14 1973.5 -11.5Q1935 -37 1918 -67H1902V200ZM2054 -76Q2121 -76 2164.5 -119.0Q2208 -162 2208 -242V-251Q2208 -330 2164.5 -373.0Q2121 -416 2054 -416Q1988 -416 1944.5 -373.0Q1901 -330 1901 -251V-242Q1901 -162 1944.0 -119.0Q1987 -76 2054 -76ZM2440 0V-700H2543V0ZM2922 14Q2847 14 2791.0 -17.5Q2735 -49 2703.5 -106.0Q2672 -163 2672 -240V-252Q2672 -329 2703.5 -386.0Q2735 -443 2790.0 -475.0Q2845 -507 2918 -507Q2989 -507 3042.5 -475.5Q3096 -444 3126.0 -388.0Q3156 -332 3156 -257V-218H2777Q2779 -153 2820.5 -114.5Q2862 -76 2924 -76Q2982 -76 3011.5 -102.0Q3041 -128 3057 -162L3143 -118Q3128 -90 3102.0 -59.0Q3076 -28 3032.0 -7.0Q2988 14 2922 14ZM2778 -297H3052Q3047 -352 3011.0 -384.0Q2975 -416 2917 -416Q2859 -416 2822.5 -384.0Q2786 -352 2778 -297ZM3468 0 3667 -700H3857L4056 0H3945L3899 -165H3625L3579 0ZM3652 -265H3872L3770 -633H3754ZM4154 0V-493H4255V-419H4271Q4285 -449 4321.0 -475.0Q4357 -501 4428 -501Q4484 -501 4527.5 -476.0Q4571 -451 4596.0 -405.0Q4621 -359 4621 -296V0H4518V-288Q4518 -352 4486.0 -382.5Q4454 -413 4398 -413Q4334 -413 4295.5 -371.0Q4257 -329 4257 -249V0ZM4922 14Q4869 14 4827.5 -4.0Q4786 -22 4761.5 -57.0Q4737 -92 4737 -142Q4737 -217 4790.5 -255.5Q4844 -294 4925 -294H5075V-326Q5075 -368 5049.0 -394.5Q5023 -421 4969 -421Q4916 -421 4888.0 -396.0Q4860 -371 4851 -331L4755 -362Q4767 -401 4793.5 -434.0Q4820 -467 4863.5 -487.0Q4907 -507 4970 -507Q5066 -507 5121.0 -458.0Q5176 -409 5176 -319V-116Q5176 -86 5204 -86H5246V0H5169Q5135 0 5113.0 -18.0Q5091 -36 5091 -67V-70H5075Q5067 -54 5051.0 -34.5Q5035 -15 5004.0 -0.5Q4973 14 4922 14ZM4937 -71Q4998 -71 5036.5 -106.5Q5075 -142 5075 -204V-214H4931Q4890 -214 4865.0 -196.5Q4840 -179 4840 -145Q4840 -111 4866.0 -91.0Q4892 -71 4937 -71ZM5346 0V-700H5449V0ZM5659 200V110H5934Q5962 110 5962 80V-72H5946Q5932 -43 5896.5 -17.0Q5861 9 5791 9Q5735 9 5691.0 -16.0Q5647 -41 5622.0 -87.0Q5597 -133 5597 -196V-493H5700V-204Q5700 -140 5732.0 -109.5Q5764 -79 5821 -79Q5884 -79 5922.5 -121.5Q5961 -164 5961 -243V-493H6064V101Q6064 146 6037.5 173.0Q6011 200 5965 200ZM6401 0Q6356 0 6329.5 -27.0Q6303 -54 6303 -99V-406H6167V-493H6303V-656H6406V-493H6553V-406H6406V-117Q6406 -87 6434 -87H6537V0ZM6674 0V-493H6777V0ZM6726 -560Q6696 -560 6675.5 -579.5Q6655 -599 6655 -630Q6655 -661 6675.5 -680.5Q6696 -700 6726 -700Q6756 -700 6776.5 -680.5Q6797 -661 6797 -630Q6797 -599 6776.5 -579.5Q6756 -560 6726 -560ZM7159 14Q7088 14 7030.5 -16.0Q6973 -46 6939.5 -103.0Q6906 -160 6906 -240V-253Q6906 -332 6939.5 -389.0Q6973 -446 7030.5 -476.5Q7088 -507 7159 -507Q7230 -507 7280.5 -481.0Q7331 -455 7360.5 -412.0Q7390 -369 7400 -317L7300 -296Q7293 -345 7259.5 -380.0Q7226 -415 7161 -415Q7097 -415 7053.0 -372.0Q7009 -329 7009 -251V-242Q7009 -164 7053.0 -121.0Q7097 -78 7161 -78Q7226 -78 7260.0 -111.5Q7294 -145 7303 -197L7403 -174Q7391 -123 7360.5 -80.0Q7330 -37 7280.0 -11.5Q7230 14 7159 14ZM7724 14Q7629 14 7567.0 -28.0Q7505 -70 7492 -155L7588 -178Q7599 -116 7636.5 -92.5Q7674 -69 7724 -69Q7773 -69 7799.5 -87.5Q7826 -106 7826 -137Q7826 -167 7801.0 -181.0Q7776 -195 7728 -204L7693 -210Q7643 -219 7602.0 -236.0Q7561 -253 7537.0 -283.0Q7513 -313 7513 -360Q7513 -430 7565.0 -468.5Q7617 -507 7703 -507Q7786 -507 7839.5 -469.5Q7893 -432 7909 -368L7813 -341Q7804 -386 7775.0 -404.5Q7746 -423 7703 -423Q7661 -423 7637.0 -407.5Q7613 -392 7613 -364Q7613 -334 7636.5 -320.0Q7660 -306 7700 -299L7735 -293Q7788 -284 7831.5 -267.5Q7875 -251 7901.0 -221.5Q7927 -192 7927 -142Q7927 -67 7871.5 -26.5Q7816 14 7724 14Z"/></svg></span>
+</a>
+        </div>
+    </footer>
+    
+
+</div>
+    <script src="https://revinder.dev/js/copy-code-to-clipboard.js"></script>
+</body>
+</html>
